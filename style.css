@@ -47,8 +47,15 @@ nav {
     flex-wrap: wrap;
 
     div {
-        margin: .25rem 1rem;
+        border-left: solid 2px var(--text-colour);
+        border-right: solid 2px var(--text-colour);
+        flex-grow: 1;
+        text-align: center;
+        margin-left: -1px;
+        margin-right: -1px;
     }
+
+    padding: 0.5rem 1rem;
 }
 
 .display {
