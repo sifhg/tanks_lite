@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="p5.min.js"></script>
+    <script src="events.js" defer></script>
     <script src="classes.js"></script>
     <script src="sketch-control-test.js"></script>
     <link rel="stylesheet" href="style.css">
@@ -15,7 +16,20 @@
 </head>
 <body>
     <h1>Tanks Lite</h1>
-    <nav></nav>
+    <nav>
+        <div>
+            <input type="radio" name="window-select" id="select-control-test" value="select-control-test" checked>
+            <label for="select-control-test">Control test</label>
+        </div>
+        <div>
+            <input type="radio" name="window-select" id="select-display-1" value="select-display-1">
+            <label for="select-display-1">Display 1</label>
+        </div>
+        <div>
+            <input type="radio" name="window-select" id="select-display-2" value="select-display-2">
+            <label for="select-display-2">Display 2</label>
+        </div>
+    </nav>
     <div class="display" id="diaplay-control-test"></div>
     <div class="display" id="diaplay-1"></div>
     <div class="display" id="diaplay-2"></div>
