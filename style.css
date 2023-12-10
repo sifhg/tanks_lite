@@ -59,11 +59,22 @@ nav {
 }
 
 .display {
-    border: solid;
-    border-width: 8px;
-    border-color: var(--text-colour);
-    border-radius: 2rem;
     width: 100%;
-    padding-bottom: 33%;
+    padding-bottom: 62.5%;
+    position: relative;
     margin: 1rem 0;
+    
+    canvas {
+        border: solid;
+        border-width: 8px;
+        border-color: var(--text-colour);
+        border-radius: 2rem;
+        border-radius: 1rem;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+
+    }
 }
