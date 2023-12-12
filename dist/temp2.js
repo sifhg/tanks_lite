@@ -13,4 +13,3 @@ class Tank {
 }
 let aTank = new Tank("KV-2");
 aTank.setName("Hej");
-//# sourceMappingURL=temp2.js.map

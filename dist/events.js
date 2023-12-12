@@ -36,4 +36,3 @@ NAV.addEventListener("click", () => {
         }
     }
 });
-//# sourceMappingURL=events.js.map
