@@ -1,4 +1,6 @@
-let tanks;
+let ball: Sprite;
+let ground: Sprite;
+
 window.setup = function() {
     const DISPLAY: HTMLElement | null = document.getElementById("display-control-test");
     if(DISPLAY === null) {
@@ -10,6 +12,16 @@ window.setup = function() {
         canvas.resize(DISPLAY.offsetWidth, DISPLAY.offsetHeight);
         background(backgroundColour);
     });
+    world.gravity.y = 10;
+    ball = new Sprite(20, 20, 50);
+    ball.collider = "d";
+    ball.mass = 5;
 
-    tanks = new Group();
+    ground = new Sprite(width/2, height*4/5, width, 5, "k");
+    ground.rotation = 2;
+    ground.velocity.y = -1;
+}
+
+window.draw = function() {
+    window.clear();
 }

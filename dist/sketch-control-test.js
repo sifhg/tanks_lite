@@ -1,4 +1,6 @@
 "use strict";
+let ball;
+let ground;
 window.setup = function () {
     const DISPLAY = document.getElementById("display-control-test");
     if (DISPLAY === null) {
@@ -10,5 +12,15 @@ window.setup = function () {
         canvas.resize(DISPLAY.offsetWidth, DISPLAY.offsetHeight);
         background(backgroundColour);
     });
+    world.gravity.y = 10;
+    ball = new Sprite(20, 20, 50);
+    ball.collider = "d";
+    ball.mass = 5;
+    ground = new Sprite(width / 2, height * 4 / 5, width, 5, "k");
+    ground.rotation = 2;
+    ground.velocity.y = -1;
+};
+window.draw = function () {
+    window.clear();
 };
 //# sourceMappingURL=sketch-control-test.js.map
