@@ -1,6 +1,7 @@
 "use strict";
-let cromwell;
-Tank;
+let cromwell, kv2;
+let tanks;
+let ball;
 function setup() {
     const DISPLAY = document.getElementById("display-control-test");
     if (DISPLAY === null) {
@@ -12,8 +13,9 @@ function setup() {
         canvas.resize(DISPLAY.offsetWidth, DISPLAY.offsetHeight);
         background(backgroundColour);
     });
+    tanks = new Group();
     world.gravity.y = 0;
-    cromwell = new Tank(100, 100, undefined, undefined, "Comet");
+    cromwell = new Tank(tanks, 100, 100);
 }
 function draw() {
     clear();

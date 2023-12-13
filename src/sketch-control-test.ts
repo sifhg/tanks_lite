@@ -1,4 +1,6 @@
-let cromwell; Tank;
+let cromwell: Tank, kv2: Tank;
+let tanks: Group;
+let ball: Sprite;
 
 function setup() {
     const DISPLAY: HTMLElement | null = document.getElementById("display-control-test");
@@ -11,8 +13,11 @@ function setup() {
         canvas.resize(DISPLAY.offsetWidth, DISPLAY.offsetHeight);
         background(backgroundColour);
     });
+    tanks = new Group();
+
     world.gravity.y = 0;
-    cromwell = new Tank(100, 100);
+    cromwell = new Tank(tanks, 100, 100);
+
 }
 
 function draw() {
