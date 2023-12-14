@@ -1,6 +1,7 @@
 let cromwell: Tank, kv2: Tank;
 let tanks: Group;
 let ball: Sprite;
+let drive: boolean = false;
 
 function setup() {
     const DISPLAY: HTMLElement | null = document.getElementById("display-control-test");
@@ -17,9 +18,14 @@ function setup() {
 
     world.gravity.y = 0;
     cromwell = new Tank(tanks, 100, 100);
-
 }
 
 function draw() {
     clear();
+    if(drive) {
+        cromwell.forwards();
+    }
+    if(cromwell.velocity.y != 0) {
+        console.log(cromwell.speed);
+    }
 }
