@@ -53,7 +53,6 @@ class Tank {
 
     drive(power: Direction): void {
         this._hull.bearing = this._hull.rotation + (90 * Math.sign(power));
-        this._hull.direction = this._hull.rotation + (90 * Math.sign(power));
         const SPEED = this._maxSpeed * Math.abs(power);
         if(Math.abs(this.speed) < this._maxSpeed) {
             this._hull.applyForce(SPEED)
@@ -62,6 +61,13 @@ class Tank {
     steer(power: Direction): void{
         this._tracks.t0.bearing = this._hull.rotation + (90 * Math.sign(power));
         this._tracks.t1.bearing = this._hull.rotation - (90 * Math.sign(power));
+        
+        //Solves backwards
+        if(cos(this._hull.bearing - this._tracks.t0.bearing) < 0) {
+            this._tracks.t0.bearing *= -1;
+            this._tracks.t1.bearing *= -1;
+        }
+
         const SPEED = this._maxSpeed * Math.abs(power);
 
         //Left track
@@ -100,6 +106,9 @@ class Tank {
             s0: dist(0, 0 , this._tracks.t0.velocity.x, this._tracks.t0.velocity.y),
             s1: dist(0, 0 , this._tracks.t1.velocity.x, this._tracks.t1.velocity.y),
         }
+    }
+    get direction(): number {
+        return this._hull.bearing;
     }
 
     //Setters

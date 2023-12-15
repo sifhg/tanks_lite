@@ -37,5 +37,5 @@ function draw() {
         cromwell.drive(Direction.Backwards);
         //world.step();
     }
-    console.log(cromwell.trackSpeed);
+    //console.log(cromwell.direction);
 }

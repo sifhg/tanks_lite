@@ -40,5 +40,5 @@ function draw() {
         //world.step();
     }
 
-    console.log(cromwell.trackSpeed);
+    //console.log(cromwell.direction);
 }
