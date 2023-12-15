@@ -23,14 +23,22 @@ function setup() {
 
 function draw() {
     clear();
-    if(drive) {
-        cromwell.drive(Direction.Forwards);
+    if(keyIsDown(LEFT_ARROW)) {
+        cromwell.steer(Direction.Left);
+        //world.step();
     }
-    if(cromwell.velocity.y != 0) {
-        console.log(cromwell.speed);
+    if(keyIsDown(RIGHT_ARROW)) {
+        cromwell.steer(Direction.Right);
+        //world.step();
+    }
+    if(keyIsDown(UP_ARROW)) {
+        cromwell.drive(Direction.Forwards);
+        //world.step();
+    }
+    if(keyIsDown(DOWN_ARROW)) {
+        cromwell.drive(Direction.Backwards);
+        //world.step();
     }
 
-    if(steer) {
-        cromwell.steer(Direction.Right);
-    }
+    console.log(cromwell.trackSpeed);
 }

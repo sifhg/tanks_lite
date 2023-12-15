@@ -23,7 +23,7 @@ class Tank {
         this._name = name;
         this._mass = 27 * Tank.SPEED_SCALAR; // 27[tons]
         this._hull.drag = 5;
-        this._hull.rotationDrag = 5;
+        this._hull.rotationDrag = 10;
         this._hull.mass = this._mass * Tank.DISTANCE_SCALAR * .5;
         this._tracks.t0.mass = this._mass * Tank.DISTANCE_SCALAR * .1;
         this._tracks.t1.mass = this._mass * Tank.DISTANCE_SCALAR * .1;
@@ -32,31 +32,24 @@ class Tank {
     }
     //Controls
     drive(power) {
-        this._modules.direction = this._hull.rotation + 90;
-        const SPEED = this._maxSpeed * power;
-        if (Math.abs(this.speed) < Math.abs(SPEED)) {
-            this._modules.speed = this.speed + SPEED / 18;
-        }
-        if (Math.abs(this.speed) > Math.abs(SPEED)) {
-            this._modules.speed = SPEED;
+        this._hull.bearing = this._hull.rotation + (90 * Math.sign(power));
+        this._hull.direction = this._hull.rotation + (90 * Math.sign(power));
+        const SPEED = this._maxSpeed * Math.abs(power);
+        if (Math.abs(this.speed) < this._maxSpeed) {
+            this._hull.applyForce(SPEED);
         }
     }
     steer(power) {
-        this._modules.direction = this._hull.rotation + 90;
-        const SPEED = this._maxSpeed * power;
+        this._tracks.t0.bearing = this._hull.rotation + (90 * Math.sign(power));
+        this._tracks.t1.bearing = this._hull.rotation - (90 * Math.sign(power));
+        const SPEED = this._maxSpeed * Math.abs(power);
         //Left track
-        if (Math.abs(this._tracks.t0.speed) < Math.abs(SPEED)) {
-            this._tracks.t0.speed += SPEED / 18;
-        }
-        if (Math.abs(this._tracks.t0.speed) > Math.abs(SPEED)) {
-            this._tracks.t0.speed = SPEED;
+        if (Math.abs(this._tracks.t0.speed) < this._maxSpeed) {
+            this._tracks.t0.applyForce(SPEED);
         }
         //Right track
-        if (Math.abs(this._tracks.t1.speed) < Math.abs(SPEED)) {
-            this._tracks.t1.speed -= SPEED / 18;
-        }
-        if (Math.abs(this._tracks.t1.speed) > Math.abs(SPEED)) {
-            this._tracks.t1.speed = -SPEED;
+        if (Math.abs(this._tracks.t1.speed) < this._maxSpeed) {
+            this._tracks.t0.applyForce(SPEED);
         }
         // //Towards mean - Left
         // this._tracks.t0.speed = Math.sign(power) * (this._tracks.t0.speed * 2 + Math.abs(this._tracks.t1.speed))/3;
@@ -76,6 +69,12 @@ class Tank {
     get speed() {
         return dist(0, 0, this._hull.velocity.x, this._hull.velocity.y);
     }
+    get trackSpeed() {
+        return {
+            s0: dist(0, 0, this._tracks.t0.velocity.x, this._tracks.t0.velocity.y),
+            s1: dist(0, 0, this._tracks.t1.velocity.x, this._tracks.t1.velocity.y),
+        };
+    }
     //Setters
     setName(N) {
         this._name = N;
@@ -83,8 +82,8 @@ class Tank {
 }
 var Direction;
 (function (Direction) {
-    Direction[Direction["Forwards"] = 1] = "Forwards";
-    Direction[Direction["Backwards"] = -0.7] = "Backwards";
-    Direction[Direction["Left"] = -1] = "Left";
-    Direction[Direction["Right"] = 1] = "Right";
+    Direction[Direction["Forwards"] = 300] = "Forwards";
+    Direction[Direction["Backwards"] = -300] = "Backwards";
+    Direction[Direction["Left"] = -5] = "Left";
+    Direction[Direction["Right"] = 5] = "Right";
 })(Direction || (Direction = {}));
