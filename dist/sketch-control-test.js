@@ -24,19 +24,34 @@ function draw() {
     clear();
     if (keyIsDown(LEFT_ARROW)) {
         cromwell.steer(Direction.Left);
-        //world.step();
+        console.log("L");
+        console.log(cromwell.motionDirection);
     }
     if (keyIsDown(RIGHT_ARROW)) {
         cromwell.steer(Direction.Right);
-        //world.step();
+        console.log("R");
+        console.log(cromwell.motionDirection);
     }
     if (keyIsDown(UP_ARROW)) {
         cromwell.drive(Direction.Forwards);
-        //world.step();
+        console.log("U");
+        console.log(cromwell.motionDirection);
     }
     if (keyIsDown(DOWN_ARROW)) {
         cromwell.drive(Direction.Backwards);
-        //world.step();
+        console.log("D");
+        console.log(cromwell.motionDirection);
     }
-    //console.log(cromwell.direction);
+    fill(255, 255, 0, 127);
+    if (cos(cromwell.motionDirection - cromwell.direction) < 0) {
+        fill(255, 0, 0, 127);
+        console.log("RED");
+        console.log(`cosine: ${cos(cromwell.motionDirection - cromwell.direction)};`);
+    }
+    else if (cos(cromwell.motionDirection - cromwell.direction) > 0) {
+        fill(0, 255, 0, 127);
+        console.log("GREEN");
+        console.log(`cosine: ${cos(cromwell.motionDirection - cromwell.direction)};`);
+    }
+    circle(20, 20, 40);
 }

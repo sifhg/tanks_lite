@@ -39,10 +39,9 @@ class Tank {
         }
     }
     steer(power) {
-        let front = (cos(this.motionDirection - this.direction) < 0) ? 1 : -1;
         this._tracks.t0.bearing = this._hull.rotation + (90 * Math.sign(power));
         this._tracks.t1.bearing = this._hull.rotation - (90 * Math.sign(power));
-        if (front == 1) {
+        if (cos(this.motionDirection - this.direction) < 0) {
             const TEMP = this._tracks.t0.bearing;
             this._tracks.t0.bearing = this._tracks.t1.bearing;
             this._tracks.t1.bearing = TEMP;
