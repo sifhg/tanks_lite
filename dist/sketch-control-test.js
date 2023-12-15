@@ -15,6 +15,7 @@ function setup() {
         canvas.resize(DISPLAY.offsetWidth, DISPLAY.offsetHeight);
         background(backgroundColour);
     });
+    angleMode(DEGREES);
     tanks = new Group();
     world.gravity.y = 0;
     cromwell = new Tank(tanks, 100, 100);

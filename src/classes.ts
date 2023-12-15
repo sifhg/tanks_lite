@@ -37,7 +37,7 @@ class Tank {
         
         this._mass = 27 * Tank.SPEED_SCALAR; // 27[tons]
         this._hull.drag = 5;
-        this._hull.rotationDrag = 10;
+        this._hull.rotationDrag = 15;
         this._hull.mass = this._mass * Tank.DISTANCE_SCALAR * .5;
         this._tracks.t0.mass = this._mass * Tank.DISTANCE_SCALAR * .1;
         this._tracks.t1.mass = this._mass * Tank.DISTANCE_SCALAR * .1;
@@ -59,13 +59,14 @@ class Tank {
         }
     }
     steer(power: Direction): void{
+        let front = (cos(this.motionDirection - this.direction) < 0) ? 1 : -1;
         this._tracks.t0.bearing = this._hull.rotation + (90 * Math.sign(power));
         this._tracks.t1.bearing = this._hull.rotation - (90 * Math.sign(power));
-        
-        //Solves backwards
-        if(cos(this._hull.bearing - this._tracks.t0.bearing) < 0) {
-            this._tracks.t0.bearing *= -1;
-            this._tracks.t1.bearing *= -1;
+
+        if(front == 1) {
+            const TEMP = this._tracks.t0.bearing;
+            this._tracks.t0.bearing = this._tracks.t1.bearing;
+            this._tracks.t1.bearing = TEMP;
         }
 
         const SPEED = this._maxSpeed * Math.abs(power);
@@ -108,7 +109,10 @@ class Tank {
         }
     }
     get direction(): number {
-        return this._hull.bearing;
+        return this._hull.rotation + 90;
+    }
+    get motionDirection(): number {
+        return atan2(cromwell.velocity.y,cromwell.velocity.x);
     }
 
     //Setters

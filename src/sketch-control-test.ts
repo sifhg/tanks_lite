@@ -4,6 +4,8 @@ let ball: Sprite;
 let drive: boolean = false;
 let steer: boolean = false;
 
+
+
 function setup() {
     const DISPLAY: HTMLElement | null = document.getElementById("display-control-test");
     if(DISPLAY === null) {
@@ -15,6 +17,8 @@ function setup() {
         canvas.resize(DISPLAY.offsetWidth, DISPLAY.offsetHeight);
         background(backgroundColour);
     });
+    angleMode(DEGREES);
+    
     tanks = new Group();
 
     world.gravity.y = 0;
