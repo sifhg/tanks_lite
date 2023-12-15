@@ -23,6 +23,7 @@ class Tank {
         this._name = name;
         this._mass = 27 * Tank.SPEED_SCALAR; // 27[tons]
         this._hull.drag = 5;
+        this._hull.rotationDrag = 5;
         this._hull.mass = this._mass * Tank.DISTANCE_SCALAR * .5;
         this._tracks.t0.mass = this._mass * Tank.DISTANCE_SCALAR * .1;
         this._tracks.t1.mass = this._mass * Tank.DISTANCE_SCALAR * .1;
@@ -30,14 +31,37 @@ class Tank {
         this._maxSpeed = 17.78 * Tank.SPEED_SCALAR; // 17.78 [m/s]
     }
     //Controls
-    forwards() {
+    drive(power) {
         this._modules.direction = this._hull.rotation + 90;
-        if (this.speed < this._maxSpeed) {
-            this._modules.speed = this.speed + this._maxSpeed / 30;
+        const SPEED = this._maxSpeed * power;
+        if (Math.abs(this.speed) < Math.abs(SPEED)) {
+            this._modules.speed = this.speed + SPEED / 18;
         }
-        else {
-            this._modules.speed = this._maxSpeed;
+        if (Math.abs(this.speed) > Math.abs(SPEED)) {
+            this._modules.speed = SPEED;
         }
+    }
+    steer(power) {
+        this._modules.direction = this._hull.rotation + 90;
+        const SPEED = this._maxSpeed * power;
+        //Left track
+        if (Math.abs(this._tracks.t0.speed) < Math.abs(SPEED)) {
+            this._tracks.t0.speed += SPEED / 18;
+        }
+        if (Math.abs(this._tracks.t0.speed) > Math.abs(SPEED)) {
+            this._tracks.t0.speed = SPEED;
+        }
+        //Right track
+        if (Math.abs(this._tracks.t1.speed) < Math.abs(SPEED)) {
+            this._tracks.t1.speed -= SPEED / 18;
+        }
+        if (Math.abs(this._tracks.t1.speed) > Math.abs(SPEED)) {
+            this._tracks.t1.speed = -SPEED;
+        }
+        // //Towards mean - Left
+        // this._tracks.t0.speed = Math.sign(power) * (this._tracks.t0.speed * 2 + Math.abs(this._tracks.t1.speed))/3;
+        // //Towards mean - Right
+        // this._tracks.t1.speed = Math.sign(-power) * (this._tracks.t1.speed * 2 + Math.abs(this._tracks.t0.speed))/3; 
     }
     //Getters
     get name() {
@@ -57,3 +81,10 @@ class Tank {
         this._name = N;
     }
 }
+var Direction;
+(function (Direction) {
+    Direction[Direction["Forwards"] = 1] = "Forwards";
+    Direction[Direction["Backwards"] = -0.7] = "Backwards";
+    Direction[Direction["Left"] = -1] = "Left";
+    Direction[Direction["Right"] = 1] = "Right";
+})(Direction || (Direction = {}));

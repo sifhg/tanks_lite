@@ -37,6 +37,7 @@ class Tank {
         
         this._mass = 27 * Tank.SPEED_SCALAR; // 27[tons]
         this._hull.drag = 5;
+        this._hull.rotationDrag = 5;
         this._hull.mass = this._mass * Tank.DISTANCE_SCALAR * .5;
         this._tracks.t0.mass = this._mass * Tank.DISTANCE_SCALAR * .1;
         this._tracks.t1.mass = this._mass * Tank.DISTANCE_SCALAR * .1;
@@ -46,15 +47,48 @@ class Tank {
     }
 
 
+
+
     //Controls
-    forwards() {
+
+    drive(power: Direction): void {
         this._modules.direction = this._hull.rotation + 90;
-        if(this.speed < this._maxSpeed) {
-            this._modules.speed = this.speed + this._maxSpeed/20;
-        }else {
-            this._modules.speed = this._maxSpeed;
+        const SPEED = this._maxSpeed * power;
+        if(Math.abs(this.speed) < Math.abs(SPEED)) {
+            this._modules.speed = this.speed + SPEED/18;
+        }
+        if(Math.abs(this.speed) > Math.abs(SPEED)) {
+            this._modules.speed = SPEED;
         }
     }
+    steer(power: Direction): void{
+        this._modules.direction = this._hull.rotation + 90;
+        const SPEED = this._maxSpeed * power;
+        
+        //Left track
+        if(Math.abs(this._tracks.t0.speed) < Math.abs(SPEED)) {
+            this._tracks.t0.speed += SPEED/18;
+        }
+        if(Math.abs(this._tracks.t0.speed) > Math.abs(SPEED)) {
+            this._tracks.t0.speed = SPEED;
+        }
+
+        //Right track
+        if(Math.abs(this._tracks.t1.speed) < Math.abs(SPEED)) {
+            this._tracks.t1.speed -= SPEED/18;
+        }
+        if(Math.abs(this._tracks.t1.speed) > Math.abs(SPEED)) {
+            this._tracks.t1.speed = -SPEED;
+        }
+
+        // //Towards mean - Left
+        // this._tracks.t0.speed = Math.sign(power) * (this._tracks.t0.speed * 2 + Math.abs(this._tracks.t1.speed))/3;
+        // //Towards mean - Right
+        // this._tracks.t1.speed = Math.sign(-power) * (this._tracks.t1.speed * 2 + Math.abs(this._tracks.t0.speed))/3; 
+        
+    }
+
+
 
     //Getters
     get name(): string {
@@ -74,4 +108,12 @@ class Tank {
     setName(N: string): void {
         this._name = N;
     }
+}
+
+
+enum Direction{
+    Forwards = 1,
+    Backwards = -.7,
+    Left = -1,
+    Right = 1
 }

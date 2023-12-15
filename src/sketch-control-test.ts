@@ -2,6 +2,7 @@ let cromwell: Tank, kv2: Tank;
 let tanks: Group;
 let ball: Sprite;
 let drive: boolean = false;
+let steer: boolean = false;
 
 function setup() {
     const DISPLAY: HTMLElement | null = document.getElementById("display-control-test");
@@ -23,9 +24,13 @@ function setup() {
 function draw() {
     clear();
     if(drive) {
-        cromwell.forwards();
+        cromwell.drive(Direction.Forwards);
     }
     if(cromwell.velocity.y != 0) {
         console.log(cromwell.speed);
+    }
+
+    if(steer) {
+        cromwell.steer(Direction.Right);
     }
 }
