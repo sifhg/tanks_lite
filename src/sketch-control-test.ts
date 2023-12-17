@@ -24,40 +24,40 @@ function setup() {
     world.gravity.y = 0;
     cromwell = new Tank(tanks, 100, 100);
 }
-
+let frameStart = 0;
 function draw() {
     clear();
     if(keyIsDown(LEFT_ARROW)) {
         cromwell.steer(Direction.Left);
-        console.log("L");
-        console.log(cromwell.motionDirection);
+        if(frameStart == 0) {
+            frameStart = frameCount;
+        }
     }
     if(keyIsDown(RIGHT_ARROW)) {
         cromwell.steer(Direction.Right);
-        console.log("R");
-        console.log(cromwell.motionDirection);
     }
     if(keyIsDown(UP_ARROW)) {
         cromwell.drive(Direction.Forwards);
-        console.log("U");
-        console.log(cromwell.motionDirection);
     }
     if(keyIsDown(DOWN_ARROW)) {
         cromwell.drive(Direction.Backwards);
-        console.log("D");
-        console.log(cromwell.motionDirection);
     }
+
 
     fill(255, 255, 0, 127);
-    if(cos(cromwell.motionDirection - cromwell.direction) < 0) {
+    let speedDirection = cos(cromwell.motionDirection - cromwell.direction)*cromwell.speed/cromwell.maxSpeed
+    if(speedDirection < -world.velocityThreshold) {
         fill(255, 0, 0, 127);
-        console.log("RED");
-        console.log(`cosine: ${cos(cromwell.motionDirection - cromwell.direction)};`);
 
-    }else if(cos(cromwell.motionDirection - cromwell.direction) > 0) {
+    }else if(speedDirection > 0) {
         fill(0, 255, 0, 127);
-        console.log("GREEN");
-        console.log(`cosine: ${cos(cromwell.motionDirection - cromwell.direction)};`);
     }
     circle(20, 20, 40);
+    console.log(cromwell.direction);
+
+    // if(cromwell.direction <= -270) {
+    //     console.log(`Time for one wole turn: ${frameCount - frameStart} [frames]`);
+    //     console.log(`Time for one wole turn: ${(frameCount - frameStart)/60} [seconds]`);
+    //     noLoop();
+    // }
 }

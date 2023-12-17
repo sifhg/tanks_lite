@@ -62,7 +62,7 @@ class Tank {
         this._tracks.t0.bearing = this._hull.rotation + (90 * Math.sign(power));
         this._tracks.t1.bearing = this._hull.rotation - (90 * Math.sign(power));
 
-        if(cos(this.motionDirection - this.direction) < 0) {
+        if(cos(this.motionDirection - this.direction) * this.speed / this._maxSpeed < -world.velocityThreshold) {
             const TEMP = this._tracks.t0.bearing;
             this._tracks.t0.bearing = this._tracks.t1.bearing;
             this._tracks.t1.bearing = TEMP;
@@ -77,7 +77,7 @@ class Tank {
 
         //Right track
         if(Math.abs(this._tracks.t1.speed) < this._maxSpeed) {
-            this._tracks.t0.applyForce(SPEED);
+            this._tracks.t1.applyForce(SPEED);
         }
 
         // //Towards mean - Left
@@ -107,6 +107,9 @@ class Tank {
             s1: dist(0, 0 , this._tracks.t1.velocity.x, this._tracks.t1.velocity.y),
         }
     }
+    get maxSpeed(): number {
+        return this._maxSpeed;
+    }
     get direction(): number {
         return this._hull.rotation + 90;
     }
@@ -124,6 +127,6 @@ class Tank {
 enum Direction{
     Forwards = 300,
     Backwards = -300,
-    Left = -5,
-    Right = 5
+    Left = -7,
+    Right = 7
 }
