@@ -41,7 +41,7 @@ class Tank {
     steer(power) {
         this._tracks.t0.bearing = this._hull.rotation + (90 * Math.sign(power));
         this._tracks.t1.bearing = this._hull.rotation - (90 * Math.sign(power));
-        if (cos(this.motionDirection - this.direction) < 0) {
+        if (cos(this.motionDirection - this.direction) * this.speed / this._maxSpeed < -world.velocityThreshold) {
             const TEMP = this._tracks.t0.bearing;
             this._tracks.t0.bearing = this._tracks.t1.bearing;
             this._tracks.t1.bearing = TEMP;
@@ -53,7 +53,7 @@ class Tank {
         }
         //Right track
         if (Math.abs(this._tracks.t1.speed) < this._maxSpeed) {
-            this._tracks.t0.applyForce(SPEED);
+            this._tracks.t1.applyForce(SPEED);
         }
         // //Towards mean - Left
         // this._tracks.t0.speed = Math.sign(power) * (this._tracks.t0.speed * 2 + Math.abs(this._tracks.t1.speed))/3;
@@ -79,6 +79,9 @@ class Tank {
             s1: dist(0, 0, this._tracks.t1.velocity.x, this._tracks.t1.velocity.y),
         };
     }
+    get maxSpeed() {
+        return this._maxSpeed;
+    }
     get direction() {
         return this._hull.rotation + 90;
     }
@@ -94,6 +97,6 @@ var Direction;
 (function (Direction) {
     Direction[Direction["Forwards"] = 300] = "Forwards";
     Direction[Direction["Backwards"] = -300] = "Backwards";
-    Direction[Direction["Left"] = -5] = "Left";
-    Direction[Direction["Right"] = 5] = "Right";
+    Direction[Direction["Left"] = -7] = "Left";
+    Direction[Direction["Right"] = 7] = "Right";
 })(Direction || (Direction = {}));
