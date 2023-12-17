@@ -20,14 +20,10 @@ function setup() {
     world.gravity.y = 0;
     cromwell = new Tank(tanks, 100, 100);
 }
-let frameStart = 0;
 function draw() {
     clear();
     if (keyIsDown(LEFT_ARROW)) {
         cromwell.steer(Direction.Left);
-        if (frameStart == 0) {
-            frameStart = frameCount;
-        }
     }
     if (keyIsDown(RIGHT_ARROW)) {
         cromwell.steer(Direction.Right);
@@ -47,10 +43,4 @@ function draw() {
         fill(0, 255, 0, 127);
     }
     circle(20, 20, 40);
-    console.log(cromwell.direction);
-    // if(cromwell.direction <= -270) {
-    //     console.log(`Time for one wole turn: ${frameCount - frameStart} [frames]`);
-    //     console.log(`Time for one wole turn: ${(frameCount - frameStart)/60} [seconds]`);
-    //     noLoop();
-    // }
 }

@@ -55,10 +55,6 @@ class Tank {
         if (Math.abs(this._tracks.t1.speed) < this._maxSpeed) {
             this._tracks.t1.applyForce(SPEED);
         }
-        // //Towards mean - Left
-        // this._tracks.t0.speed = Math.sign(power) * (this._tracks.t0.speed * 2 + Math.abs(this._tracks.t1.speed))/3;
-        // //Towards mean - Right
-        // this._tracks.t1.speed = Math.sign(-power) * (this._tracks.t1.speed * 2 + Math.abs(this._tracks.t0.speed))/3; 
     }
     //Getters
     get name() {
