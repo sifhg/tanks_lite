@@ -121,7 +121,7 @@ class Tank {
 
 enum Direction{
     Forwards = 300,
-    Backwards = -300,
+    Backwards = -30,
     Left = -7,
     Right = 7
 }

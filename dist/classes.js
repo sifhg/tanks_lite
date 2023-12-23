@@ -92,7 +92,7 @@ class Tank {
 var Direction;
 (function (Direction) {
     Direction[Direction["Forwards"] = 300] = "Forwards";
-    Direction[Direction["Backwards"] = -300] = "Backwards";
+    Direction[Direction["Backwards"] = -150] = "Backwards";
     Direction[Direction["Left"] = -7] = "Left";
     Direction[Direction["Right"] = 7] = "Right";
 })(Direction || (Direction = {}));
