@@ -1,6 +1,7 @@
 class Tank {
     static DISTANCE_SCALAR = 15.75;
     static SPEED_SCALAR = 4.1 / Tank.DISTANCE_SCALAR;
+    static TANKS: Tank[] = [];
 
     private _mass: number;
     private _maxSpeed: number;
@@ -44,6 +45,8 @@ class Tank {
         //this._turret.mass = this._mass * Tank.DISTANCE_SCALAR * .3;
 
         this._maxSpeed = 17.78 * Tank.SPEED_SCALAR; // 17.78 [m/s]
+
+        Tank.TANKS.push(this);
     }
 
 
@@ -118,10 +121,15 @@ class Tank {
     }
 }
 
-
 enum Direction{
     Forwards = 300,
     Backwards = -30,
     Left = -7,
     Right = 7
 }
+
+p5.prototype.registerMethod('pre', function applySideDragForce() {
+    for(const TANK of Tank.TANKS) {
+        console.log(TANK.name);
+    }
+})

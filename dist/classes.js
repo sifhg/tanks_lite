@@ -2,6 +2,7 @@
 class Tank {
     static DISTANCE_SCALAR = 15.75;
     static SPEED_SCALAR = 4.1 / Tank.DISTANCE_SCALAR;
+    static TANKS = [];
     _mass;
     _maxSpeed;
     _name;
@@ -29,6 +30,7 @@ class Tank {
         this._tracks.t1.mass = this._mass * Tank.DISTANCE_SCALAR * .1;
         //this._turret.mass = this._mass * Tank.DISTANCE_SCALAR * .3;
         this._maxSpeed = 17.78 * Tank.SPEED_SCALAR; // 17.78 [m/s]
+        Tank.TANKS.push(this);
     }
     //Controls
     drive(power) {
@@ -92,7 +94,12 @@ class Tank {
 var Direction;
 (function (Direction) {
     Direction[Direction["Forwards"] = 300] = "Forwards";
-    Direction[Direction["Backwards"] = -150] = "Backwards";
+    Direction[Direction["Backwards"] = -30] = "Backwards";
     Direction[Direction["Left"] = -7] = "Left";
     Direction[Direction["Right"] = 7] = "Right";
 })(Direction || (Direction = {}));
+p5.prototype.registerMethod('pre', function applySideDragForce() {
+    for (const TANK of Tank.TANKS) {
+        console.log(TANK.name);
+    }
+});

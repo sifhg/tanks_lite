@@ -1,7 +1,6 @@
 "use strict";
 let cromwell, kv2;
-let tanks;
-let ball;
+let tankSprites;
 let drive = false;
 let steer = false;
 function setup() {
@@ -16,9 +15,9 @@ function setup() {
         background(backgroundColour);
     });
     angleMode(DEGREES);
-    tanks = new Group();
+    tankSprites = new Group();
     world.gravity.y = 0;
-    cromwell = new Tank(tanks, 100, 100);
+    cromwell = new Tank(tankSprites, 100, 100);
 }
 function draw() {
     clear();
