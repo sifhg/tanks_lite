@@ -43,7 +43,7 @@ class Tank {
     steer(power) {
         this._tracks.t0.bearing = this._hull.rotation + (90 * Math.sign(power));
         this._tracks.t1.bearing = this._hull.rotation - (90 * Math.sign(power));
-        if (cos(this.motionDirection - this.direction) * this.speed / this._maxSpeed < -world.velocityThreshold) {
+        if (cos(this.motionDirection - this.direction) * this.speed < -world.velocityThreshold) {
             const TEMP = this._tracks.t0.bearing;
             this._tracks.t0.bearing = this._tracks.t1.bearing;
             this._tracks.t1.bearing = TEMP;
@@ -57,6 +57,12 @@ class Tank {
         if (Math.abs(this._tracks.t1.speed) < this._maxSpeed) {
             this._tracks.t1.applyForce(SPEED);
         }
+    }
+    applyForce2Tracks(direction, strength) {
+        this._tracks.t0.bearing = direction;
+        this._tracks.t1.bearing = direction;
+        this._tracks.t0.applyForce(strength / 2);
+        this._tracks.t1.applyForce(strength / 2);
     }
     //Getters
     get name() {
@@ -94,12 +100,14 @@ class Tank {
 var Direction;
 (function (Direction) {
     Direction[Direction["Forwards"] = 300] = "Forwards";
-    Direction[Direction["Backwards"] = -30] = "Backwards";
-    Direction[Direction["Left"] = -7] = "Left";
-    Direction[Direction["Right"] = 7] = "Right";
+    Direction[Direction["Backwards"] = -150] = "Backwards";
+    Direction[Direction["Left"] = -8] = "Left";
+    Direction[Direction["Right"] = 8] = "Right";
 })(Direction || (Direction = {}));
 p5.prototype.registerMethod('pre', function applySideDragForce() {
     for (const TANK of Tank.TANKS) {
-        console.log(TANK.name);
+        const FORCE_DIRECTION = TANK.motionDirection - 180;
+        const FORCE_MAGNITUDE = Math.abs(sin(TANK.motionDirection - TANK.direction)) * TANK.speed * 5000;
+        TANK.applyForce2Tracks(FORCE_DIRECTION, FORCE_MAGNITUDE);
     }
 });

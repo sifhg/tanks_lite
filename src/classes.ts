@@ -65,7 +65,7 @@ class Tank {
         this._tracks.t0.bearing = this._hull.rotation + (90 * Math.sign(power));
         this._tracks.t1.bearing = this._hull.rotation - (90 * Math.sign(power));
 
-        if(cos(this.motionDirection - this.direction) * this.speed / this._maxSpeed < -world.velocityThreshold) {
+        if(cos(this.motionDirection - this.direction) * this.speed < -world.velocityThreshold) {
             const TEMP = this._tracks.t0.bearing;
             this._tracks.t0.bearing = this._tracks.t1.bearing;
             this._tracks.t1.bearing = TEMP;
@@ -82,6 +82,12 @@ class Tank {
         if(Math.abs(this._tracks.t1.speed) < this._maxSpeed) {
             this._tracks.t1.applyForce(SPEED);
         }
+    }
+    applyForce2Tracks(direction: number, strength: number) {
+        this._tracks.t0.bearing = direction;
+        this._tracks.t1.bearing = direction;
+        this._tracks.t0.applyForce(strength/2);
+        this._tracks.t1.applyForce(strength/2);
     }
 
 
@@ -123,13 +129,15 @@ class Tank {
 
 enum Direction{
     Forwards = 300,
-    Backwards = -30,
-    Left = -7,
-    Right = 7
+    Backwards = -150,
+    Left = -8,
+    Right = 8
 }
 
 p5.prototype.registerMethod('pre', function applySideDragForce() {
     for(const TANK of Tank.TANKS) {
-        console.log(TANK.name);
+        const FORCE_DIRECTION: number = TANK.motionDirection - 180;
+        const FORCE_MAGNITUDE: number = Math.abs(sin(TANK.motionDirection - TANK.direction)) * TANK.speed * 5000;
+        TANK.applyForce2Tracks(FORCE_DIRECTION, FORCE_MAGNITUDE);
     }
 })
