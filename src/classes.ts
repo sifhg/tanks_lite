@@ -8,13 +8,15 @@ class Tank {
     private _name: string;
     private _modules: Group;
     private _hull: Sprite;
+    private _turret: Sprite;
     private _tracks: {
         t0: Sprite,
         t1: Sprite
     }
     private _joints: {
         jr: GlueJoint,
-        jl: GlueJoint
+        jl: GlueJoint,
+        turretAxle: WheelJoint
     }
 
     constructor(group: Group, x: number, y: number,
@@ -24,14 +26,17 @@ class Tank {
 
 
         this._hull = new this._modules.Sprite(x, y, width * Tank.DISTANCE_SCALAR, length * Tank.DISTANCE_SCALAR, "d");
+        this._turret = new this._modules.Sprite(x, y + this._hull.halfHeight - this._hull.height/3, this._hull.width*2/3);
         this._tracks = {
             t0: new this._modules.Sprite(x + this._hull.halfWidth + wheelWidth*Tank.DISTANCE_SCALAR/2, y, wheelWidth * Tank.DISTANCE_SCALAR, length * Tank.DISTANCE_SCALAR, "d"),
             t1: new this._modules.Sprite(x - this._hull.halfWidth - wheelWidth*Tank.DISTANCE_SCALAR/2, y, wheelWidth * Tank.DISTANCE_SCALAR, length * Tank.DISTANCE_SCALAR, "d")
         }
 
+
         this._joints = {
             jr: new GlueJoint(this._hull, this._tracks.t0),
-            jl: new GlueJoint(this._hull, this._tracks.t1) 
+            jl: new GlueJoint(this._hull, this._tracks.t1),
+            turretAxle: new WheelJoint(this._hull, this._turret)
         }
         
         this._name = name;
@@ -42,7 +47,7 @@ class Tank {
         this._hull.mass = this._mass * Tank.DISTANCE_SCALAR * .5;
         this._tracks.t0.mass = this._mass * Tank.DISTANCE_SCALAR * .1;
         this._tracks.t1.mass = this._mass * Tank.DISTANCE_SCALAR * .1;
-        //this._turret.mass = this._mass * Tank.DISTANCE_SCALAR * .3;
+        this._turret.mass = this._mass * Tank.DISTANCE_SCALAR * .3;
 
         this._maxSpeed = 17.78 * Tank.SPEED_SCALAR; // 17.78 [m/s]
 

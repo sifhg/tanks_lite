@@ -26,8 +26,8 @@ function setup() {
 
 function draw() {
     //clear();
-
     background(backgroundColour + "10");
+
     if(keyIsDown(LEFT_ARROW)) {
         cromwell.steer(Direction.Left);
     }
@@ -51,11 +51,12 @@ function draw() {
         fill(0, 255, 0, 127);
     }
     circle(20, 20, 40);
-    cromwell.drive(Direction.Forwards);
-    console.log(`Max speed: ${cromwell.maxSpeed}`);
-    console.log(`Current speed: ${cromwell.speed}`);
-    console.log(`Time passed: ${frameCount/60} [sec]`)
-    if(cromwell.speed >= cromwell.maxSpeed) {
+
+    cromwell.steer(Direction.Left);
+    console.log(`Whole turn: -270`);
+    console.log(`Current rotation: ${cromwell.direction}`);
+    console.log(`Time passed: ${frameCount / 60} [sec]`);
+    if (cromwell.direction < -270) {
         noLoop();
     }
 }

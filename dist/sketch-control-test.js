@@ -43,11 +43,11 @@ function draw() {
         fill(0, 255, 0, 127);
     }
     circle(20, 20, 40);
-    cromwell.drive(Direction.Forwards);
-    console.log(`Max speed: ${cromwell.maxSpeed}`);
-    console.log(`Current speed: ${cromwell.speed}`);
+    cromwell.steer(Direction.Left);
+    console.log(`Whole turn: -270`);
+    console.log(`Current rotation: ${cromwell.direction}`);
     console.log(`Time passed: ${frameCount / 60} [sec]`);
-    if (cromwell.speed >= cromwell.maxSpeed) {
+    if (cromwell.direction < -270) {
         noLoop();
     }
 }
