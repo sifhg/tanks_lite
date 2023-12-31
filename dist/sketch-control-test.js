@@ -43,5 +43,6 @@ function draw() {
         fill(0, 255, 0, 127);
     }
     circle(20, 20, 40);
+    cromwell.turnTurret(Direction.Right);
     //noLoop();
 }

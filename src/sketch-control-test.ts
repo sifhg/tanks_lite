@@ -52,5 +52,6 @@ function draw() {
     }
     circle(20, 20, 40);
 
+    cromwell.turnTurret(Direction.Right);
     //noLoop();
 }
