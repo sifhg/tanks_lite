@@ -20,8 +20,8 @@ function setup() {
     cromwell = new Tank(tankSprites, 100, 100);
 }
 function draw() {
-    //clear();
-    background(backgroundColour + "10");
+    clear();
+    //background(backgroundColour + "10");
     if (keyIsDown(LEFT_ARROW)) {
         cromwell.steer(Direction.Left);
     }
@@ -43,11 +43,5 @@ function draw() {
         fill(0, 255, 0, 127);
     }
     circle(20, 20, 40);
-    cromwell.steer(Direction.Left);
-    console.log(`Whole turn: -270`);
-    console.log(`Current rotation: ${cromwell.direction}`);
-    console.log(`Time passed: ${frameCount / 60} [sec]`);
-    if (cromwell.direction < -270) {
-        noLoop();
-    }
+    //noLoop();
 }

@@ -3,9 +3,14 @@ class Tank {
     static SPEED_SCALAR = 4.1 / Tank.DISTANCE_SCALAR;
     static TANKS: Tank[] = [];
 
+    //Specifications
+    private _damage: number;
     private _mass: number;
     private _maxSpeed: number;
     private _name: string;
+    private _dispersion: number;
+
+    //p5play members
     private _modules: Group;
     private _hull: Sprite;
     private _turret: Sprite;
@@ -21,17 +26,27 @@ class Tank {
 
     constructor(group: Group, x: number, y: number,
                 width: number = 2.908, length: number = 6.35,
+                barrelLength: number = 2.82, shellMass = 2.72,
                 name: string = "Cromwell", wheelWidth: number = 0.394) {
+
+        //Specifications
+        this._damage = shellMass;
+        this._mass = 27 * Tank.SPEED_SCALAR; // 27[tons]
+        this._name = name;
+        this._dispersion = atan(shellMass / barrelLength) / Tank.DISTANCE_SCALAR;
+
+        //p5play members
         this._modules = new group.Group();
 
-
         this._hull = new this._modules.Sprite(x, y, width * Tank.DISTANCE_SCALAR, length * Tank.DISTANCE_SCALAR, "d");
-        this._turret = new this._modules.Sprite(x, y + this._hull.halfHeight - this._hull.height/3, this._hull.width*2/3);
+        this._turret = new this._modules.Sprite(x, y + this._hull.halfHeight - this._hull.height/3, this._hull.width);
+        let calibre = Math.sqrt(shellMass/PI) * 0.0306 * 2;
+        this._turret.addCollider(0, (barrelLength * Tank.DISTANCE_SCALAR / 2) + this._hull.halfWidth*2/3, (calibre + 0.08) * Tank.DISTANCE_SCALAR, barrelLength * Tank.DISTANCE_SCALAR);
         this._tracks = {
             t0: new this._modules.Sprite(x + this._hull.halfWidth + wheelWidth*Tank.DISTANCE_SCALAR/2, y, wheelWidth * Tank.DISTANCE_SCALAR, length * Tank.DISTANCE_SCALAR, "d"),
             t1: new this._modules.Sprite(x - this._hull.halfWidth - wheelWidth*Tank.DISTANCE_SCALAR/2, y, wheelWidth * Tank.DISTANCE_SCALAR, length * Tank.DISTANCE_SCALAR, "d")
         }
-
+        this._turret.overlaps(this._modules);
 
         this._joints = {
             jr: new GlueJoint(this._hull, this._tracks.t0),
@@ -39,9 +54,6 @@ class Tank {
             turretAxle: new WheelJoint(this._hull, this._turret)
         }
         
-        this._name = name;
-        
-        this._mass = 27 * Tank.SPEED_SCALAR; // 27[tons]
         this._hull.drag = 5;
         this._hull.rotationDrag = 15;
         this._hull.mass = this._mass * Tank.DISTANCE_SCALAR * .5;
@@ -53,8 +65,6 @@ class Tank {
 
         Tank.TANKS.push(this);
     }
-
-
 
 
     //Controls
