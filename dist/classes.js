@@ -124,9 +124,9 @@ class Tank {
     }
     relativeTurretDirection(xa, y) {
         if (y == undefined) {
-            return this._turret.rotation + 90 - xa;
+            return this._turret.rotation - xa;
         }
-        return atan2(y - this._turret.y, xa - cromwell._turret.x) - 90;
+        return this._turret.rotation - (atan((y - this._turret.y) / (xa - cromwell._turret.x)));
     }
     //Setters
     setName(N) {
