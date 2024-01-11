@@ -40,13 +40,13 @@ function draw() {
     if(keyIsDown(DOWN_ARROW)) {
         cromwell.drive(Direction.Backwards);
     }
-    // if(cromwell.relativeTurretDirection(mouseX, mouseY) > 2) {
-    //     cromwell.turnTurret(Direction.Right);
-    // }else if(cromwell.relativeTurretDirection(mouseX, mouseY) < 2) {
-    //     cromwell.turnTurret(Direction.Left);
-    // }else {
-    //     cromwell.breakTurret();
-    // }
+    if(cromwell.relativeTurretDirection(mouseX, mouseY) > 2) {
+        cromwell.turnTurret(Direction.Right);
+    }else if(cromwell.relativeTurretDirection(mouseX, mouseY) < -2) {
+        cromwell.turnTurret(Direction.Left);
+    }else {
+        cromwell.breakTurret();
+    }
 
 
     fill(255, 255, 0, 127);
@@ -59,6 +59,5 @@ function draw() {
     }
     circle(20, 20, 40);
 
-    console.log(cromwell.relativeTurretDirection(mouseX, mouseY));
     //noLoop();
 }

@@ -146,13 +146,21 @@ class Tank {
         return atan2(cromwell.velocity.y,cromwell.velocity.x);
     }
     get turretDirection(): number {
-        return this._turret.rotation + 90;
+        let rotation = this._turret.rotation + 90;
+        while(rotation < 0) {
+            rotation += 360;
+        }
+        return rotation % 360;
     }
     relativeTurretDirection(xa: number, y?: number) {
         if(y == undefined) {
             return this._turret.rotation - xa;
         }
-        return this._turret.rotation - (atan((y - this._turret.y) / (xa - cromwell._turret.x)));
+        let rotation = -atan2((xa - this._turret.x) , (y - cromwell._turret.y)) - this._turret.rotation;
+        while(rotation < -180) {
+            rotation += 360;
+        }
+        return rotation % 360;
     }
 
     //Setters
