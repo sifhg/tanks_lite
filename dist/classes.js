@@ -26,7 +26,6 @@ class Tank {
         this._modules = new group.Group();
         this._hull = new this._modules.Sprite(x, y, width * Tank.DISTANCE_SCALAR, length * Tank.DISTANCE_SCALAR, "d");
         this._turret = new this._modules.Sprite(x, y + this._hull.halfHeight - this._hull.height / 3, this._hull.width);
-        this._turret.debug = true;
         let calibre = Math.sqrt(shellMass / PI) * 0.0306 * 2;
         this._tracks = {
             t0: new this._modules.Sprite(x + this._hull.halfWidth + wheelWidth * Tank.DISTANCE_SCALAR / 2, y, wheelWidth * Tank.DISTANCE_SCALAR, length * Tank.DISTANCE_SCALAR, "d"),
@@ -119,6 +118,15 @@ class Tank {
     }
     get motionDirection() {
         return atan2(cromwell.velocity.y, cromwell.velocity.x);
+    }
+    get turretDirection() {
+        return this._turret.rotation + 90;
+    }
+    relativeTurretDirection(xa, y) {
+        if (y == undefined) {
+            return this._turret.rotation + 90 - xa;
+        }
+        return atan2(y - this._turret.y, xa - cromwell._turret.x) - 90;
     }
     //Setters
     setName(N) {
