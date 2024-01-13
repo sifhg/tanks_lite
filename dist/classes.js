@@ -123,10 +123,12 @@ class Tank {
         return this._turret.rotation + 90;
     }
     relativeTurretDirection(xa, y) {
+        //const b = new p5.Vector();
+        //const TURRET_VECTOR = p5.Vector.fromAngle(0);
         if (y == undefined) {
             return this._turret.rotation - xa;
         }
-        return this._turret.rotation - (atan((y - this._turret.y) / (xa - cromwell._turret.x)));
+        return this._turret.rotation + (atan2((xa - this._turret.x), (y - cromwell._turret.y))); //this._turret.rotation;// - (atan((y - this._turret.y) / (xa - cromwell._turret.x)));
     }
     //Setters
     setName(N) {

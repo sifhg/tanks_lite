@@ -59,6 +59,6 @@ function draw() {
     }
     circle(20, 20, 40);
 
-    console.log(cromwell.relativeTurretDirection(mouseX, mouseY));
+    //console.log(cromwell.relativeTurretDirection(mouseX, mouseY));
     //noLoop();
 }

@@ -50,6 +50,6 @@ function draw() {
         fill(0, 255, 0, 127);
     }
     circle(20, 20, 40);
-    console.log(cromwell.relativeTurretDirection(mouseX, mouseY));
+    //console.log(cromwell.relativeTurretDirection(mouseX, mouseY));
     //noLoop();
 }

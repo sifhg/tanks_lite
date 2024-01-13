@@ -143,16 +143,18 @@ class Tank {
         return this._hull.rotation + 90;
     }
     get motionDirection(): number {
-        return atan2(cromwell.velocity.y,cromwell.velocity.x);
+        return atan2(this.velocity.y, this.velocity.x);
     }
     get turretDirection(): number {
         return this._turret.rotation + 90;
     }
     relativeTurretDirection(xa: number, y?: number) {
+        const a = new p5.Vector(1,1);
+        const TURRET_VECTOR = p5.Vector.fromAngle(0);
         if(y == undefined) {
             return this._turret.rotation - xa;
         }
-        return this._turret.rotation - (atan((y - this._turret.y) / (xa - cromwell._turret.x)));
+        return this._turret.rotation + (atan2((xa - this._turret.x) , (y - cromwell._turret.y))); //this._turret.rotation;// - (atan((y - this._turret.y) / (xa - cromwell._turret.x)));
     }
 
     //Setters
