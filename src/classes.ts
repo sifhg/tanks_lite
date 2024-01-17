@@ -106,6 +106,11 @@ class Tank {
     }
     turnTurret(power: Direction) {
         const SPEED = power * Tank.SPEED_SCALAR * this._maxSpeed / this._mass;
+        if(power == Direction.NONE) {
+            this.breakTurret();
+            return;
+        }
+
         if(Math.abs(this._joints.turretAxle.speed) < Math.abs(SPEED)) {
             this._joints.turretAxle.speed += SPEED/60;
         }else {
@@ -142,8 +147,11 @@ class Tank {
     get direction(): number {
         return this._hull.rotation + 90;
     }
+    get dispersion(): number {
+        return this._dispersion;
+    }
     get motionDirection(): number {
-        return atan2(this.velocity.y, this.velocity.x);
+        return atan2(cromwell.velocity.y,cromwell.velocity.x);
     }
     get turretDirection(): number {
         let rotation = this._turret.rotation + 90;
@@ -152,17 +160,51 @@ class Tank {
         }
         return rotation % 360;
     }
-    relativeTurretDirection(xa: number, y?: number) {
-        const a = new p5.Vector(1,1);
-        const TURRET_VECTOR = p5.Vector.fromAngle(0);
+    getAngle2Turret(xa: number, y?: number): number {
         if(y == undefined) {
-            return this._turret.rotation - xa;
+            //If only an angle is provided
+            let rotation = this._turret.rotation - xa
+
+            // Normalize the angle to be between -180 and 180 degrees
+            while(rotation < -180) {
+                rotation += 360;
+            }
+            return rotation % 360;
         }
-        let rotation = -atan2((xa - this._turret.x) , (y - cromwell._turret.y)) - this._turret.rotation;
+        const DX = xa - this._turret.x;
+        const DY = y - this._turret.y;
+        let rotation = -atan2(DX, DY) - this._turret.rotation;
+
+        // Normalize the angle to be between -180 and 180 degrees
         while(rotation < -180) {
             rotation += 360;
         }
         return rotation % 360;
+    }
+    getPerpendicularDistance2Turret(x: number, y: number): number {
+        const DISTANCE = dist(x, y, this._turret.x, this._turret.y);
+        const ANGLE = this.getAngle2Turret(x, y);
+        const PERPENDICULAR_DISTANCE = sin(ANGLE) * DISTANCE;
+        return PERPENDICULAR_DISTANCE;
+    }
+    decideTurretTurningDirection(x: number, y: number, threshold: number = 0): Direction {
+        if(threshold < 0) {
+            throw new Error("The input threshold of decideTurretTurningDirection cannot be a negative number");
+        }
+
+        const PERPENDICULAR_DISTANCE = this.getPerpendicularDistance2Turret(x, y);
+        if(PERPENDICULAR_DISTANCE >= threshold/2) {
+            return Direction.Right;
+        }
+        if(PERPENDICULAR_DISTANCE < -threshold/2) {
+            return Direction.Left;
+        }
+
+        //Handles cases where the point is behind the turret
+        if(cos(this.getAngle2Turret(x, y)) < 0) {
+            return this.decideTurretTurningDirection(x, y, 0);
+        }
+        return Direction.NONE;
     }
 
     //Setters
@@ -175,7 +217,8 @@ enum Direction{
     Forwards = 300,
     Backwards = -150,
     Left = -8,
-    Right = 8
+    Right = 8,
+    NONE = 0
 }
 
 p5.prototype.registerMethod('pre', function applySideDragForce() {

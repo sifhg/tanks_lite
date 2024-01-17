@@ -34,15 +34,9 @@ function draw() {
     if (keyIsDown(DOWN_ARROW)) {
         cromwell.drive(Direction.Backwards);
     }
-    if (cromwell.relativeTurretDirection(mouseX, mouseY) > 2) {
-        cromwell.turnTurret(Direction.Right);
-    }
-    else if (cromwell.relativeTurretDirection(mouseX, mouseY) < -2) {
-        cromwell.turnTurret(Direction.Left);
-    }
-    else {
-        cromwell.breakTurret();
-    }
+    const DIRECTION = cromwell.decideTurretTurningDirection(mouseX, mouseY, cromwell.dispersion / 3);
+    cromwell.turnTurret(DIRECTION);
+    console.log(DIRECTION);
     fill(255, 255, 0, 127);
     let speedDirection = cos(cromwell.motionDirection - cromwell.direction) * cromwell.speed;
     if (speedDirection < -world.velocityThreshold) {
