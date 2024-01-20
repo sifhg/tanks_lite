@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 })
 
-const NAV: HTMLElement = document.getElementsByTagName("nav")[0];
+const NAV: any = document.getElementsByTagName("nav")[0];
 NAV.addEventListener("click", () => {
     const DISPLAYS: any = document.getElementsByClassName("display");
 

@@ -36,7 +36,6 @@ class Tank {
             jl: new GlueJoint(this._hull, this._tracks.t1),
             turretAxle: new WheelJoint(this._hull, this._turret)
         };
-        this._joints.turretAxle.enableMotor = true;
         this._turret.addCollider(0, (barrelLength * Tank.DISTANCE_SCALAR / 2) + this._hull.halfWidth * 2 / 3, (calibre + 0.08) * Tank.DISTANCE_SCALAR, barrelLength * Tank.DISTANCE_SCALAR);
         this._turret.overlaps(this._tracks.t0);
         this._turret.overlaps(this._tracks.t1);
@@ -80,20 +79,20 @@ class Tank {
         this._tracks.t1.applyForce(strength / 2);
     }
     turnTurret(power) {
-        const SPEED = power * Tank.SPEED_SCALAR * this._maxSpeed / this._mass;
-        if (power == Direction.NONE) {
-            this.breakTurret();
-            return;
-        }
-        if (Math.abs(this._joints.turretAxle.speed) < Math.abs(SPEED)) {
-            this._joints.turretAxle.speed += SPEED / 60;
-        }
-        else {
-            this._joints.turretAxle.speed = SPEED;
+        const SPEED_AMPLITUDE = Direction.Right * Tank.SPEED_SCALAR * this._maxSpeed / this._mass;
+        if (typeof power == "number" || typeof power == "object") {
+            this._turret.rotateTo(power, SPEED_AMPLITUDE, -90);
+            this._turret.rotationSpeed += this._hull.rotationSpeed;
+            console.log("rotates to mouse");
         }
     }
     breakTurret() {
-        this._joints.turretAxle.speed = 0;
+        this._turret.rotationSpeed = 0;
+        this._turret.rotateTo(this._turret.rotation);
+    }
+    //Setters
+    setName(N) {
+        this._name = N;
     }
     //Getters
     get name() {
@@ -133,6 +132,7 @@ class Tank {
         }
         return rotation % 360;
     }
+    //Helpers
     getAngle2Turret(xa, y) {
         if (y == undefined) {
             //If only an angle is provided
@@ -158,7 +158,7 @@ class Tank {
         const PERPENDICULAR_DISTANCE = sin(ANGLE) * DISTANCE;
         return PERPENDICULAR_DISTANCE;
     }
-    decideTurretTurningDirection(x, y, threshold = 0) {
+    decideTurretTurningDirection(x, y, threshold = this.dispersion / 3) {
         if (threshold < 0) {
             throw new Error("The input threshold of decideTurretTurningDirection cannot be a negative number");
         }
@@ -174,10 +174,6 @@ class Tank {
             return this.decideTurretTurningDirection(x, y, 0);
         }
         return Direction.NONE;
-    }
-    //Setters
-    setName(N) {
-        this._name = N;
     }
 }
 var Direction;

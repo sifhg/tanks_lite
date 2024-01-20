@@ -40,10 +40,14 @@ function draw() {
     if(keyIsDown(DOWN_ARROW)) {
         cromwell.drive(Direction.Backwards);
     }
-    const DIRECTION = cromwell.decideTurretTurningDirection(mouseX, mouseY, cromwell.dispersion/3)
-    cromwell.turnTurret(DIRECTION);
-
-    console.log(DIRECTION);
+    
+    cromwell.turnTurret({x: mouseX, y: mouseY});
+    // const DIRECTION = cromwell.decideTurretTurningDirection(mouseX, mouseY);
+    // if(DIRECTION == Direction.NONE) {
+    //     cromwell.breakTurret();
+    // }else {
+    //     cromwell.turnTurret({x: mouseX, y: mouseY});
+    // }
 
     fill(255, 255, 0, 127);
     let speedDirection = cos(cromwell.motionDirection - cromwell.direction)*cromwell.speed;
