@@ -25,8 +25,8 @@ function setup() {
 }
 
 function draw() {
-    clear();
-    //background(backgroundColour + "10");
+    //clear();
+    background(backgroundColour + "10");
 
     if(keyIsDown(LEFT_ARROW)) {
         cromwell.steer(Direction.Left);

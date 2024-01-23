@@ -25,12 +25,12 @@ class Tank {
         //p5play members
         this._modules = new group.Group();
         this._hull = new this._modules.Sprite(x, y, width * Tank.DISTANCE_SCALAR, length * Tank.DISTANCE_SCALAR, "d");
-        this._turret = new this._modules.Sprite(x, y + this._hull.halfHeight - this._hull.height / 3, this._hull.width);
-        let calibre = Math.sqrt(shellMass / PI) * 0.0306 * 2;
         this._tracks = {
             t0: new this._modules.Sprite(x + this._hull.halfWidth + wheelWidth * Tank.DISTANCE_SCALAR / 2, y, wheelWidth * Tank.DISTANCE_SCALAR, length * Tank.DISTANCE_SCALAR, "d"),
             t1: new this._modules.Sprite(x - this._hull.halfWidth - wheelWidth * Tank.DISTANCE_SCALAR / 2, y, wheelWidth * Tank.DISTANCE_SCALAR, length * Tank.DISTANCE_SCALAR, "d")
         };
+        this._turret = new this._modules.Sprite(x, y + this._hull.halfHeight - this._hull.height / 3, this._hull.width);
+        let calibre = Math.sqrt(shellMass / PI) * 0.0306 * 2;
         this._joints = {
             jr: new GlueJoint(this._hull, this._tracks.t0),
             jl: new GlueJoint(this._hull, this._tracks.t1),

@@ -20,8 +20,8 @@ function setup() {
     cromwell = new Tank(tankSprites, 100, 100);
 }
 function draw() {
-    clear();
-    //background(backgroundColour + "10");
+    //clear();
+    background(backgroundColour + "10");
     if (keyIsDown(LEFT_ARROW)) {
         cromwell.steer(Direction.Left);
     }
