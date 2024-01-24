@@ -110,7 +110,6 @@ class Tank {
         if(typeof power == "number" || typeof power == "object") {
             this._turret.rotateTo(power, SPEED_AMPLITUDE, -90);
             this._turret.rotationSpeed += this._hull.rotationSpeed;
-            console.log("rotates to mouse");
         }
     }
     breakTurret() {
@@ -190,16 +189,15 @@ class Tank {
         const PERPENDICULAR_DISTANCE = sin(ANGLE) * DISTANCE;
         return PERPENDICULAR_DISTANCE;
     }
-    decideTurretTurningDirection(x: number, y: number, threshold: number = this.dispersion/3): Direction {
+    decideTurretTurningDirection(x: number, y: number, threshold: number = this.dispersion*2/3): Direction {
         if(threshold < 0) {
             throw new Error("The input threshold of decideTurretTurningDirection cannot be a negative number");
         }
 
-        const PERPENDICULAR_DISTANCE = this.getPerpendicularDistance2Turret(x, y);
-        if(PERPENDICULAR_DISTANCE >= threshold/2) {
+        if(this._turret.angleToFace(x, y, -90) <= -threshold/2) {
             return Direction.Right;
         }
-        if(PERPENDICULAR_DISTANCE < -threshold/2) {
+        if(this._turret.angleToFace(x, y, -90) >= threshold/2) {
             return Direction.Left;
         }
 

@@ -1,5 +1,6 @@
 "use strict";
 let cromwell, kv2;
+let aim;
 let tankSprites;
 let drive = false;
 let steer = false;
@@ -15,6 +16,9 @@ function setup() {
         background(backgroundColour);
     });
     angleMode(DEGREES);
+    aim = new Sprite(mouse.x, mouse.y, 5);
+    aim.collider = 'none';
+    aim.visible = false;
     tankSprites = new Group();
     world.gravity.y = 0;
     cromwell = new Tank(tankSprites, 100, 100);
@@ -34,13 +38,17 @@ function draw() {
     if (keyIsDown(DOWN_ARROW)) {
         cromwell.drive(Direction.Backwards);
     }
-    cromwell.turnTurret({ x: mouseX, y: mouseY });
-    // const DIRECTION = cromwell.decideTurretTurningDirection(mouseX, mouseY);
-    // if(DIRECTION == Direction.NONE) {
-    //     cromwell.breakTurret();
-    // }else {
-    //     cromwell.turnTurret({x: mouseX, y: mouseY});
-    // }
+    aim.moveTo({ x: mouse.x, y: mouse.y }, 10);
+    const DIRECTION = cromwell.decideTurretTurningDirection(aim.x, aim.y);
+    if (DIRECTION == Direction.NONE) {
+        cromwell.breakTurret();
+        console.log("break");
+    }
+    else {
+        cromwell.turnTurret({ x: aim.x, y: aim.y });
+        console.log("move");
+    }
+    //console.log(DIRECTION);
     fill(255, 255, 0, 127);
     let speedDirection = cos(cromwell.motionDirection - cromwell.direction) * cromwell.speed;
     if (speedDirection < -world.velocityThreshold) {
