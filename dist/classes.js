@@ -3,7 +3,7 @@ class Tank {
     static DISTANCE_SCALAR = 15.75;
     static SPEED_SCALAR = 4.1 / Tank.DISTANCE_SCALAR;
     static TANKS = [];
-    static TANK_SPRITES = new Group();
+    //static TANK_SPRITES: Group = new Group();
     //Specifications
     _damage;
     _mass;
@@ -16,7 +16,7 @@ class Tank {
     _turret;
     _tracks;
     _joints;
-    constructor(x, y, width = 2.908, length = 6.35, mass = 27, maxSpeed = 17.78, barrelLength = 2.82, shellMass = 2.72, name = "Cromwell", wheelWidth = 0.394) {
+    constructor(group, x, y, width = 2.908, length = 6.35, mass = 27, maxSpeed = 17.78, barrelLength = 2.82, shellMass = 2.72, name = "Cromwell", wheelWidth = 0.394) {
         //Specifications
         this._damage = shellMass;
         this._mass = mass * Tank.SPEED_SCALAR; // 27[tons]
@@ -24,7 +24,7 @@ class Tank {
         this._dispersion = atan(shellMass / barrelLength) / Tank.DISTANCE_SCALAR;
         this._maxSpeed = maxSpeed * Tank.SPEED_SCALAR; // 17.78 [m/s]
         //p5play members
-        this._modules = new Tank.TANK_SPRITES.Group();
+        this._modules = new group.Group();
         this._hull = new this._modules.Sprite(x, y, width * Tank.DISTANCE_SCALAR, length * Tank.DISTANCE_SCALAR, "d");
         this._tracks = {
             t0: new this._modules.Sprite(x + this._hull.halfWidth + wheelWidth * Tank.DISTANCE_SCALAR / 2, y, wheelWidth * Tank.DISTANCE_SCALAR, length * Tank.DISTANCE_SCALAR, "d"),

@@ -26,7 +26,7 @@ function setup() {
     tankSprites = new Group();
 
     world.gravity.y = 0;
-    cromwell = new Tank(100, 100);
+    cromwell = new Tank(tankSprites, 100, 100);
 }
 
 function draw() {
