@@ -26,23 +26,23 @@ function setup() {
     tankSprites = new Group();
 
     world.gravity.y = 0;
-    cromwell = new Tank(tankSprites, 100, 100);
+    cromwell = new Tank(100, 100);
 }
 
 function draw() {
-    //clear();
-    background(backgroundColour + "10");
+    clear();
+    //background(backgroundColour + "10");
 
-    if(keyIsDown(LEFT_ARROW)) {
+    if(keyIsDown(65)) { //LEFT
         cromwell.steer(Direction.Left);
     }
-    if(keyIsDown(RIGHT_ARROW)) {
+    if(keyIsDown(68)) { //RIGHT
         cromwell.steer(Direction.Right);
     }
-    if(keyIsDown(UP_ARROW)) {
+    if(keyIsDown(87)) { //UP
         cromwell.drive(Direction.Forwards);
     }
-    if(keyIsDown(DOWN_ARROW)) {
+    if(keyIsDown(83)) { //DOWN
         cromwell.drive(Direction.Backwards);
     }
     aim.moveTo({x: mouse.x, y: mouse.y}, 10);
@@ -51,23 +51,9 @@ function draw() {
     const DIRECTION = cromwell.decideTurretTurningDirection(aim.x, aim.y);
     if(DIRECTION == Direction.NONE) {
         cromwell.breakTurret();
-        console.log("break")
     }else {
         cromwell.turnTurret({x: aim.x, y: aim.y});
-        console.log("move")
     }
-    //console.log(DIRECTION);
 
-    fill(255, 255, 0, 127);
-    let speedDirection = cos(cromwell.motionDirection - cromwell.direction)*cromwell.speed;
-    if(speedDirection < -world.velocityThreshold) {
-        fill(255, 0, 0, 127);
-
-    }else if(speedDirection > 0) {
-        fill(0, 255, 0, 127);
-    }
-    circle(20, 20, 40);
-
-    //console.log(cromwell.relativeTurretDirection(mouseX, mouseY));
     //noLoop();
 }

@@ -2,6 +2,7 @@ class Tank {
     static DISTANCE_SCALAR = 15.75;
     static SPEED_SCALAR = 4.1 / Tank.DISTANCE_SCALAR;
     static TANKS: Tank[] = [];
+    static TANK_SPRITES: Group = new Group();
 
     //Specifications
     private _damage: number;
@@ -24,7 +25,7 @@ class Tank {
         turretAxle: WheelJoint
     }
 
-    constructor(group: Group, x: number, y: number,
+    constructor(x: number, y: number,
                 width: number = 2.908, length: number = 6.35,
                 mass: number = 27, maxSpeed:number = 17.78,
                 barrelLength: number = 2.82, shellMass = 2.72,
@@ -38,7 +39,7 @@ class Tank {
         this._maxSpeed = maxSpeed * Tank.SPEED_SCALAR; // 17.78 [m/s]
 
         //p5play members
-        this._modules = new group.Group();
+        this._modules = new Tank.TANK_SPRITES.Group();
 
         this._hull = new this._modules.Sprite(x, y, width * Tank.DISTANCE_SCALAR, length * Tank.DISTANCE_SCALAR, "d");
         this._tracks = {
@@ -206,6 +207,25 @@ class Tank {
             return this.decideTurretTurningDirection(x, y, 0);
         }
         return Direction.NONE;
+    }
+}
+
+class Barrier {
+    static BARRIERS: Barrier[] = [];
+
+    body: Sprite;
+    constructor(x: number, y: number, r: number);
+    constructor(x: number, y: number, w: number, h: number);
+    constructor(x: number, y: number, arg3: number, arg4?: number) {
+        if ([...arguments].length == 3) {
+            this.body = new Sprite(x, y, arg3);
+        } else {
+            this.body = new Sprite(x, y, arg3, arg4);
+        }
+        this.body.collider = "static";
+        this.body.colour = color(0);
+
+        Barrier.BARRIERS.push(this);
     }
 }
 

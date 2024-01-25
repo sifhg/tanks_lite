@@ -2,6 +2,7 @@ declare class Tank {
     static DISTANCE_SCALAR: number;
     static SPEED_SCALAR: number;
     static TANKS: Tank[];
+    static TANK_SPRITES: Group;
     private _damage;
     private _mass;
     private _maxSpeed;
@@ -12,7 +13,7 @@ declare class Tank {
     private _turret;
     private _tracks;
     private _joints;
-    constructor(group: Group, x: number, y: number, width?: number, length?: number, mass?: number, maxSpeed?: number, barrelLength?: number, shellMass?: number, name?: string, wheelWidth?: number);
+    constructor(x: number, y: number, width?: number, length?: number, mass?: number, maxSpeed?: number, barrelLength?: number, shellMass?: number, name?: string, wheelWidth?: number);
     drive(power: Direction): void;
     steer(power: Direction): void;
     applyForce2Tracks(direction: number, strength: number): void;
@@ -40,6 +41,12 @@ declare class Tank {
     protected getAngle2Turret(xa: number, y?: number): number;
     protected getPerpendicularDistance2Turret(x: number, y: number): number;
     decideTurretTurningDirection(x: number, y: number, threshold?: number): Direction;
+}
+declare class Barrier {
+    static BARRIERS: Barrier[];
+    body: Sprite;
+    constructor(x: number, y: number, r: number);
+    constructor(x: number, y: number, w: number, h: number);
 }
 declare enum Direction {
     Forwards = 300,
