@@ -2,7 +2,6 @@ declare class Tank {
     static DISTANCE_SCALAR: number;
     static SPEED_SCALAR: number;
     static TANKS: Tank[];
-    static TANK_SPRITES: Group;
     private _damage;
     private _mass;
     private _maxSpeed;
@@ -13,7 +12,7 @@ declare class Tank {
     private _turret;
     private _tracks;
     private _joints;
-    constructor(x: number, y: number, width?: number, length?: number, mass?: number, maxSpeed?: number, barrelLength?: number, shellMass?: number, name?: string, wheelWidth?: number);
+    constructor(group: Group, x: number, y: number, width?: number, length?: number, mass?: number, maxSpeed?: number, barrelLength?: number, shellMass?: number, name?: string, wheelWidth?: number);
     drive(power: Direction): void;
     steer(power: Direction): void;
     applyForce2Tracks(direction: number, strength: number): void;
