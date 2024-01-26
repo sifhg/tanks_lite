@@ -3,7 +3,6 @@ class Tank {
     static DISTANCE_SCALAR = 15.75;
     static SPEED_SCALAR = 4.1 / Tank.DISTANCE_SCALAR;
     static TANKS = [];
-    //static TANK_SPRITES: Group = new Group();
     //Specifications
     _damage;
     _mass;
@@ -12,6 +11,8 @@ class Tank {
     _dispersion;
     //p5play members
     _modules;
+    _turretAssembly;
+    _gun;
     _hull;
     _turret;
     _tracks;
@@ -25,19 +26,22 @@ class Tank {
         this._maxSpeed = maxSpeed * Tank.SPEED_SCALAR; // 17.78 [m/s]
         //p5play members
         this._modules = new group.Group();
+        this._turretAssembly = new this._modules.Group();
         this._hull = new this._modules.Sprite(x, y, width * Tank.DISTANCE_SCALAR, length * Tank.DISTANCE_SCALAR, "d");
         this._tracks = {
             t0: new this._modules.Sprite(x + this._hull.halfWidth + wheelWidth * Tank.DISTANCE_SCALAR / 2, y, wheelWidth * Tank.DISTANCE_SCALAR, length * Tank.DISTANCE_SCALAR, "d"),
             t1: new this._modules.Sprite(x - this._hull.halfWidth - wheelWidth * Tank.DISTANCE_SCALAR / 2, y, wheelWidth * Tank.DISTANCE_SCALAR, length * Tank.DISTANCE_SCALAR, "d")
         };
-        this._turret = new this._modules.Sprite(x, y + this._hull.halfHeight - this._hull.height / 3, this._hull.width);
+        this._turret = new this._turretAssembly.Sprite(x, y + this._hull.halfHeight - this._hull.height / 3, this._hull.width);
         let calibre = Math.sqrt(shellMass / PI) * 0.0306 * 2;
+        this._gun = new this._turretAssembly.Sprite(this._turret.x, this._turret.y + (barrelLength * Tank.DISTANCE_SCALAR / 2) + this._hull.halfWidth * 2 / 3, (calibre + 0.08) * Tank.DISTANCE_SCALAR, barrelLength * Tank.DISTANCE_SCALAR, 'none');
         this._joints = {
             jr: new GlueJoint(this._hull, this._tracks.t0),
             jl: new GlueJoint(this._hull, this._tracks.t1),
-            turretAxle: new WheelJoint(this._hull, this._turret)
+            turretAxle: new WheelJoint(this._hull, this._turret),
+            mantlet: new Joint(this._turret, this._gun)
         };
-        this._turret.addCollider(0, (barrelLength * Tank.DISTANCE_SCALAR / 2) + this._hull.halfWidth * 2 / 3, (calibre + 0.08) * Tank.DISTANCE_SCALAR, barrelLength * Tank.DISTANCE_SCALAR);
+        //this._turret.addCollider(0, (barrelLength * Tank.DISTANCE_SCALAR / 2) + this._hull.halfWidth*2/3, (calibre + 0.08) * Tank.DISTANCE_SCALAR, barrelLength * Tank.DISTANCE_SCALAR);
         this._turret.overlaps(this._tracks.t0);
         this._turret.overlaps(this._tracks.t1);
         this._hull.drag = 5;
@@ -80,11 +84,12 @@ class Tank {
         this._tracks.t1.applyForce(strength / 2);
     }
     turnTurret(power) {
-        const SPEED_AMPLITUDE = Direction.Right * Tank.SPEED_SCALAR * this._maxSpeed / this._mass;
-        if (typeof power == "number" || typeof power == "object") {
-            this._turret.rotateTo(power, SPEED_AMPLITUDE, -90);
-            this._turret.rotationSpeed += this._hull.rotationSpeed;
+        if (typeof power == 'object') {
+            power = this.decideTurretTurningDirection(power.x, power.y);
         }
+        const SPEED_AMPLITUDE = power * Tank.SPEED_SCALAR * this._maxSpeed / this._mass;
+        this._turretAssembly.rotationSpeed = SPEED_AMPLITUDE + this._hull.rotationSpeed;
+        return power;
     }
     breakTurret() {
         this._turret.rotationSpeed = 0;
@@ -162,10 +167,10 @@ class Tank {
         if (threshold < 0) {
             throw new Error("The input threshold of decideTurretTurningDirection cannot be a negative number");
         }
-        if (this._turret.angleToFace(x, y, -90) <= -threshold / 2) {
+        if (this._turret.angleToFace(x, y, -90) >= threshold / 2) {
             return Direction.Right;
         }
-        if (this._turret.angleToFace(x, y, -90) >= threshold / 2) {
+        if (this._turret.angleToFace(x, y, -90) <= -threshold / 2) {
             return Direction.Left;
         }
         //Handles cases where the point is behind the turret

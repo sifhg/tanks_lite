@@ -2,7 +2,6 @@ class Tank {
     static DISTANCE_SCALAR = 15.75;
     static SPEED_SCALAR = 4.1 / Tank.DISTANCE_SCALAR;
     static TANKS: Tank[] = [];
-    //static TANK_SPRITES: Group = new Group();
 
     //Specifications
     private _damage: number;
@@ -13,6 +12,8 @@ class Tank {
 
     //p5play members
     private _modules: Group;
+    private _turretAssembly: Group;
+    private _gun: Sprite;
     private _hull: Sprite;
     private _turret: Sprite;
     private _tracks: {
@@ -22,7 +23,8 @@ class Tank {
     private _joints: {
         jr: GlueJoint,
         jl: GlueJoint,
-        turretAxle: WheelJoint
+        turretAxle: WheelJoint,
+        mantlet: Joint
     }
 
     constructor(group: Group, x: number, y: number,
@@ -40,22 +42,25 @@ class Tank {
 
         //p5play members
         this._modules = new group.Group();
+        this._turretAssembly = new this._modules.Group();
 
         this._hull = new this._modules.Sprite(x, y, width * Tank.DISTANCE_SCALAR, length * Tank.DISTANCE_SCALAR, "d");
         this._tracks = {
             t0: new this._modules.Sprite(x + this._hull.halfWidth + wheelWidth*Tank.DISTANCE_SCALAR/2, y, wheelWidth * Tank.DISTANCE_SCALAR, length * Tank.DISTANCE_SCALAR, "d"),
             t1: new this._modules.Sprite(x - this._hull.halfWidth - wheelWidth*Tank.DISTANCE_SCALAR/2, y, wheelWidth * Tank.DISTANCE_SCALAR, length * Tank.DISTANCE_SCALAR, "d")
         }
-        this._turret = new this._modules.Sprite(x, y + this._hull.halfHeight - this._hull.height/3, this._hull.width);
+        this._turret = new this._turretAssembly.Sprite(x, y + this._hull.halfHeight - this._hull.height/3, this._hull.width);
         let calibre = Math.sqrt(shellMass/PI) * 0.0306 * 2;
-
+        this._gun = new this._turretAssembly.Sprite(this._turret.x, this._turret.y + (barrelLength * Tank.DISTANCE_SCALAR / 2) + this._hull.halfWidth*2/3,
+                                                    (calibre + 0.08) * Tank.DISTANCE_SCALAR, barrelLength * Tank.DISTANCE_SCALAR, 'none');
 
         this._joints = {
             jr: new GlueJoint(this._hull, this._tracks.t0),
             jl: new GlueJoint(this._hull, this._tracks.t1),
-            turretAxle: new WheelJoint(this._hull, this._turret)
-        }
-        this._turret.addCollider(0, (barrelLength * Tank.DISTANCE_SCALAR / 2) + this._hull.halfWidth*2/3, (calibre + 0.08) * Tank.DISTANCE_SCALAR, barrelLength * Tank.DISTANCE_SCALAR);
+            turretAxle: new WheelJoint(this._hull, this._turret),
+            mantlet: new Joint(this._turret, this._gun)
+        };
+        //this._turret.addCollider(0, (barrelLength * Tank.DISTANCE_SCALAR / 2) + this._hull.halfWidth*2/3, (calibre + 0.08) * Tank.DISTANCE_SCALAR, barrelLength * Tank.DISTANCE_SCALAR);
         this._turret.overlaps(this._tracks.t0);
         this._turret.overlaps(this._tracks.t1);
         
@@ -105,13 +110,13 @@ class Tank {
         this._tracks.t0.applyForce(strength/2);
         this._tracks.t1.applyForce(strength/2);
     }
-    turnTurret(power: Direction|number|{x: number, y: number}) {
-        const SPEED_AMPLITUDE = Direction.Right * Tank.SPEED_SCALAR * this._maxSpeed / this._mass;
-
-        if(typeof power == "number" || typeof power == "object") {
-            this._turret.rotateTo(power, SPEED_AMPLITUDE, -90);
-            this._turret.rotationSpeed += this._hull.rotationSpeed;
+    turnTurret(power: Direction|number|{x: number, y: number}): Direction {
+        if(typeof power == 'object') {
+            power = this.decideTurretTurningDirection(power.x, power.y);
         }
+        const SPEED_AMPLITUDE = power * Tank.SPEED_SCALAR * this._maxSpeed / this._mass;
+        this._turretAssembly.rotationSpeed = SPEED_AMPLITUDE + this._hull.rotationSpeed;
+        return power;
     }
     breakTurret() {
         this._turret.rotationSpeed = 0;
@@ -190,15 +195,15 @@ class Tank {
         const PERPENDICULAR_DISTANCE = sin(ANGLE) * DISTANCE;
         return PERPENDICULAR_DISTANCE;
     }
-    decideTurretTurningDirection(x: number, y: number, threshold: number = this.dispersion*2/3): Direction {
+    decideTurretTurningDirection(x: number, y: number, threshold: number = this.dispersion * 2/3): Direction {
         if(threshold < 0) {
             throw new Error("The input threshold of decideTurretTurningDirection cannot be a negative number");
         }
 
-        if(this._turret.angleToFace(x, y, -90) <= -threshold/2) {
+        if(this._turret.angleToFace(x, y, -90) >= threshold/2) {
             return Direction.Right;
         }
-        if(this._turret.angleToFace(x, y, -90) >= threshold/2) {
+        if(this._turret.angleToFace(x, y, -90) <= -threshold/2) {
             return Direction.Left;
         }
 

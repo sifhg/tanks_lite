@@ -8,6 +8,8 @@ declare class Tank {
     private _name;
     private _dispersion;
     private _modules;
+    private _turretAssembly;
+    private _gun;
     private _hull;
     private _turret;
     private _tracks;
@@ -19,7 +21,7 @@ declare class Tank {
     turnTurret(power: Direction | number | {
         x: number;
         y: number;
-    }): void;
+    }): Direction;
     breakTurret(): void;
     setName(N: string): void;
     get name(): string;

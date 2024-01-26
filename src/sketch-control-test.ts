@@ -41,13 +41,8 @@ function draw() {
         cromwell.drive(Direction.Backwards);
     }
     
-    
+    cromwell.turnTurret({x: mouse.x, y: mouse.y});
     const DIRECTION = cromwell.decideTurretTurningDirection(mouse.x, mouse.y);
-    if(DIRECTION == Direction.NONE) {
-        cromwell.breakTurret();
-    }else {
-        cromwell.turnTurret({x: mouse.x, y: mouse.y});
-    }
 
     //noLoop();
 }
