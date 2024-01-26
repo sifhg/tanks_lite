@@ -1,5 +1,4 @@
 let cromwell: Tank, kv2: Tank;
-let aim: Sprite;
 let tankSprites: Group;
 
 let drive: boolean = false;
@@ -18,10 +17,6 @@ function setup() {
         background(backgroundColour);
     });
     angleMode(DEGREES);
-
-    aim = new Sprite(mouse.x, mouse.y, 5);
-    aim.collider = 'none';
-    aim.visible = false;
     
     tankSprites = new Group();
 
@@ -30,8 +25,8 @@ function setup() {
 }
 
 function draw() {
-    clear();
-    //background(backgroundColour + "10");
+    //clear();
+    background(backgroundColour + "10");
 
     if(keyIsDown(65)) { //LEFT
         cromwell.steer(Direction.Left);
@@ -45,14 +40,13 @@ function draw() {
     if(keyIsDown(83)) { //DOWN
         cromwell.drive(Direction.Backwards);
     }
-    aim.moveTo({x: mouse.x, y: mouse.y}, 10);
     
     
-    const DIRECTION = cromwell.decideTurretTurningDirection(aim.x, aim.y);
+    const DIRECTION = cromwell.decideTurretTurningDirection(mouse.x, mouse.y);
     if(DIRECTION == Direction.NONE) {
         cromwell.breakTurret();
     }else {
-        cromwell.turnTurret({x: aim.x, y: aim.y});
+        cromwell.turnTurret({x: mouse.x, y: mouse.y});
     }
 
     //noLoop();

@@ -1,5 +1,4 @@
 declare let cromwell: Tank, kv2: Tank;
-declare let aim: Sprite;
 declare let tankSprites: Group;
 declare let drive: boolean;
 declare let steer: boolean;
