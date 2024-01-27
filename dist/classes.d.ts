@@ -1,4 +1,3 @@
-/// <reference types="p5play" />
 declare class Tank {
     static DISTANCE_SCALAR: number;
     static SPEED_SCALAR: number;

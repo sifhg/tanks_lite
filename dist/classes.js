@@ -22,7 +22,7 @@ class Tank {
         this._damage = shellMass;
         this._mass = mass * Tank.SPEED_SCALAR; // 27[tons]
         this._name = name;
-        this._dispersion = atan(shellMass / barrelLength) / Tank.DISTANCE_SCALAR;
+        this._dispersion = Math.atan(shellMass / barrelLength) / Tank.DISTANCE_SCALAR;
         this._maxSpeed = maxSpeed * Tank.SPEED_SCALAR; // 17.78 [m/s]
         //p5play members
         this._modules = new group.Group();
@@ -33,10 +33,10 @@ class Tank {
             t1: new this._modules.Sprite(x - this._hull.halfWidth - wheelWidth * Tank.DISTANCE_SCALAR / 2, y, wheelWidth * Tank.DISTANCE_SCALAR, length * Tank.DISTANCE_SCALAR, "d")
         };
         this._turret = new this._turretAssembly.Sprite(x, y + this._hull.halfHeight - this._hull.height / 3, this._hull.width);
-        let calibre = Math.sqrt(shellMass / PI) * 0.0306 * 2;
+        let calibre = Math.sqrt(shellMass / Math.PI) * 0.0306 * 2;
         this._gun = new this._turretAssembly.Sprite(this._turret.x, this._turret.y + (barrelLength * Tank.DISTANCE_SCALAR / 2) + this._hull.halfWidth * 2 / 3, (calibre + 0.08) * Tank.DISTANCE_SCALAR, barrelLength * Tank.DISTANCE_SCALAR, 'none');
         this._joints = {
-            jr: new GlueJoint(this._hull, this._tracks.t0),
+            jr: new window.p5play.GlueJoint(this._hull, this._tracks.t0),
             jl: new GlueJoint(this._hull, this._tracks.t1),
             turretAxle: new WheelJoint(this._hull, this._turret),
             mantlet: new Joint(this._turret, this._gun)
@@ -124,7 +124,7 @@ class Tank {
         return this._dispersion;
     }
     get motionDirection() {
-        return atan2(cromwell.velocity.y, cromwell.velocity.x);
+        return atan2(this.velocity.y, this.velocity.x);
     }
     get turretDirection() {
         let rotation = this._turret.rotation + 90;
