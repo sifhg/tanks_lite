@@ -1,3 +1,4 @@
+/// <reference types="p5play" />
 declare let cromwell: Tank, kv2: Tank;
 declare let tankSprites: Group;
 declare let drive: boolean;

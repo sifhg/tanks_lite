@@ -91,10 +91,6 @@ class Tank {
         this._turretAssembly.rotationSpeed = SPEED_AMPLITUDE + this._hull.rotationSpeed;
         return power;
     }
-    breakTurret() {
-        this._turret.rotationSpeed = 0;
-        this._turret.rotateTo(this._turret.rotation);
-    }
     //Setters
     setName(N) {
         this._name = N;

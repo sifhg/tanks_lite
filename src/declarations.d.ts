@@ -1,3 +1,3 @@
 import 'p5/global'
 import 'p5/declaration-fixes'
-import 'p5play/global'
+import '../node_modules/p5play/p5play'

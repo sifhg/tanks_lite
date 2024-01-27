@@ -1,3 +1,4 @@
+/// <reference types="p5play" />
 declare class Tank {
     static DISTANCE_SCALAR: number;
     static SPEED_SCALAR: number;
@@ -22,7 +23,6 @@ declare class Tank {
         x: number;
         y: number;
     }): Direction;
-    breakTurret(): void;
     setName(N: string): void;
     get name(): string;
     get velocity(): {
