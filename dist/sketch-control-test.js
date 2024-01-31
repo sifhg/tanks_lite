@@ -1,4 +1,4 @@
-
+import p5 from 'p5';
 const ctSketch = (p) => {
     let tankSprites;
     let cromwell, kv2;

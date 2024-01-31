@@ -1,22 +1,5 @@
 "use strict";
 class Tank {
-    static DISTANCE_SCALAR = 15.75;
-    static SPEED_SCALAR = 4.1 / Tank.DISTANCE_SCALAR;
-    static TANKS = [];
-    //Specifications
-    _damage;
-    _mass;
-    _maxSpeed;
-    _name;
-    _dispersion;
-    //p5play members
-    _modules;
-    _turretAssembly;
-    _gun;
-    _hull;
-    _turret;
-    _tracks;
-    _joints;
     constructor(group, x, y, width = 2.908, length = 6.35, mass = 27, maxSpeed = 17.78, barrelLength = 2.82, shellMass = 2.72, name = "Cromwell", wheelWidth = 0.394) {
         //Specifications
         this._damage = shellMass;
@@ -36,7 +19,7 @@ class Tank {
         let calibre = Math.sqrt(shellMass / Math.PI) * 0.0306 * 2;
         this._gun = new this._turretAssembly.Sprite(this._turret.x, this._turret.y + (barrelLength * Tank.DISTANCE_SCALAR / 2) + this._hull.halfWidth * 2 / 3, (calibre + 0.08) * Tank.DISTANCE_SCALAR, barrelLength * Tank.DISTANCE_SCALAR, 'none');
         this._joints = {
-            jr: new window.p5play.GlueJoint(this._hull, this._tracks.t0),
+            jr: new GlueJoint(this._hull, this._tracks.t0),
             jl: new GlueJoint(this._hull, this._tracks.t1),
             turretAxle: new WheelJoint(this._hull, this._turret),
             mantlet: new Joint(this._turret, this._gun)
@@ -176,9 +159,10 @@ class Tank {
         return Direction.NONE;
     }
 }
+Tank.DISTANCE_SCALAR = 15.75;
+Tank.SPEED_SCALAR = 4.1 / Tank.DISTANCE_SCALAR;
+Tank.TANKS = [];
 class Barrier {
-    static BARRIERS = [];
-    body;
     constructor(x, y, arg3, arg4) {
         if ([...arguments].length == 3) {
             this.body = new Sprite(x, y, arg3);
@@ -191,6 +175,7 @@ class Barrier {
         Barrier.BARRIERS.push(this);
     }
 }
+Barrier.BARRIERS = [];
 var Direction;
 (function (Direction) {
     Direction[Direction["Forwards"] = 300] = "Forwards";

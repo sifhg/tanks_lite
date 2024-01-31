@@ -15,10 +15,18 @@
     <meta name="keywords" content="mini-game, AI, tanks, p5.js, TensorFlow">
 </head>
 <body>
+    <script type="importmap">
+        {
+            "imports":
+            {
+                "p5": "/node_modules/p5/lib/p5.min.js"
+            }
+        }
+    </script>
     <script src="dist/events.js" defer></script>
     <script src="dist/classes.js" defer></script>
 
-    <script src="dist/sketch-control-test.js"></script>
+    <script type="module" src="dist/sketch-control-test.js"></script>
     <main>
         <h1>Tanks Lite</h1>
         <nav>
