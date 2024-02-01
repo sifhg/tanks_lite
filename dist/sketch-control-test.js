@@ -3,6 +3,7 @@ const ctSketch = (p) => {
     let cromwell, kv2;
     let test;
     p.preload = () => {
+        //console.log(Direction)
         tankSprites = new p.Group();
         p.world.gravity.y = 0;
     };

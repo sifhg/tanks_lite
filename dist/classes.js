@@ -1,4 +1,11 @@
 import P5 from 'p5';
+// enum Direction{
+//     Forwards = 300,
+//     Backwards = -150,
+//     Left = -8,
+//     Right = 8,
+//     None = 0
+// }
 export class Tank {
     constructor(group, x, y, width = 2.908, length = 6.35, mass = 27, maxSpeed = 17.78, barrelLength = 2.82, shellMass = 2.72, name = "Cromwell", wheelWidth = 0.394) {
         //Specifications
@@ -69,6 +76,9 @@ export class Tank {
     turnTurret(power) {
         if (typeof power == 'object') {
             power = this.decideTurretTurningDirection(power.x, power.y);
+        }
+        if (typeof power != 'number') {
+            throw new Error(`power imput of Tnak.turnTurret() is '${typeof power}'. Input must be Tank.Direction, number, or {x: number, y: number}`);
         }
         const SPEED_AMPLITUDE = power * Tank.SPEED_SCALAR * this._maxSpeed / this._mass;
         this._turretAssembly.rotationSpeed = SPEED_AMPLITUDE + this._hull.rotationSpeed;
@@ -147,21 +157,31 @@ export class Tank {
             throw new Error("The input threshold of decideTurretTurningDirection cannot be a negative number");
         }
         if (this._turret.angleToFace(x, y, -90) >= threshold / 2) {
-            return Direction.Right;
+            return Tank.Direction.Right;
         }
         if (this._turret.angleToFace(x, y, -90) <= -threshold / 2) {
-            return Direction.Left;
+            return Tank.Direction.Left;
         }
         //Handles cases where the point is behind the turret
         if (P5.prototype.cos(this.getAngle2Turret(x, y)) < 0) {
             return this.decideTurretTurningDirection(x, y, 0);
         }
-        return Direction.NONE;
+        return Tank.Direction.None;
     }
 }
 Tank.DISTANCE_SCALAR = 15.75;
 Tank.SPEED_SCALAR = 4.1 / Tank.DISTANCE_SCALAR;
 Tank.TANKS = [];
+(function (Tank) {
+    let Direction;
+    (function (Direction) {
+        Direction[Direction["Forwards"] = 300] = "Forwards";
+        Direction[Direction["Backwards"] = -150] = "Backwards";
+        Direction[Direction["Left"] = -8] = "Left";
+        Direction[Direction["Right"] = 8] = "Right";
+        Direction[Direction["None"] = 0] = "None";
+    })(Direction = Tank.Direction || (Tank.Direction = {}));
+})(Tank || (Tank = {}));
 export class Barrier {
     constructor(x, y, arg3, arg4) {
         if ([...arguments].length == 3) {
@@ -176,14 +196,6 @@ export class Barrier {
     }
 }
 Barrier.BARRIERS = [];
-var Direction;
-(function (Direction) {
-    Direction[Direction["Forwards"] = 300] = "Forwards";
-    Direction[Direction["Backwards"] = -150] = "Backwards";
-    Direction[Direction["Left"] = -8] = "Left";
-    Direction[Direction["Right"] = 8] = "Right";
-    Direction[Direction["NONE"] = 0] = "NONE";
-})(Direction || (Direction = {}));
 //@ts-expect-error
 p5.prototype.registerMethod('pre', function applySideDragForce() {
     for (const TANK of Tank.TANKS) {

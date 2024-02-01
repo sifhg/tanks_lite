@@ -15,13 +15,13 @@ export declare class Tank {
     private _tracks;
     private _joints;
     constructor(group: Group, x: number, y: number, width?: number, length?: number, mass?: number, maxSpeed?: number, barrelLength?: number, shellMass?: number, name?: string, wheelWidth?: number);
-    drive(power: Direction): void;
-    steer(power: Direction): void;
+    drive(power: Tank.Direction): void;
+    steer(power: Tank.Direction): void;
     applyForce2Tracks(direction: number, strength: number): void;
-    turnTurret(power: Direction | number | {
+    turnTurret(power: Tank.Direction | number | {
         x: number;
         y: number;
-    }): Direction;
+    }): Tank.Direction;
     setName(N: string): void;
     get name(): string;
     get velocity(): {
@@ -40,7 +40,16 @@ export declare class Tank {
     get turretDirection(): number;
     protected getAngle2Turret(xa: number, y?: number): number;
     protected getPerpendicularDistance2Turret(x: number, y: number): number;
-    decideTurretTurningDirection(x: number, y: number, threshold?: number): Direction;
+    decideTurretTurningDirection(x: number, y: number, threshold?: number): Tank.Direction;
+}
+export declare namespace Tank {
+    enum Direction {
+        Forwards = 300,
+        Backwards = -150,
+        Left = -8,
+        Right = 8,
+        None = 0
+    }
 }
 export declare class Barrier {
     static BARRIERS: Barrier[];
@@ -48,11 +57,3 @@ export declare class Barrier {
     constructor(x: number, y: number, r: number);
     constructor(x: number, y: number, w: number, h: number);
 }
-declare enum Direction {
-    Forwards = 300,
-    Backwards = -150,
-    Left = -8,
-    Right = 8,
-    NONE = 0
-}
-export {};

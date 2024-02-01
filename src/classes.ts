@@ -1,5 +1,14 @@
 import P5 from 'p5';
 
+// enum Direction{
+//     Forwards = 300,
+//     Backwards = -150,
+//     Left = -8,
+//     Right = 8,
+//     None = 0
+// }
+
+
 export class Tank {
     static DISTANCE_SCALAR = 15.75;
     static SPEED_SCALAR = 4.1 / Tank.DISTANCE_SCALAR;
@@ -77,14 +86,14 @@ export class Tank {
 
 
     //Controls
-    drive(power: Direction): void {
+    drive(power: Tank.Direction): void {
         this._hull.bearing = this._hull.rotation + (90 * Math.sign(power));
         const SPEED = this._maxSpeed * Math.abs(power);
         if(Math.abs(this.speed) < this._maxSpeed) {
             this._hull.applyForce(SPEED)
         }
     }
-    steer(power: Direction): void{
+    steer(power: Tank.Direction): void{
         this._tracks.t0.bearing = this._hull.rotation + (90 * Math.sign(power));
         this._tracks.t1.bearing = this._hull.rotation - (90 * Math.sign(power));
 
@@ -112,11 +121,14 @@ export class Tank {
         this._tracks.t0.applyForce(strength/2);
         this._tracks.t1.applyForce(strength/2);
     }
-    turnTurret(power: Direction|number|{x: number, y: number}): Direction {
+    turnTurret(power: Tank.Direction|number|{x: number, y: number}): Tank.Direction {
         if(typeof power == 'object') {
             power = this.decideTurretTurningDirection(power.x, power.y);
         }
-        const SPEED_AMPLITUDE = power * Tank.SPEED_SCALAR * this._maxSpeed / this._mass;
+        if(typeof power != 'number') {
+            throw new Error(`power imput of Tnak.turnTurret() is '${typeof power}'. Input must be Tank.Direction, number, or {x: number, y: number}`);
+        }
+        const SPEED_AMPLITUDE: number = power * Tank.SPEED_SCALAR * this._maxSpeed / this._mass;
         this._turretAssembly.rotationSpeed = SPEED_AMPLITUDE + this._hull.rotationSpeed;
         return power;
     }
@@ -193,23 +205,33 @@ export class Tank {
         const PERPENDICULAR_DISTANCE = P5.prototype.sin(ANGLE) * DISTANCE;
         return PERPENDICULAR_DISTANCE;
     }
-    decideTurretTurningDirection(x: number, y: number, threshold: number = this.dispersion * 2/3): Direction {
+    decideTurretTurningDirection(x: number, y: number, threshold: number = this.dispersion * 2/3): Tank.Direction {
         if(threshold < 0) {
             throw new Error("The input threshold of decideTurretTurningDirection cannot be a negative number");
         }
 
         if(this._turret.angleToFace(x, y, -90) >= threshold/2) {
-            return Direction.Right;
+            return Tank.Direction.Right;
         }
         if(this._turret.angleToFace(x, y, -90) <= -threshold/2) {
-            return Direction.Left;
+            return Tank.Direction.Left;
         }
 
         //Handles cases where the point is behind the turret
         if(P5.prototype.cos(this.getAngle2Turret(x, y)) < 0) {
             return this.decideTurretTurningDirection(x, y, 0);
         }
-        return Direction.NONE;
+        return Tank.Direction.None;
+    }
+}
+
+export namespace Tank {
+    export enum Direction{
+        Forwards = 300,
+        Backwards = -150,
+        Left = -8,
+        Right = 8,
+        None = 0
     }
 }
 
@@ -232,13 +254,7 @@ export class Barrier {
     }
 }
 
-enum Direction{
-    Forwards = 300,
-    Backwards = -150,
-    Left = -8,
-    Right = 8,
-    NONE = 0
-}
+
 
 //@ts-expect-error
 p5.prototype.registerMethod('pre', function applySideDragForce() {
