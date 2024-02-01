@@ -1,16 +1,24 @@
-import * as P5 from 'p5';
-import { Tank } from './classes';
+import p5 from 'p5';
+import p5Tanks from 'classes';
 
-const ctSketch: any = (p: P5) => {
-    let tankSprites: Group;
-    let cromwell: Tank, kv2: Tank;
+
+
+const ctSketch: any = (p: p5Tanks) => {
+    let A = new p5Tanks.Ingrid("Ingrid");
+    console.log(A.toString());
+    
+    let tankSprites = new p.Group();
+    //new p.Tank()
+    console.log(A.toString());
+    let cromwell, kv2;
     let test: number;
     
     p.preload = () => {
         //console.log(Direction)
         tankSprites = new p.Group();
         p.world.gravity.y = 0;
-
+        
+        cromwell = new p.Tank(tankSprites, 100, 100);
     }
 
     p.setup = () => {
@@ -18,7 +26,7 @@ const ctSketch: any = (p: P5) => {
         if(DISPLAY === null) {
             throw new Error("DISPLAY === null: Element with id 'display-control-test' not found.");
         }
-        let canvas: P5.Renderer = p.createCanvas(DISPLAY.offsetWidth, DISPLAY.offsetHeight);
+        let canvas: p5.Renderer = p.createCanvas(DISPLAY.offsetWidth, DISPLAY.offsetHeight);
         addEventListener('resize', () => {
             canvas.resize(DISPLAY.offsetWidth, DISPLAY.offsetHeight);
             p.background(backgroundColour);
@@ -31,8 +39,8 @@ const ctSketch: any = (p: P5) => {
         //clear();
     }
 };
-//@ts-expect-error
-const ct: object = new p5(ctSketch, 'display-control-test');
+
+const ct: object = new p5Tanks(ctSketch, 'display-control-test');
 
 // let cromwell: Tank, kv2: Tank;
 // let tankSprites: Group;

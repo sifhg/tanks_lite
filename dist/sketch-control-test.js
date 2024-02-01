@@ -1,11 +1,17 @@
+import p5Tanks from 'classes';
 const ctSketch = (p) => {
-    let tankSprites;
+    let A = new p5Tanks.Ingrid("Ingrid");
+    console.log(A.toString());
+    let tankSprites = new p.Group();
+    //new p.Tank()
+    console.log(A.toString());
     let cromwell, kv2;
     let test;
     p.preload = () => {
         //console.log(Direction)
         tankSprites = new p.Group();
         p.world.gravity.y = 0;
+        cromwell = new p.Tank(tankSprites, 100, 100);
     };
     p.setup = () => {
         const DISPLAY = document.getElementById("display-control-test");
@@ -24,9 +30,7 @@ const ctSketch = (p) => {
         //clear();
     };
 };
-//@ts-expect-error
-const ct = new p5(ctSketch, 'display-control-test');
-export {};
+const ct = new p5Tanks(ctSketch, 'display-control-test');
 // let cromwell: Tank, kv2: Tank;
 // let tankSprites: Group;
 // let drive: boolean = false;
