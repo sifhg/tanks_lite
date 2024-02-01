@@ -1,4 +1,6 @@
-class Tank {
+import P5 from 'p5';
+
+export class Tank {
     static DISTANCE_SCALAR = 15.75;
     static SPEED_SCALAR = 4.1 / Tank.DISTANCE_SCALAR;
     static TANKS: Tank[] = [];
@@ -37,7 +39,7 @@ class Tank {
         this._damage = shellMass;
         this._mass = mass * Tank.SPEED_SCALAR; // 27[tons]
         this._name = name;
-        this._dispersion = Math.atan(shellMass / barrelLength) / Tank.DISTANCE_SCALAR;
+        this._dispersion = P5.prototype.atan(shellMass / barrelLength) / Tank.DISTANCE_SCALAR;
         this._maxSpeed = maxSpeed * Tank.SPEED_SCALAR; // 17.78 [m/s]
 
         //p5play members
@@ -86,7 +88,7 @@ class Tank {
         this._tracks.t0.bearing = this._hull.rotation + (90 * Math.sign(power));
         this._tracks.t1.bearing = this._hull.rotation - (90 * Math.sign(power));
 
-        if(cos(this.motionDirection - this.direction) * this.speed < -world.velocityThreshold) {
+        if(Math.cos(this.motionDirection - this.direction) * this.speed < -world.velocityThreshold) {
             const TEMP = this._tracks.t0.bearing;
             this._tracks.t0.bearing = this._tracks.t1.bearing;
             this._tracks.t1.bearing = TEMP;
@@ -135,12 +137,12 @@ class Tank {
         }
     }
     get speed(): number {
-        return dist(0, 0 , this._hull.velocity.x, this._hull.velocity.y);
+        return P5.prototype.dist(0, 0 , this._hull.velocity.x, this._hull.velocity.y);
     }
     get trackSpeed(): {s0: number, s1: number} {
         return {
-            s0: dist(0, 0 , this._tracks.t0.velocity.x, this._tracks.t0.velocity.y),
-            s1: dist(0, 0 , this._tracks.t1.velocity.x, this._tracks.t1.velocity.y),
+            s0: P5.prototype.dist(0, 0 , this._tracks.t0.velocity.x, this._tracks.t0.velocity.y),
+            s1: P5.prototype.dist(0, 0 , this._tracks.t1.velocity.x, this._tracks.t1.velocity.y),
         }
     }
     get maxSpeed(): number {
@@ -153,7 +155,7 @@ class Tank {
         return this._dispersion;
     }
     get motionDirection(): number {
-        return atan2(this.velocity.y, this.velocity.x);
+        return P5.prototype.atan2(this.velocity.y, this.velocity.x);
     }
     get turretDirection(): number {
         let rotation = this._turret.rotation + 90;
@@ -177,7 +179,7 @@ class Tank {
         }
         const DX = xa - this._turret.x;
         const DY = y - this._turret.y;
-        let rotation = -atan2(DX, DY) - this._turret.rotation;
+        let rotation = -P5.prototype.atan2(DX, DY) - this._turret.rotation;
 
         // Normalize the angle to be between -180 and 180 degrees
         while(rotation < -180) {
@@ -186,9 +188,9 @@ class Tank {
         return rotation % 360;
     }
     protected getPerpendicularDistance2Turret(x: number, y: number): number {
-        const DISTANCE = dist(x, y, this._turret.x, this._turret.y);
+        const DISTANCE = P5.prototype.dist(x, y, this._turret.x, this._turret.y);
         const ANGLE = this.getAngle2Turret(x, y);
-        const PERPENDICULAR_DISTANCE = sin(ANGLE) * DISTANCE;
+        const PERPENDICULAR_DISTANCE = P5.prototype.sin(ANGLE) * DISTANCE;
         return PERPENDICULAR_DISTANCE;
     }
     decideTurretTurningDirection(x: number, y: number, threshold: number = this.dispersion * 2/3): Direction {
@@ -204,14 +206,14 @@ class Tank {
         }
 
         //Handles cases where the point is behind the turret
-        if(cos(this.getAngle2Turret(x, y)) < 0) {
+        if(P5.prototype.cos(this.getAngle2Turret(x, y)) < 0) {
             return this.decideTurretTurningDirection(x, y, 0);
         }
         return Direction.NONE;
     }
 }
 
-class Barrier {
+export class Barrier {
     static BARRIERS: Barrier[] = [];
 
     body: Sprite;
@@ -224,7 +226,7 @@ class Barrier {
             this.body = new Sprite(x, y, arg3, arg4);
         }
         this.body.collider = "static";
-        this.body.colour = color(0);
+        this.body.colour = P5.prototype.color(0);
 
         Barrier.BARRIERS.push(this);
     }
@@ -238,10 +240,11 @@ enum Direction{
     NONE = 0
 }
 
+//@ts-expect-error
 p5.prototype.registerMethod('pre', function applySideDragForce() {
     for(const TANK of Tank.TANKS) {
         const FORCE_DIRECTION: number = TANK.motionDirection - 180;
-        const FORCE_MAGNITUDE: number = Math.abs(sin(TANK.motionDirection - TANK.direction)) * TANK.speed * 5000;
+        const FORCE_MAGNITUDE: number = Math.abs(P5.prototype.sin(TANK.motionDirection - TANK.direction)) * TANK.speed * 5000;
         TANK.applyForce2Tracks(FORCE_DIRECTION, FORCE_MAGNITUDE);
     }
 })

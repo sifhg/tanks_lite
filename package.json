@@ -2,13 +2,12 @@
   "dependencies": {
     "@types/p5": "^1.7.6",
     "p5": "^1.9.0",
-    "p5play": "^3.18.5"
+    "p5play": "^3.19.6"
   },
   "name": "tanks_lite",
   "description": "I wanted a mini-game that I could use to experiment with artificial intelligence algorithms. My Fiancée is very passionate about the history of tanks, so I decided to make a simple 2D tank game to work from.\r Tanks Lite is a 2D tank mini-game developed using p5.js. The game features two teams of tanks on a battlefield, each controlled by human players or an AIs trained using TensorFlow.\r ## Tank Features\r The game provides different tanks with different features such as:\r - HP: Different tanks have different amounts of HP. A Tank loses HP by getting shot and if it reaches 0 HP, the tank is destroyed.\r - Top speed: This parameter determines how fast a tank moves at top speed.\r - Acceleration: This parameter determines how fast a tank reaches top speed when starting to move.\r - Traverse speed: Determines how fast the tank can rotate its turret or hull.\r - Accurace: Determines the precision and accuracy of a tank's shots.\r - Shell strength: Determines how much damage a tank's shot can inflict on the opposing tank.\r - Shell speed: Determines how fast a tank's shot travels towards the target.\r - Armor: Determines how likely a tank is to resist damage from incoming shots.\r ## Controls",
   "version": "1.0.0",
   "main": "p5.min.js",
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

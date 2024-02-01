@@ -1,25 +1,37 @@
-import p5 from 'p5';
+import * as P5 from 'p5';
+import { Tank } from './classes';
 
-const ctSketch: any = (p: p5) => {
+const ctSketch: any = (p: P5) => {
     let tankSprites: Group;
     let cromwell: Tank, kv2: Tank;
+    let test: number;
     
+    p.preload = () => {
+        //console.log(Direction)
+        tankSprites = new p.Group();
+        p.world.gravity.y = 0;
+
+    }
+
     p.setup = () => {
         const DISPLAY: HTMLElement | null = document.getElementById("display-control-test");
         if(DISPLAY === null) {
             throw new Error("DISPLAY === null: Element with id 'display-control-test' not found.");
         }
-        let canvas: p5.Renderer = p.createCanvas(DISPLAY.offsetWidth, DISPLAY.offsetHeight);
+        let canvas: P5.Renderer = p.createCanvas(DISPLAY.offsetWidth, DISPLAY.offsetHeight);
         addEventListener('resize', () => {
             canvas.resize(DISPLAY.offsetWidth, DISPLAY.offsetHeight);
             p.background(backgroundColour);
         })
         p.angleMode(p.DEGREES);
-        tankSprites = new p.Group();
-        p.world.gravity.y = 0;
-        cromwell = new Tank(tankSprites, 100, 100);
+        // cromwell = new Tank(tankSprites, 100, 100);
+    };
+
+    p.draw = () => {
+        //clear();
     }
 };
+//@ts-expect-error
 const ct: object = new p5(ctSketch, 'display-control-test');
 
 // let cromwell: Tank, kv2: Tank;

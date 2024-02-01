@@ -1,7 +1,11 @@
-import p5 from 'p5';
 const ctSketch = (p) => {
     let tankSprites;
     let cromwell, kv2;
+    let test;
+    p.preload = () => {
+        tankSprites = new p.Group();
+        p.world.gravity.y = 0;
+    };
     p.setup = () => {
         const DISPLAY = document.getElementById("display-control-test");
         if (DISPLAY === null) {
@@ -13,12 +17,15 @@ const ctSketch = (p) => {
             p.background(backgroundColour);
         });
         p.angleMode(p.DEGREES);
-        tankSprites = new p.Group();
-        p.world.gravity.y = 0;
-        cromwell = new Tank(tankSprites, 100, 100);
+        // cromwell = new Tank(tankSprites, 100, 100);
+    };
+    p.draw = () => {
+        //clear();
     };
 };
+//@ts-expect-error
 const ct = new p5(ctSketch, 'display-control-test');
+export {};
 // let cromwell: Tank, kv2: Tank;
 // let tankSprites: Group;
 // let drive: boolean = false;

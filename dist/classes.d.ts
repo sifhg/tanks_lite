@@ -1,4 +1,4 @@
-declare class Tank {
+export declare class Tank {
     static DISTANCE_SCALAR: number;
     static SPEED_SCALAR: number;
     static TANKS: Tank[];
@@ -42,7 +42,7 @@ declare class Tank {
     protected getPerpendicularDistance2Turret(x: number, y: number): number;
     decideTurretTurningDirection(x: number, y: number, threshold?: number): Direction;
 }
-declare class Barrier {
+export declare class Barrier {
     static BARRIERS: Barrier[];
     body: Sprite;
     constructor(x: number, y: number, r: number);
@@ -55,3 +55,4 @@ declare enum Direction {
     Right = 8,
     NONE = 0
 }
+export {};
