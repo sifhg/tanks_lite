@@ -2,7 +2,7 @@ import p5Tanks from 'classes';
 const ctSketch = (p) => {
     let A = new p5Tanks.Ingrid("Ingrid");
     console.log(A.toString());
-    let tankSprites = new p.Group();
+    let tankSprites;
     //new p.Tank()
     console.log(A.toString());
     let cromwell, kv2;
@@ -10,6 +10,10 @@ const ctSketch = (p) => {
     p.preload = () => {
         //console.log(Direction)
         tankSprites = new p.Group();
+        new tankSprites.Sprite();
+        console.log(tankSprites[0]);
+        console.log(tankSprites.constructor.name);
+        console.log(p.Group.name);
         p.world.gravity.y = 0;
         cromwell = new p.Tank(tankSprites, 100, 100);
     };

@@ -9,6 +9,14 @@ class p5Tanks extends p5 {
         static A = p5Tanks.DISTANCE_SCALAR;
         _theName: string;
         constructor(name: string) {
+            let inputs: any[] = [...arguments];
+            if(inputs.length > 1) {
+                console.error(`There were ${inputs.length} in the Ingrid constructer, and it can only take 1`);
+                for(const ARG in inputs) {
+                    console.error(`Arg: ${ARG} of type ${typeof ARG}`);
+                }
+                throw new Error(`Program times out.`)
+            }
             this._theName = name;
         }
         toString(): string {
@@ -20,6 +28,9 @@ class p5Tanks extends p5 {
     }
 
     public Tank = class{
+        //Instace mode
+        p: p5|p5Tanks|null;
+
         //Specifications
         _damage: number;
         _mass: number;
@@ -43,13 +54,73 @@ class p5Tanks extends p5 {
             turretAxle: WheelJoint,
             mantlet: Joint
         }
-    
+        constructor(instance: p5|p5Tanks, group: Group, x: number, y: number,
+            width?: number, length?: number,
+            mass?: number, maxSpeed?: number,
+            barrelLength?: number , shellMass?: number,
+            name?: string, wheelWidth?: number);
         constructor(group: Group, x: number, y: number,
-                    width: number = 2.908, length: number = 6.35,
-                    mass: number = 27, maxSpeed:number = 17.78,
-                    barrelLength: number = 2.82, shellMass = 2.72,
-                    name: string = "Cromwell", wheelWidth: number = 0.394) {
-    
+                    width?: number, length?: number,
+                    mass?: number, maxSpeed?: number ,
+                    barrelLength?: number, shellMass?: number,
+                    name?: string, wheelWidth?: number);
+        constructor(
+            arg0: p5 | p5Tanks | Group,
+            arg1: Group | number,
+            arg2: number,
+            arg3?: number,
+            arg4?: number,
+            arg5?: number,
+            arg6?: number,
+            arg7?: number,
+            arg8?: number,
+            arg9?: number | string,
+            arg10?: number | string,
+            arg11?: number
+            ){
+            const args = [...arguments];
+            if(args[0].constructer.name == 'p5' || args[0].constructer.name == 'p5Tanks'){
+                this.p = args[0];
+                args.shift();
+            }else{
+                this.p = null;
+            };
+            if(args[0].constructor.name == Group.name) {
+                this._modules = new args[0].Group();
+                args.shift();
+            }else {
+                console.error("First arguments of new Tank. Must be (group: Group...) or (instance: p5|p5Tanks, group: Group, ...)");
+                throw new Error(`Your input were (${arg0}: ${arg0.constructor.name}, ${arg1}: ${arg1.constructor.name}, ...)`);
+            };
+
+            const parameterInitializers: object = {
+                width: 2.908,
+                length: 6.35,
+                mass: 27,
+                maxSpeed:17.78,
+                barrelLength: 2.82,
+                shellMass: 2.72,
+                name: "Cromwell",
+                wheelWidth: 0.394
+            };
+
+            const parameterKeys: string[] = [
+                "width",
+                "length",
+                "mass",
+                "maxSpeed",
+                "barrelLength",
+                "shellMass",
+                "name",
+                "wheelWidth",
+            ];
+            for(let i = 0; i < args.length && i < 8; i++) {
+                if(typeof parameterKeys[i] == 'string'){
+                    const KEY: string = parameterKeys[i];
+                    parameterInitializers[KEY] = args[i];
+                }
+            }
+
             //Specifications
             this._damage = shellMass;
             this._mass = mass * p5Tanks.SPEED_SCALAR; // 27[tons]

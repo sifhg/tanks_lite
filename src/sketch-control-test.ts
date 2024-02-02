@@ -7,7 +7,7 @@ const ctSketch: any = (p: p5Tanks) => {
     let A = new p5Tanks.Ingrid("Ingrid");
     console.log(A.toString());
     
-    let tankSprites = new p.Group();
+    let tankSprites: Group;
     //new p.Tank()
     console.log(A.toString());
     let cromwell, kv2;

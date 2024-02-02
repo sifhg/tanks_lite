@@ -180,6 +180,14 @@ p5Tanks.SPEED_SCALAR = 4.1 / p5Tanks.DISTANCE_SCALAR;
 p5Tanks.TANKS = [];
 p5Tanks.Ingrid = (_a = class {
         constructor(name) {
+            let inputs = [...arguments];
+            if (inputs.length > 1) {
+                console.error(`There were ${inputs.length} in the Ingrid constructer, and it can only take 1`);
+                for (const ARG in inputs) {
+                    console.error(`Arg: ${ARG} of type ${typeof ARG}`);
+                }
+                throw new Error(`Program times out.`);
+            }
             this._theName = name;
         }
         toString() {
