@@ -18,7 +18,7 @@ const ctSketch: any = (p: p5Tanks) => {
         tankSprites = new p.Group();
         p.world.gravity.y = 0;
         
-        cromwell = new p.Tank(tankSprites, 100, 100);
+        cromwell = new p.Tank(p, tankSprites, 100, 100);
     }
 
     p.setup = () => {

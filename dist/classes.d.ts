@@ -12,7 +12,66 @@ declare class p5Tanks extends p5 {
         A: number;
     };
     Tank: {
+        new (instance: p5 | p5Tanks, group: Group, x: number, y: number, width?: number, length?: number, mass?: number, maxSpeed?: number, barrelLength?: number, shellMass?: number, name?: string, wheelWidth?: number): {
+            p: p5 | p5Tanks | null;
+            _pos: {
+                x: number;
+                y: number;
+            };
+            _damage: number;
+            _mass: number;
+            _maxSpeed: number;
+            _name: string;
+            _dispersion: number;
+            _modules: Group;
+            _turretAssembly: Group;
+            _gun: Sprite;
+            _hull: Sprite;
+            _turret: Sprite;
+            _tracks: {
+                t0: Sprite;
+                t1: Sprite;
+            };
+            _joints: {
+                jr: GlueJoint;
+                jl: GlueJoint;
+                turretAxle: WheelJoint;
+                mantlet: Joint;
+            };
+            drive(power: Tank.Direction): void;
+            steer(power: Tank.Direction): void;
+            applyForce2Tracks(direction: number, strength: number): void;
+            turnTurret(power: Tank.Direction | number | {
+                x: number;
+                y: number;
+            }): Tank.Direction;
+            setName(N: string): void;
+            readonly name: string;
+            readonly velocity: {
+                x: number;
+                y: number;
+            };
+            readonly speed: number;
+            readonly trackSpeed: {
+                s0: number;
+                s1: number;
+            };
+            readonly maxSpeed: number;
+            readonly direction: number;
+            readonly dispersion: number;
+            readonly motionDirection: number;
+            readonly turretDirection: number;
+            toString(): string;
+            getAngle2Turret(xa: number, y?: number): number;
+            getPerpendicularDistance2Turret(x: number, y: number): number;
+            decideTurretTurningDirection(x: number, y: number, threshold?: number): Tank.Direction;
+        };
         new (group: Group, x: number, y: number, width?: number, length?: number, mass?: number, maxSpeed?: number, barrelLength?: number, shellMass?: number, name?: string, wheelWidth?: number): {
+            p: p5 | p5Tanks | null;
+            _pos: {
+                x: number;
+                y: number;
+            };
             _damage: number;
             _mass: number;
             _maxSpeed: number;

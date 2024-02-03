@@ -10,12 +10,8 @@ const ctSketch = (p) => {
     p.preload = () => {
         //console.log(Direction)
         tankSprites = new p.Group();
-        new tankSprites.Sprite();
-        console.log(tankSprites[0]);
-        console.log(tankSprites.constructor.name);
-        console.log(p.Group.name);
         p.world.gravity.y = 0;
-        cromwell = new p.Tank(tankSprites, 100, 100);
+        cromwell = new p.Tank(p, tankSprites, 100, 100);
     };
     p.setup = () => {
         const DISPLAY = document.getElementById("display-control-test");

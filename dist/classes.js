@@ -3,29 +3,79 @@ var __setFunctionName = (this && this.__setFunctionName) || function (f, name, p
     return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
 };
 var _a;
-//import p5 from 'p5';
+
 class p5Tanks extends p5 {
     constructor() {
         super(...arguments);
         this.Tank = class {
-            constructor(group, x, y, width = 2.908, length = 6.35, mass = 27, maxSpeed = 17.78, barrelLength = 2.82, shellMass = 2.72, name = "Cromwell", wheelWidth = 0.394) {
-                //Specifications
-                this._damage = shellMass;
-                this._mass = mass * p5Tanks.SPEED_SCALAR; // 27[tons]
-                this._name = name;
-                this._dispersion = p5.prototype.atan(shellMass / barrelLength) / p5Tanks.DISTANCE_SCALAR;
-                this._maxSpeed = maxSpeed * p5Tanks.SPEED_SCALAR; // 17.78 [m/s]
-                //p5play members
-                this._modules = new group.Group();
-                this._turretAssembly = new this._modules.Group();
-                this._hull = new this._modules.Sprite(x, y, width * p5Tanks.DISTANCE_SCALAR, length * p5Tanks.DISTANCE_SCALAR, "d");
-                this._tracks = {
-                    t0: new this._modules.Sprite(x + this._hull.halfWidth + wheelWidth * p5Tanks.DISTANCE_SCALAR / 2, y, wheelWidth * p5Tanks.DISTANCE_SCALAR, length * p5Tanks.DISTANCE_SCALAR, "d"),
-                    t1: new this._modules.Sprite(x - this._hull.halfWidth - wheelWidth * p5Tanks.DISTANCE_SCALAR / 2, y, wheelWidth * p5Tanks.DISTANCE_SCALAR, length * p5Tanks.DISTANCE_SCALAR, "d")
+            constructor(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11) {
+                const args = [...arguments];
+                if (args[0].constructor.name == 'p5' || args[0].constructor.name == 'p5Tanks') {
+                    this.p = args[0];
+                    args.shift();
+                }
+                else {
+                    this.p = null;
+                }
+                ;
+                if (args[0].constructor.name == this.p.Group.name) {
+                    this._modules = new args[0].Group();
+                    args.shift();
+                }
+                else {
+                    console.error("First arguments of new Tank. Must be (group: Group...) or (instance: p5|p5Tanks, group: Group, ...)");
+                    throw new Error(`Your input were (${arg0}: ${arg0.constructor.name}, ${arg1}: ${arg1.constructor.name}, ...)`);
+                }
+                ;
+                this._pos = {
+                    x: args[0],
+                    y: args[1]
                 };
-                this._turret = new this._turretAssembly.Sprite(x, y + this._hull.halfHeight - this._hull.height / 3, this._hull.width);
-                let calibre = Math.sqrt(shellMass / Math.PI) * 0.0306 * 2;
-                this._gun = new this._turretAssembly.Sprite(this._turret.x, this._turret.y + (barrelLength * p5Tanks.DISTANCE_SCALAR / 2) + this._hull.halfWidth * 2 / 3, (calibre + 0.08) * p5Tanks.DISTANCE_SCALAR, barrelLength * p5Tanks.DISTANCE_SCALAR, 'none');
+                args.shift();
+                args.shift();
+                const parameterInitializers = {
+                    width: 2.908,
+                    length: 6.35,
+                    mass: 27,
+                    maxSpeed: 17.78,
+                    barrelLength: 2.82,
+                    shellMass: 2.72,
+                    name: "Cromwell",
+                    wheelWidth: 0.394
+                };
+                const parameterKeys = [
+                    "width",
+                    "length",
+                    "mass",
+                    "maxSpeed",
+                    "barrelLength",
+                    "shellMass",
+                    "name",
+                    "wheelWidth",
+                ];
+                if (args.length > parameterKeys.length) {
+                    throw new Error(`Too many arguments for p5Tanks.Tank constructor.\nNumber of arguments: ${args.length}\nArgument structure: (${args.map(item => item.constructor.name)})`);
+                }
+                for (let i = 0; i < args.length; i++) {
+                    const KEY = parameterKeys[i];
+                    parameterInitializers[KEY] = args[i];
+                }
+                //Specifications
+                this._damage = parameterInitializers.shellMass;
+                this._mass = parameterInitializers.mass * p5Tanks.SPEED_SCALAR; // 27[tons]
+                this._name = parameterInitializers.name;
+                this._dispersion = p5.prototype.atan(parameterInitializers.shellMass / parameterInitializers.barrelLength) / p5Tanks.DISTANCE_SCALAR;
+                this._maxSpeed = parameterInitializers.maxSpeed * p5Tanks.SPEED_SCALAR; // 17.78 [m/s]
+                //p5play members
+                this._turretAssembly = new this._modules.Group();
+                this._hull = new this._modules.Sprite(this._pos.x, this._pos.y, parameterInitializers.width * p5Tanks.DISTANCE_SCALAR, length * p5Tanks.DISTANCE_SCALAR, "d");
+                this._tracks = {
+                    t0: new this._modules.Sprite(this._pos.x + this._hull.halfWidth + parameterInitializers.wheelWidth * p5Tanks.DISTANCE_SCALAR / 2, this._pos.y, parameterInitializers.wheelWidth * p5Tanks.DISTANCE_SCALAR, length * p5Tanks.DISTANCE_SCALAR, "d"),
+                    t1: new this._modules.Sprite(this._pos.x - this._hull.halfWidth - parameterInitializers.wheelWidth * p5Tanks.DISTANCE_SCALAR / 2, this._pos.y, parameterInitializers.wheelWidth * p5Tanks.DISTANCE_SCALAR, length * p5Tanks.DISTANCE_SCALAR, "d")
+                };
+                this._turret = new this._turretAssembly.Sprite(this._pos.x, this._pos.y + this._hull.halfHeight - this._hull.height / 3, this._hull.width);
+                let calibre = Math.sqrt(parameterInitializers.shellMass / Math.PI) * 0.0306 * 2;
+                this._gun = new this._turretAssembly.Sprite(this._turret.x, this._turret.y + (parameterInitializers.barrelLength * p5Tanks.DISTANCE_SCALAR / 2) + this._hull.halfWidth * 2 / 3, (calibre + 0.08) * p5Tanks.DISTANCE_SCALAR, parameterInitializers.barrelLength * p5Tanks.DISTANCE_SCALAR, 'none');
                 this._joints = {
                     jr: new GlueJoint(this._hull, this._tracks.t0),
                     jl: new GlueJoint(this._hull, this._tracks.t1),
@@ -182,7 +232,7 @@ p5Tanks.Ingrid = (_a = class {
         constructor(name) {
             let inputs = [...arguments];
             if (inputs.length > 1) {
-                console.error(`There were ${inputs.length} in the Ingrid constructer, and it can only take 1`);
+                console.error(`There were ${inputs.length} in the Ingrid constructor, and it can only take 1`);
                 for (const ARG in inputs) {
                     console.error(`Arg: ${ARG} of type ${typeof ARG}`);
                 }
