@@ -10,27 +10,13 @@ class p5Tanks extends p5 {
         this.Tank = class {
             constructor(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11) {
                 const args = [...arguments];
-                if (args[0].constructor.name == 'p5' || args[0].constructor.name == 'p5Tanks') {
-                    this.p = args[0];
-                    args.shift();
-                }
-                else {
-                    this.p = null;
-                }
-                ;
-                if (args[0].constructor.name == this.p.Group.name) {
-                    this._modules = new args[0].Group();
-                    args.shift();
-                }
-                else {
-                    console.error("First arguments of new Tank. Must be (group: Group...) or (instance: p5|p5Tanks, group: Group, ...)");
-                    throw new Error(`Your input were (${arg0}: ${arg0.constructor.name}, ${arg1}: ${arg1.constructor.name}, ...)`);
-                }
-                ;
-                this._pos = {
-                    x: args[0],
-                    y: args[1]
-                };
+                this.p = args[0];
+                const GROUP = args[1];
+                args.shift();
+                args.shift();
+                this._modules = new GROUP.Group();
+                const X = args[0];
+                const Y = args[0];
                 args.shift();
                 args.shift();
                 const parameterInitializers = {
@@ -68,19 +54,19 @@ class p5Tanks extends p5 {
                 this._maxSpeed = parameterInitializers.maxSpeed * p5Tanks.SPEED_SCALAR; // 17.78 [m/s]
                 //p5play members
                 this._turretAssembly = new this._modules.Group();
-                this._hull = new this._modules.Sprite(this._pos.x, this._pos.y, parameterInitializers.width * p5Tanks.DISTANCE_SCALAR, length * p5Tanks.DISTANCE_SCALAR, "d");
+                this._hull = new this._modules.Sprite(X, Y, parameterInitializers.width * p5Tanks.DISTANCE_SCALAR, length * p5Tanks.DISTANCE_SCALAR, "d");
                 this._tracks = {
-                    t0: new this._modules.Sprite(this._pos.x + this._hull.halfWidth + parameterInitializers.wheelWidth * p5Tanks.DISTANCE_SCALAR / 2, this._pos.y, parameterInitializers.wheelWidth * p5Tanks.DISTANCE_SCALAR, length * p5Tanks.DISTANCE_SCALAR, "d"),
-                    t1: new this._modules.Sprite(this._pos.x - this._hull.halfWidth - parameterInitializers.wheelWidth * p5Tanks.DISTANCE_SCALAR / 2, this._pos.y, parameterInitializers.wheelWidth * p5Tanks.DISTANCE_SCALAR, length * p5Tanks.DISTANCE_SCALAR, "d")
+                    t0: new this._modules.Sprite(X + this._hull.halfWidth + parameterInitializers.wheelWidth * p5Tanks.DISTANCE_SCALAR / 2, Y, parameterInitializers.wheelWidth * p5Tanks.DISTANCE_SCALAR, length * p5Tanks.DISTANCE_SCALAR, "d"),
+                    t1: new this._modules.Sprite(X - this._hull.halfWidth - parameterInitializers.wheelWidth * p5Tanks.DISTANCE_SCALAR / 2, Y, parameterInitializers.wheelWidth * p5Tanks.DISTANCE_SCALAR, length * p5Tanks.DISTANCE_SCALAR, "d")
                 };
-                this._turret = new this._turretAssembly.Sprite(this._pos.x, this._pos.y + this._hull.halfHeight - this._hull.height / 3, this._hull.width);
+                this._turret = new this._turretAssembly.Sprite(X, Y + this._hull.halfHeight - this._hull.height / 3, this._hull.width);
                 let calibre = Math.sqrt(parameterInitializers.shellMass / Math.PI) * 0.0306 * 2;
                 this._gun = new this._turretAssembly.Sprite(this._turret.x, this._turret.y + (parameterInitializers.barrelLength * p5Tanks.DISTANCE_SCALAR / 2) + this._hull.halfWidth * 2 / 3, (calibre + 0.08) * p5Tanks.DISTANCE_SCALAR, parameterInitializers.barrelLength * p5Tanks.DISTANCE_SCALAR, 'none');
                 this._joints = {
-                    jr: new GlueJoint(this._hull, this._tracks.t0),
-                    jl: new GlueJoint(this._hull, this._tracks.t1),
-                    turretAxle: new WheelJoint(this._hull, this._turret),
-                    mantlet: new Joint(this._turret, this._gun)
+                    jr: new this.p.GlueJoint(this._hull, this._tracks.t0),
+                    jl: new this.p.GlueJoint(this._hull, this._tracks.t1),
+                    turretAxle: new this.p.WheelJoint(this._hull, this._turret),
+                    mantlet: new this.p.Joint(this._turret, this._gun)
                 };
                 //this._turret.addCollider(0, (barrelLength * Tank.DISTANCE_SCALAR / 2) + this._hull.halfWidth*2/3, (calibre + 0.08) * Tank.DISTANCE_SCALAR, barrelLength * Tank.DISTANCE_SCALAR);
                 this._turret.overlaps(this._tracks.t0);

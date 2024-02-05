@@ -27,11 +27,9 @@ class p5Tanks extends p5 {
         }
     }
 
-    public Tank = class{
+    public Tank = class {
         //Instace mode
-        p: p5|p5Tanks|null;
-
-        _pos: {x: number, y: number};
+        p: p5 | p5Tanks | null;
 
         //Specifications
         _damage: number;
@@ -39,7 +37,7 @@ class p5Tanks extends p5 {
         _maxSpeed: number;
         _name: string;
         _dispersion: number;
-    
+
         //p5play members
         _modules: Group;
         _turretAssembly: Group;
@@ -56,19 +54,14 @@ class p5Tanks extends p5 {
             turretAxle: WheelJoint,
             mantlet: Joint
         }
-        constructor(instance: p5|p5Tanks, group: Group, x: number, y: number,
+        constructor(instance: p5 | p5Tanks, group: Group, x: number, y: number,
             width?: number, length?: number,
             mass?: number, maxSpeed?: number,
-            barrelLength?: number , shellMass?: number,
+            barrelLength?: number, shellMass?: number,
             name?: string, wheelWidth?: number);
-        constructor(group: Group, x: number, y: number,
-                    width?: number, length?: number,
-                    mass?: number, maxSpeed?: number ,
-                    barrelLength?: number, shellMass?: number,
-                    name?: string, wheelWidth?: number);
         constructor(
-            arg0: p5 | p5Tanks | Group,
-            arg1: Group | number,
+            arg0: p5 | p5Tanks,
+            arg1: Group,
             arg2: number,
             arg3?: number,
             arg4?: number,
@@ -76,37 +69,30 @@ class p5Tanks extends p5 {
             arg6?: number,
             arg7?: number,
             arg8?: number,
-            arg9?: number | string,
+            arg9?: number,
             arg10?: number | string,
             arg11?: number
-            ){
+        ) {
             const args = [...arguments];
-            if(args[0].constructor.name == 'p5' || args[0].constructor.name == 'p5Tanks'){
-                this.p = args[0];
-                args.shift();
-            }else{
-                this.p = null;
-            };
-            if(args[0].constructor.name == Group.name) {
-                this._modules = new args[0].Group();
-                args.shift();
-            }else {
-                console.error("First arguments of new Tank. Must be (group: Group...) or (instance: p5|p5Tanks, group: Group, ...)");
-                throw new Error(`Your input were (${arg0}: ${arg0.constructor.name}, ${arg1}: ${arg1.constructor.name}, ...)`);
-            };
-            this._pos = {
-                x: args[0],
-                y: args[1]
-            }
+
+            this.p = args[0] as p5 | p5Tanks;
+            const GROUP: Group = args[1];
             args.shift();
             args.shift();
             
+            this._modules = new GROUP.Group();
+
+            const X = args[0];
+            const Y = args[0];
+            args.shift();
+            args.shift();
+
             interface Initializers {
                 [key: string]: any;
                 width: number,
                 length: number,
                 mass: number,
-                maxSpeed:number,
+                maxSpeed: number,
                 barrelLength: number,
                 shellMass: number,
                 name: string,
@@ -116,7 +102,7 @@ class p5Tanks extends p5 {
                 width: 2.908,
                 length: 6.35,
                 mass: 27,
-                maxSpeed:17.78,
+                maxSpeed: 17.78,
                 barrelLength: 2.82,
                 shellMass: 2.72,
                 name: "Cromwell",
@@ -133,10 +119,10 @@ class p5Tanks extends p5 {
                 "name",
                 "wheelWidth",
             ];
-            if(args.length > parameterKeys.length) {
+            if (args.length > parameterKeys.length) {
                 throw new Error(`Too many arguments for p5Tanks.Tank constructor.\nNumber of arguments: ${args.length}\nArgument structure: (${args.map(item => item.constructor.name)})`);
             }
-            for(let i = 0; i < args.length; i++) {
+            for (let i = 0; i < args.length; i++) {
                 const KEY: string = parameterKeys[i] as string;
                 parameterInitializers[KEY] = args[i];
             }
@@ -147,110 +133,110 @@ class p5Tanks extends p5 {
             this._name = parameterInitializers.name;
             this._dispersion = p5.prototype.atan(parameterInitializers.shellMass / parameterInitializers.barrelLength) / p5Tanks.DISTANCE_SCALAR;
             this._maxSpeed = parameterInitializers.maxSpeed * p5Tanks.SPEED_SCALAR; // 17.78 [m/s]
-    
+
             //p5play members
             this._turretAssembly = new this._modules.Group();
-    
-            this._hull = new this._modules.Sprite(this._pos.x, this._pos.y, parameterInitializers.width * p5Tanks.DISTANCE_SCALAR, length * p5Tanks.DISTANCE_SCALAR, "d");
+
+            this._hull = new this._modules.Sprite(X, Y, parameterInitializers.width * p5Tanks.DISTANCE_SCALAR, length * p5Tanks.DISTANCE_SCALAR, "d");
             this._tracks = {
-                t0: new this._modules.Sprite(this._pos.x + this._hull.halfWidth + parameterInitializers.wheelWidth*p5Tanks.DISTANCE_SCALAR/2, this._pos.y, parameterInitializers.wheelWidth * p5Tanks.DISTANCE_SCALAR, length * p5Tanks.DISTANCE_SCALAR, "d"),
-                t1: new this._modules.Sprite(this._pos.x - this._hull.halfWidth - parameterInitializers.wheelWidth*p5Tanks.DISTANCE_SCALAR/2, this._pos.y, parameterInitializers.wheelWidth * p5Tanks.DISTANCE_SCALAR, length * p5Tanks.DISTANCE_SCALAR, "d")
+                t0: new this._modules.Sprite(X + this._hull.halfWidth + parameterInitializers.wheelWidth * p5Tanks.DISTANCE_SCALAR / 2, Y, parameterInitializers.wheelWidth * p5Tanks.DISTANCE_SCALAR, length * p5Tanks.DISTANCE_SCALAR, "d"),
+                t1: new this._modules.Sprite(X - this._hull.halfWidth - parameterInitializers.wheelWidth * p5Tanks.DISTANCE_SCALAR / 2, Y, parameterInitializers.wheelWidth * p5Tanks.DISTANCE_SCALAR, length * p5Tanks.DISTANCE_SCALAR, "d")
             }
-            this._turret = new this._turretAssembly.Sprite(this._pos.x, this._pos.y + this._hull.halfHeight - this._hull.height/3, this._hull.width);
-            let calibre = Math.sqrt(parameterInitializers.shellMass/Math.PI) * 0.0306 * 2;
-            this._gun = new this._turretAssembly.Sprite(this._turret.x, this._turret.y + (parameterInitializers.barrelLength * p5Tanks.DISTANCE_SCALAR / 2) + this._hull.halfWidth*2/3,
-                                                        (calibre + 0.08) * p5Tanks.DISTANCE_SCALAR, parameterInitializers.barrelLength * p5Tanks.DISTANCE_SCALAR, 'none');
-    
+            this._turret = new this._turretAssembly.Sprite(X, Y + this._hull.halfHeight - this._hull.height / 3, this._hull.width);
+            let calibre = Math.sqrt(parameterInitializers.shellMass / Math.PI) * 0.0306 * 2;
+            this._gun = new this._turretAssembly.Sprite(this._turret.x, this._turret.y + (parameterInitializers.barrelLength * p5Tanks.DISTANCE_SCALAR / 2) + this._hull.halfWidth * 2 / 3,
+                (calibre + 0.08) * p5Tanks.DISTANCE_SCALAR, parameterInitializers.barrelLength * p5Tanks.DISTANCE_SCALAR, 'none');
+
             this._joints = {
-                jr: new GlueJoint(this._hull, this._tracks.t0),
-                jl: new GlueJoint(this._hull, this._tracks.t1),
-                turretAxle: new WheelJoint(this._hull, this._turret),
-                mantlet: new Joint(this._turret, this._gun)
+                jr: new this.p.GlueJoint(this._hull, this._tracks.t0),
+                jl: new this.p.GlueJoint(this._hull, this._tracks.t1),
+                turretAxle: new this.p.WheelJoint(this._hull, this._turret),
+                mantlet: new this.p.Joint(this._turret, this._gun)
             };
             //this._turret.addCollider(0, (barrelLength * Tank.DISTANCE_SCALAR / 2) + this._hull.halfWidth*2/3, (calibre + 0.08) * Tank.DISTANCE_SCALAR, barrelLength * Tank.DISTANCE_SCALAR);
             this._turret.overlaps(this._tracks.t0);
             this._turret.overlaps(this._tracks.t1);
-            
+
             this._hull.drag = 5;
             this._hull.rotationDrag = 15;
             this._hull.mass = this._mass * p5Tanks.DISTANCE_SCALAR * .6;
             this._tracks.t0.mass = this._mass * p5Tanks.DISTANCE_SCALAR * .2;
             this._tracks.t1.mass = this._mass * p5Tanks.DISTANCE_SCALAR * .2;
-    
+
             p5Tanks.TANKS.push(this);
         }
-    
-    
+
+
         //Controls
         drive(power: Tank.Direction): void {
             this._hull.bearing = this._hull.rotation + (90 * Math.sign(power));
             const SPEED = this._maxSpeed * Math.abs(power);
-            if(Math.abs(this.speed) < this._maxSpeed) {
+            if (Math.abs(this.speed) < this._maxSpeed) {
                 this._hull.applyForce(SPEED)
             }
         }
-        steer(power: Tank.Direction): void{
+        steer(power: Tank.Direction): void {
             this._tracks.t0.bearing = this._hull.rotation + (90 * Math.sign(power));
             this._tracks.t1.bearing = this._hull.rotation - (90 * Math.sign(power));
-    
-            if(Math.cos(this.motionDirection - this.direction) * this.speed < -world.velocityThreshold) {
+
+            if (Math.cos(this.motionDirection - this.direction) * this.speed < -world.velocityThreshold) {
                 const TEMP = this._tracks.t0.bearing;
                 this._tracks.t0.bearing = this._tracks.t1.bearing;
                 this._tracks.t1.bearing = TEMP;
             }
-    
+
             const SPEED = this._maxSpeed * Math.abs(power);
-    
+
             //Left track
-            if(Math.abs(this._tracks.t0.speed) < this._maxSpeed) {
+            if (Math.abs(this._tracks.t0.speed) < this._maxSpeed) {
                 this._tracks.t0.applyForce(SPEED);
             }
-    
+
             //Right track
-            if(Math.abs(this._tracks.t1.speed) < this._maxSpeed) {
+            if (Math.abs(this._tracks.t1.speed) < this._maxSpeed) {
                 this._tracks.t1.applyForce(SPEED);
             }
         }
         applyForce2Tracks(direction: number, strength: number) {
             this._tracks.t0.bearing = direction;
             this._tracks.t1.bearing = direction;
-            this._tracks.t0.applyForce(strength/2);
-            this._tracks.t1.applyForce(strength/2);
+            this._tracks.t0.applyForce(strength / 2);
+            this._tracks.t1.applyForce(strength / 2);
         }
-        turnTurret(power: Tank.Direction|number|{x: number, y: number}): Tank.Direction {
-            if(typeof power == 'object') {
+        turnTurret(power: Tank.Direction | number | { x: number, y: number }): Tank.Direction {
+            if (typeof power == 'object') {
                 power = this.decideTurretTurningDirection(power.x, power.y);
             }
-            if(typeof power != 'number') {
+            if (typeof power != 'number') {
                 throw new Error(`power imput of Tank.turnTurret() is '${typeof power}'. Input must be Tank.Direction, number, or {x: number, y: number}`);
             }
             const SPEED_AMPLITUDE: number = power * p5Tanks.SPEED_SCALAR * this._maxSpeed / this._mass;
             this._turretAssembly.rotationSpeed = SPEED_AMPLITUDE + this._hull.rotationSpeed;
             return power;
         }
-    
+
         //Setters
         setName(N: string): void {
             this._name = N;
         }
-    
+
         //Getters
         get name(): string {
             return this._name;
         }
-        get velocity(): {x: number, y: number} {
+        get velocity(): { x: number, y: number } {
             return {
                 x: this._hull.velocity.x,
                 y: this._hull.velocity.y
             }
         }
         get speed(): number {
-            return p5.prototype.dist(0, 0 , this._hull.velocity.x, this._hull.velocity.y);
+            return p5.prototype.dist(0, 0, this._hull.velocity.x, this._hull.velocity.y);
         }
-        get trackSpeed(): {s0: number, s1: number} {
+        get trackSpeed(): { s0: number, s1: number } {
             return {
-                s0: p5.prototype.dist(0, 0 , this._tracks.t0.velocity.x, this._tracks.t0.velocity.y),
-                s1: p5.prototype.dist(0, 0 , this._tracks.t1.velocity.x, this._tracks.t1.velocity.y),
+                s0: p5.prototype.dist(0, 0, this._tracks.t0.velocity.x, this._tracks.t0.velocity.y),
+                s1: p5.prototype.dist(0, 0, this._tracks.t1.velocity.x, this._tracks.t1.velocity.y),
             }
         }
         get maxSpeed(): number {
@@ -267,7 +253,7 @@ class p5Tanks extends p5 {
         }
         get turretDirection(): number {
             let rotation = this._turret.rotation + 90;
-            while(rotation < 0) {
+            while (rotation < 0) {
                 rotation += 360;
             }
             return rotation % 360;
@@ -275,15 +261,15 @@ class p5Tanks extends p5 {
         toString() {
             return `Name: ${this._name}`;
         }
-    
+
         //Helpers
         getAngle2Turret(xa: number, y?: number): number {
-            if(y == undefined) {
+            if (y == undefined) {
                 //If only an angle is provided
                 let rotation = this._turret.rotation - xa
-    
+
                 // Normalize the angle to be between -180 and 180 degrees
-                while(rotation < -180) {
+                while (rotation < -180) {
                     rotation += 360;
                 }
                 return rotation % 360;
@@ -291,9 +277,9 @@ class p5Tanks extends p5 {
             const DX = xa - this._turret.x;
             const DY = y - this._turret.y;
             let rotation = -p5.prototype.atan2(DX, DY) - this._turret.rotation;
-    
+
             // Normalize the angle to be between -180 and 180 degrees
-            while(rotation < -180) {
+            while (rotation < -180) {
                 rotation += 360;
             }
             return rotation % 360;
@@ -304,20 +290,20 @@ class p5Tanks extends p5 {
             const PERPENDICULAR_DISTANCE = p5.prototype.sin(ANGLE) * DISTANCE;
             return PERPENDICULAR_DISTANCE;
         }
-        decideTurretTurningDirection(x: number, y: number, threshold: number = this.dispersion * 2/3): Tank.Direction {
-            if(threshold < 0) {
+        decideTurretTurningDirection(x: number, y: number, threshold: number = this.dispersion * 2 / 3): Tank.Direction {
+            if (threshold < 0) {
                 throw new Error("The input threshold of decideTurretTurningDirection cannot be a negative number");
             }
-    
-            if(this._turret.angleToFace(x, y, -90) >= threshold/2) {
+
+            if (this._turret.angleToFace(x, y, -90) >= threshold / 2) {
                 return Tank.Direction.Right;
             }
-            if(this._turret.angleToFace(x, y, -90) <= -threshold/2) {
+            if (this._turret.angleToFace(x, y, -90) <= -threshold / 2) {
                 return Tank.Direction.Left;
             }
-    
+
             //Handles cases where the point is behind the turret
-            if(p5.prototype.cos(this.getAngle2Turret(x, y)) < 0) {
+            if (p5.prototype.cos(this.getAngle2Turret(x, y)) < 0) {
                 return this.decideTurretTurningDirection(x, y, 0);
             }
             return Tank.Direction.None;
