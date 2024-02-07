@@ -2,11 +2,11 @@ import p5Tanks, { Tank } from 'classes';
 const ctSketch = (p) => {
     let tankSprites;
     let cromwell;
-    let test;
     p.preload = () => {
         tankSprites = new p.Group();
         p.world.gravity.y = 0;
         cromwell = new p.Tank(p, tankSprites, 100, 100);
+        console.log(typeof p.Tank);
     };
     p.setup = () => {
         const DISPLAY = document.getElementById("display-control-test");

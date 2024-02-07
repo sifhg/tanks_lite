@@ -1,18 +1,15 @@
 import p5 from 'p5';
 import p5Tanks, {Tank} from 'classes';
 
-
-
-
 const ctSketch: any = (p: p5Tanks) => {
     let tankSprites: Group;
     let cromwell: any;
-    let test: number;
     
     p.preload = () => {
         tankSprites = new p.Group();
         p.world.gravity.y = 0;
         cromwell = new p.Tank(p, tankSprites, 100, 100);
+        console.log(typeof p.Tank);
     }
 
     p.setup = () => {
@@ -30,7 +27,7 @@ const ctSketch: any = (p: p5Tanks) => {
 
     p.draw = () => {
         //p.clear();
-        p.background(backgroundColour + "10");
+        p.background(backgroundColour + "10");        
 
         if (p.keyIsDown(65)) { //LEFT
             cromwell.steer(Tank.Direction.Left);

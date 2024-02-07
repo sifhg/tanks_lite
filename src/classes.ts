@@ -117,9 +117,11 @@ class p5Tanks extends p5 {
 
             this._hull = new this._modules.Sprite(X, Y, parameterInitializers.width * p5Tanks.DISTANCE_SCALAR, parameterInitializers.length * p5Tanks.DISTANCE_SCALAR, "d");
             this._tracks = {
-                t0: new this._modules.Sprite(X + this._hull.halfWidth + parameterInitializers.wheelWidth * p5Tanks.DISTANCE_SCALAR / 2, Y, parameterInitializers.wheelWidth * p5Tanks.DISTANCE_SCALAR, parameterInitializers.length * p5Tanks.DISTANCE_SCALAR, "d"),
-                t1: new this._modules.Sprite(X - this._hull.halfWidth - parameterInitializers.wheelWidth * p5Tanks.DISTANCE_SCALAR / 2, Y, parameterInitializers.wheelWidth * p5Tanks.DISTANCE_SCALAR, parameterInitializers.length * p5Tanks.DISTANCE_SCALAR, "d")
+                t0: new this._modules.Sprite(X, Y, parameterInitializers.wheelWidth * p5Tanks.DISTANCE_SCALAR, parameterInitializers.length * p5Tanks.DISTANCE_SCALAR, "d"),
+                t1: new this._modules.Sprite(X , Y, parameterInitializers.wheelWidth * p5Tanks.DISTANCE_SCALAR, parameterInitializers.length * p5Tanks.DISTANCE_SCALAR, "d")
             }
+            this._tracks.t0.offset.x = this._hull.halfWidth + parameterInitializers.wheelWidth * p5Tanks.DISTANCE_SCALAR / 2;
+            this._tracks.t1.offset.x = -this._hull.halfWidth - parameterInitializers.wheelWidth * p5Tanks.DISTANCE_SCALAR / 2;
             this._turret = new this._turretAssembly.Sprite(X, Y + this._hull.halfHeight - this._hull.height / 3, this._hull.width);
             let calibre = Math.sqrt(parameterInitializers.shellMass / Math.PI) * 0.0306 * 2;
             this._gun = new this._turretAssembly.Sprite(this._turret.x, this._turret.y + (parameterInitializers.barrelLength * p5Tanks.DISTANCE_SCALAR / 2) + this._hull.halfWidth * 2 / 3,
@@ -154,26 +156,29 @@ class p5Tanks extends p5 {
             }
         }
         steer(power: Tank.Direction): void {
-            this._tracks.t0.bearing = this._hull.rotation + (90 * Math.sign(power));
-            this._tracks.t1.bearing = this._hull.rotation - (90 * Math.sign(power));
+            this._tracks.t0.applyTorque(power);
+            this._tracks.t1.applyTorque(power);
 
-            if (Math.cos(this.motionDirection - this.direction) * this.speed < -this.p.world.velocityThreshold) {
-                const TEMP = this._tracks.t0.bearing;
-                this._tracks.t0.bearing = this._tracks.t1.bearing;
-                this._tracks.t1.bearing = TEMP;
-            }
+            // this._tracks.t0.bearing = this._hull.rotation + (90 * Math.sign(power));
+            // this._tracks.t1.bearing = this._hull.rotation - (90 * Math.sign(power));
 
-            const SPEED = this._maxSpeed * Math.abs(power);
+            // if (Math.cos(this.motionDirection - this.direction) * this.speed < -this.p.world.velocityThreshold) {
+            //     const TEMP = this._tracks.t0.bearing;
+            //     this._tracks.t0.bearing = this._tracks.t1.bearing;
+            //     this._tracks.t1.bearing = TEMP;
+            // }
 
-            //Left track
-            if (Math.abs(this._tracks.t0.speed) < this._maxSpeed) {
-                this._tracks.t0.applyForce(SPEED);
-            }
+            // const SPEED = this._maxSpeed * Math.abs(power);
 
-            //Right track
-            if (Math.abs(this._tracks.t1.speed) < this._maxSpeed) {
-                this._tracks.t1.applyForce(SPEED);
-            }
+            // //Left track
+            // if (Math.abs(this._tracks.t0.speed) < this._maxSpeed) {
+            //     this._tracks.t0.applyForce(SPEED);
+            // }
+
+            // //Right track
+            // if (Math.abs(this._tracks.t1.speed) < this._maxSpeed) {
+            //     this._tracks.t1.applyForce(SPEED);
+            // }
         }
         applyForce2Tracks(direction: number, strength: number) {
             this._tracks.t0.bearing = direction;
@@ -290,8 +295,6 @@ class p5Tanks extends p5 {
 }
 
 export default p5Tanks;
-
-
 
 export namespace Tank {
     export enum Direction{
