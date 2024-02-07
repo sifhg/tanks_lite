@@ -23,7 +23,18 @@ const ctSketch = (p) => {
     p.draw = () => {
         //p.clear();
         p.background(backgroundColour + "10");
-        cromwell.steer(Tank.Direction.Left);
+        if (p.keyIsDown(65)) { //LEFT
+            cromwell.steer(Tank.Direction.Left);
+        }
+        if (p.keyIsDown(68)) { //RIGHT
+            cromwell.steer(Tank.Direction.Right);
+        }
+        if (p.keyIsDown(87)) { //UP
+            cromwell.drive(Tank.Direction.Forwards);
+        }
+        if (p.keyIsDown(83)) { //DOWN
+            cromwell.drive(Tank.Direction.Backwards);
+        }
     };
 };
 const ct = new p5Tanks(ctSketch, 'display-control-test');
