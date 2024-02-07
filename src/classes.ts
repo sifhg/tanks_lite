@@ -5,31 +5,9 @@ class p5Tanks extends p5 {
     static SPEED_SCALAR = 4.1 / p5Tanks.DISTANCE_SCALAR;
     static TANKS: any[] = [];
 
-    static Ingrid = class {
-        static A = p5Tanks.DISTANCE_SCALAR;
-        _theName: string;
-        constructor(name: string) {
-            let inputs: any[] = [...arguments];
-            if(inputs.length > 1) {
-                console.error(`There were ${inputs.length} in the Ingrid constructor, and it can only take 1`);
-                for(const ARG in inputs) {
-                    console.error(`Arg: ${ARG} of type ${typeof ARG}`);
-                }
-                throw new Error(`Program times out.`)
-            }
-            this._theName = name;
-        }
-        toString(): string {
-            return `A = ${p5Tanks.DISTANCE_SCALAR}: Name = ${this.name}`;
-        }
-        get name(): string {
-            return this._theName;
-        }
-    }
-
     public Tank = class {
         //Instace mode
-        p: p5 | p5Tanks | null;
+        p: p5 | p5Tanks;
 
         //Specifications
         _damage: number;
@@ -137,10 +115,10 @@ class p5Tanks extends p5 {
             //p5play members
             this._turretAssembly = new this._modules.Group();
 
-            this._hull = new this._modules.Sprite(X, Y, parameterInitializers.width * p5Tanks.DISTANCE_SCALAR, length * p5Tanks.DISTANCE_SCALAR, "d");
+            this._hull = new this._modules.Sprite(X, Y, parameterInitializers.width * p5Tanks.DISTANCE_SCALAR, parameterInitializers.length * p5Tanks.DISTANCE_SCALAR, "d");
             this._tracks = {
-                t0: new this._modules.Sprite(X + this._hull.halfWidth + parameterInitializers.wheelWidth * p5Tanks.DISTANCE_SCALAR / 2, Y, parameterInitializers.wheelWidth * p5Tanks.DISTANCE_SCALAR, length * p5Tanks.DISTANCE_SCALAR, "d"),
-                t1: new this._modules.Sprite(X - this._hull.halfWidth - parameterInitializers.wheelWidth * p5Tanks.DISTANCE_SCALAR / 2, Y, parameterInitializers.wheelWidth * p5Tanks.DISTANCE_SCALAR, length * p5Tanks.DISTANCE_SCALAR, "d")
+                t0: new this._modules.Sprite(X + this._hull.halfWidth + parameterInitializers.wheelWidth * p5Tanks.DISTANCE_SCALAR / 2, Y, parameterInitializers.wheelWidth * p5Tanks.DISTANCE_SCALAR, parameterInitializers.length * p5Tanks.DISTANCE_SCALAR, "d"),
+                t1: new this._modules.Sprite(X - this._hull.halfWidth - parameterInitializers.wheelWidth * p5Tanks.DISTANCE_SCALAR / 2, Y, parameterInitializers.wheelWidth * p5Tanks.DISTANCE_SCALAR, parameterInitializers.length * p5Tanks.DISTANCE_SCALAR, "d")
             }
             this._turret = new this._turretAssembly.Sprite(X, Y + this._hull.halfHeight - this._hull.height / 3, this._hull.width);
             let calibre = Math.sqrt(parameterInitializers.shellMass / Math.PI) * 0.0306 * 2;
@@ -179,7 +157,7 @@ class p5Tanks extends p5 {
             this._tracks.t0.bearing = this._hull.rotation + (90 * Math.sign(power));
             this._tracks.t1.bearing = this._hull.rotation - (90 * Math.sign(power));
 
-            if (Math.cos(this.motionDirection - this.direction) * this.speed < -world.velocityThreshold) {
+            if (Math.cos(this.motionDirection - this.direction) * this.speed < -this.p.world.velocityThreshold) {
                 const TEMP = this._tracks.t0.bearing;
                 this._tracks.t0.bearing = this._tracks.t1.bearing;
                 this._tracks.t1.bearing = TEMP;

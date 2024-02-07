@@ -1,14 +1,9 @@
-import p5Tanks from 'classes';
+import p5Tanks, { Tank } from 'classes';
 const ctSketch = (p) => {
-    let A = new p5Tanks.Ingrid("Ingrid");
-    console.log(A.toString());
     let tankSprites;
-    //new p.Tank()
-    console.log(A.toString());
-    let cromwell, kv2;
+    let cromwell;
     let test;
     p.preload = () => {
-        //console.log(Direction)
         tankSprites = new p.Group();
         p.world.gravity.y = 0;
         cromwell = new p.Tank(p, tankSprites, 100, 100);
@@ -24,33 +19,35 @@ const ctSketch = (p) => {
             p.background(backgroundColour);
         });
         p.angleMode(p.DEGREES);
-        // cromwell = new Tank(tankSprites, 100, 100);
     };
     p.draw = () => {
-        //clear();
+        //p.clear();
+        p.background(backgroundColour + "10");
+        cromwell.steer(Tank.Direction.Left);
     };
 };
 const ct = new p5Tanks(ctSketch, 'display-control-test');
 // let cromwell: Tank, kv2: Tank;
 // let tankSprites: Group;
-// let drive: boolean = false;
-// let steer: boolean = false;
-// function setup() {
-//     const DISPLAY: HTMLElement | null = document.getElementById("display-control-test");
-//     if(DISPLAY === null) {
-//         throw new Error("DISPLAY === null: Element with id 'display-control-test' not found.");
-//     }
-//     let canvas: any = createCanvas(DISPLAY.offsetWidth, DISPLAY.offsetHeight);
-//     canvas.parent("display-control-test");
-//     addEventListener("resize", () => {
-//         canvas.resize(DISPLAY.offsetWidth, DISPLAY.offsetHeight);
-//         background(backgroundColour);
-//     });
-//     angleMode(DEGREES);
-//     tankSprites = new Group();
-//     world.gravity.y = 0;
-//     cromwell = new Tank(tankSprites, 100, 100);
-// }
+/*
+function setup() {
+    const DISPLAY: HTMLElement | null = document.getElementById("display-control-test");
+    if(DISPLAY === null) {
+        throw new Error("DISPLAY === null: Element with id 'display-control-test' not found.");
+    }
+    let canvas: any = createCanvas(DISPLAY.offsetWidth, DISPLAY.offsetHeight);
+    canvas.parent("display-control-test");
+    addEventListener("resize", () => {
+        canvas.resize(DISPLAY.offsetWidth, DISPLAY.offsetHeight);
+        background(backgroundColour);
+    });
+    angleMode(DEGREES);
+    
+    tankSprites = new Group();
+
+    world.gravity.y = 0;
+    cromwell = new Tank(tankSprites, 100, 100);
+}*/
 // function draw() {
 //     //clear();
 //     background(backgroundColour + "10");

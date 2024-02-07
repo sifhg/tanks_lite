@@ -3,17 +3,9 @@ declare class p5Tanks extends p5 {
     static DISTANCE_SCALAR: number;
     static SPEED_SCALAR: number;
     static TANKS: any[];
-    static Ingrid: {
-        new (name: string): {
-            _theName: string;
-            toString(): string;
-            readonly name: string;
-        };
-        A: number;
-    };
     Tank: {
         new (instance: p5 | p5Tanks, group: Group, x: number, y: number, width?: number, length?: number, mass?: number, maxSpeed?: number, barrelLength?: number, shellMass?: number, name?: string, wheelWidth?: number): {
-            p: p5 | p5Tanks | null;
+            p: p5 | p5Tanks;
             _damage: number;
             _mass: number;
             _maxSpeed: number;
