@@ -292,6 +292,49 @@ class p5Tanks extends p5 {
 export default p5Tanks;
 
 
+
+export namespace Tank {
+    export enum Direction{
+        Forwards = 300,
+        Backwards = -150,
+        Left = -8,
+        Right = 8,
+        None = 0
+    }
+}
+
+export class Barrier {
+    static BARRIERS: Barrier[] = [];
+
+    body: Sprite;
+    constructor(x: number, y: number, r: number);
+    constructor(x: number, y: number, w: number, h: number);
+    constructor(x: number, y: number, arg3: number, arg4?: number) {
+        if ([...arguments].length == 3) {
+            this.body = new Sprite(x, y, arg3);
+        } else {
+            this.body = new Sprite(x, y, arg3, arg4);
+        }
+        this.body.collider = "static";
+        this.body.colour = p5.prototype.color(0);
+
+        Barrier.BARRIERS.push(this);
+    }
+}
+
+
+
+//@ts-expect-error
+p5.prototype.registerMethod('pre', function applySideDragForce() {
+    for(const TANK of p5Tanks.TANKS) {
+        const FORCE_DIRECTION: number = TANK.motionDirection - 180;
+        const FORCE_MAGNITUDE: number = Math.abs(p5.prototype.sin(TANK.motionDirection - TANK.direction)) * TANK.speed * 5000;
+        //TANK.applyForce2Tracks(FORCE_DIRECTION, FORCE_MAGNITUDE);
+    }
+})
+
+
+
 // export class Tank {
 //     static DISTANCE_SCALAR = 15.75;
 //     static SPEED_SCALAR = 4.1 / Tank.DISTANCE_SCALAR;
@@ -507,45 +550,3 @@ export default p5Tanks;
 //         return Tank.Direction.None;
 //     }
 // }
-
-
-
-export namespace Tank {
-    export enum Direction{
-        Forwards = 300,
-        Backwards = -150,
-        Left = -8,
-        Right = 8,
-        None = 0
-    }
-}
-
-export class Barrier {
-    static BARRIERS: Barrier[] = [];
-
-    body: Sprite;
-    constructor(x: number, y: number, r: number);
-    constructor(x: number, y: number, w: number, h: number);
-    constructor(x: number, y: number, arg3: number, arg4?: number) {
-        if ([...arguments].length == 3) {
-            this.body = new Sprite(x, y, arg3);
-        } else {
-            this.body = new Sprite(x, y, arg3, arg4);
-        }
-        this.body.collider = "static";
-        this.body.colour = p5.prototype.color(0);
-
-        Barrier.BARRIERS.push(this);
-    }
-}
-
-
-
-//@ts-expect-error
-p5.prototype.registerMethod('pre', function applySideDragForce() {
-    for(const TANK of p5Tanks.TANKS) {
-        const FORCE_DIRECTION: number = TANK.motionDirection - 180;
-        const FORCE_MAGNITUDE: number = Math.abs(p5.prototype.sin(TANK.motionDirection - TANK.direction)) * TANK.speed * 5000;
-        TANK.applyForce2Tracks(FORCE_DIRECTION, FORCE_MAGNITUDE);
-    }
-})
