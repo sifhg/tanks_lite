@@ -1,3 +1,4 @@
+var _a;
 import p5Tanks, { Tank } from 'classes';
 const ctSketch = (p) => {
     let tankSprites;
@@ -51,6 +52,7 @@ const ctSketch = (p) => {
     };
 };
 const ct = new p5Tanks(ctSketch, 'display-control-test');
+console.log((_a = p5Tanks.INSTANCES[0]) === null || _a === void 0 ? void 0 : _a.BARRIERS.length);
 // let cromwell: Tank, kv2: Tank;
 // let tankSprites: Group;
 /*

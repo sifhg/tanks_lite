@@ -6,8 +6,10 @@ declare class p5Tanks extends p5 {
     };
     static DISTANCE_SCALAR: number;
     static SPEED_SCALAR: number;
+    static INSTANCES: p5Tanks[];
     TANKS: any[];
     BARRIERS: any[];
+    constructor(arg0: (...args: any[]) => any, arg1?: string | HTMLElement | undefined);
     Tank: {
         new (instance: p5Tanks, group: Group, x: number, y: number, width?: number, length?: number, mass?: number, maxSpeed?: number, barrelLength?: number, shellMass?: number, name?: string, wheelWidth?: number): {
             p: p5Tanks;
@@ -87,10 +89,4 @@ export declare namespace Tank {
         Right = 8,
         None = 0
     }
-}
-export declare class Barrier {
-    static BARRIERS: Barrier[];
-    body: Sprite;
-    constructor(x: number, y: number, r: number);
-    constructor(x: number, y: number, w: number, h: number);
 }

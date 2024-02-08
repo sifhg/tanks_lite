@@ -1,5 +1,5 @@
 import p5 from 'p5';
-import p5Tanks, { Tank, Barrier } from 'classes';
+import p5Tanks, { Tank } from 'classes';
 
 const ctSketch: any = (p: p5Tanks) => {
     let tankSprites: Group;
@@ -59,6 +59,8 @@ const ctSketch: any = (p: p5Tanks) => {
 };
 
 const ct: object = new p5Tanks(ctSketch, 'display-control-test');
+
+console.log(p5Tanks.INSTANCES[0]?.BARRIERS.length);
 
 // let cromwell: Tank, kv2: Tank;
 // let tankSprites: Group;

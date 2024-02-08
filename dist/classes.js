@@ -1,7 +1,7 @@
-
+import p5 from 'p5';
 class p5Tanks extends p5 {
-    constructor() {
-        super(...arguments);
+    constructor(arg0, arg1) {
+        super(arg0, arg1);
         this.TANKS = [];
         this.BARRIERS = [];
         this.Tank = class {
@@ -76,7 +76,7 @@ class p5Tanks extends p5 {
                 this._hull.mass = this._mass * p5Tanks.DISTANCE_SCALAR * .6;
                 this._tracks.t0.mass = this._mass * p5Tanks.DISTANCE_SCALAR * .2;
                 this._tracks.t1.mass = this._mass * p5Tanks.DISTANCE_SCALAR * .2;
-                this.p.BARRIERS.push(this);
+                this.p.TANKS.push(this);
             }
             //Controls
             drive(power) {
@@ -234,10 +234,12 @@ class p5Tanks extends p5 {
                 this.p.BARRIERS.push(this);
             }
         };
+        p5Tanks.INSTANCES.push(this);
     }
 }
 p5Tanks.DISTANCE_SCALAR = 15.75;
 p5Tanks.SPEED_SCALAR = 4.1 / p5Tanks.DISTANCE_SCALAR;
+p5Tanks.INSTANCES = [];
 export default p5Tanks;
 export var Tank;
 (function (Tank) {
@@ -250,25 +252,13 @@ export var Tank;
         Direction[Direction["None"] = 0] = "None";
     })(Direction = Tank.Direction || (Tank.Direction = {}));
 })(Tank || (Tank = {}));
-export class Barrier {
-    constructor(x, y, arg3, arg4) {
-        if ([...arguments].length == 3) {
-            this.body = new Sprite(x, y, arg3);
-        }
-        else {
-            this.body = new Sprite(x, y, arg3, arg4);
-        }
-        this.body.collider = "static";
-        this.body.colour = p5Tanks.prototype.color(0);
-        Barrier.BARRIERS.push(this);
-    }
-}
-Barrier.BARRIERS = [];
 //@ts-expect-error
-// p5Tanks.prototype.registerMethod('pre', function applySideDragForce() {
-//     for (const TANK of p5Tanks.prototype.TANKS) {
-//         const FORCE_DIRECTION = TANK.motionDirection - 180;
-//         const FORCE_MAGNITUDE = Math.abs(p5Tanks.prototype.sin(TANK.motionDirection - TANK.direction)) * TANK.speed * 5000;
-//         TANK.applyForce2Tracks(FORCE_DIRECTION, FORCE_MAGNITUDE);
-//     }
-// });
+p5Tanks.prototype.registerMethod('pre', function applySideDragForce() {
+    for (const P of p5Tanks.INSTANCES) {
+        for (const TANK of P.TANKS) {
+            const FORCE_DIRECTION = TANK.motionDirection - 180;
+            const FORCE_MAGNITUDE = Math.abs(P.sin(TANK.motionDirection - TANK.direction)) * TANK.speed * 5000;
+            TANK.applyForce2Tracks(FORCE_DIRECTION, FORCE_MAGNITUDE);
+        }
+    }
+});

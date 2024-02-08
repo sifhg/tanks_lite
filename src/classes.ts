@@ -5,8 +5,14 @@ class p5Tanks extends p5 {
 
     static DISTANCE_SCALAR = 15.75;
     static SPEED_SCALAR = 4.1 / p5Tanks.DISTANCE_SCALAR;
+    static INSTANCES: p5Tanks[] = [];
     TANKS: any[] = [];
     BARRIERS: any[] = [];
+
+    constructor(arg0: (...args: any[]) => any, arg1?: string | HTMLElement | undefined) {
+        super(arg0, arg1);
+        p5Tanks.INSTANCES.push(this);
+    }
 
     public Tank = class {
         //Instace mode
@@ -149,7 +155,7 @@ class p5Tanks extends p5 {
             this._tracks.t1.mass = this._mass * p5Tanks.DISTANCE_SCALAR * .2;
 
 
-            this.p.BARRIERS.push(this);
+            this.p.TANKS.push(this);
         }
 
 
@@ -324,8 +330,9 @@ class p5Tanks extends p5 {
             this.p.BARRIERS.push(this);
         }
     }
-    
 }
+
+
 
 export default p5Tanks;
 
@@ -339,32 +346,13 @@ export namespace Tank {
     }
 }
 
-export class Barrier {
-    static BARRIERS: Barrier[] = [];
-
-    body: Sprite;
-    constructor(x: number, y: number, r: number);
-    constructor(x: number, y: number, w: number, h: number);
-    constructor(x: number, y: number, arg3: number, arg4?: number) {
-        if ([...arguments].length == 3) {
-            this.body = new Sprite(x, y, arg3);
-        } else {
-            this.body = new Sprite(x, y, arg3, arg4);
-        }
-        this.body.collider = "static";
-        this.body.colour = p5Tanks.prototype.color(0);
-
-        Barrier.BARRIERS.push(this);
-    }
-}
-
-
-
 //@ts-expect-error
 p5Tanks.prototype.registerMethod('pre', function applySideDragForce() {
-    for(const TANK of p5Tanks.prototype.TANKS) {
-        const FORCE_DIRECTION: number = TANK.motionDirection - 180;
-        const FORCE_MAGNITUDE: number = Math.abs(p5Tanks.prototype.sin(TANK.motionDirection - TANK.direction)) * TANK.speed * 5000;
-        TANK.applyForce2Tracks(FORCE_DIRECTION, FORCE_MAGNITUDE);
+    for(const P of p5Tanks.INSTANCES) {
+        for(const TANK of P.TANKS) {
+            const FORCE_DIRECTION: number = TANK.motionDirection - 180;
+            const FORCE_MAGNITUDE: number = Math.abs(P.sin(TANK.motionDirection - TANK.direction)) * TANK.speed * 5000;
+            TANK.applyForce2Tracks(FORCE_DIRECTION, FORCE_MAGNITUDE);
+        }
     }
 })
