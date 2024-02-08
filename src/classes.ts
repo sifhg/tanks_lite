@@ -2,13 +2,15 @@ import p5 from 'p5';
 
 class p5Tanks extends p5 {
     declare mouse: {x: number, y: number};
+
     static DISTANCE_SCALAR = 15.75;
     static SPEED_SCALAR = 4.1 / p5Tanks.DISTANCE_SCALAR;
-    static TANKS: any[] = [];
+    TANKS: any[] = [];
+    BARRIERS: any[] = [];
 
     public Tank = class {
         //Instace mode
-        p: p5 | p5Tanks;
+        p: p5Tanks;
 
         //Specifications
         _damage: number;
@@ -33,13 +35,13 @@ class p5Tanks extends p5 {
             turretAxle: WheelJoint,
             mantlet: Joint
         }
-        constructor(instance: p5 | p5Tanks, group: Group, x: number, y: number,
+        constructor(instance: p5Tanks, group: Group, x: number, y: number,
             width?: number, length?: number,
             mass?: number, maxSpeed?: number,
             barrelLength?: number, shellMass?: number,
             name?: string, wheelWidth?: number);
         constructor(
-            arg0: p5 | p5Tanks,
+            arg0: p5Tanks,
             arg1: Group,
             arg2: number,
             arg3?: number,
@@ -54,7 +56,7 @@ class p5Tanks extends p5 {
         ) {
             const args = [...arguments];
 
-            this.p = args[0] as p5 | p5Tanks;
+            this.p = args[0] as p5Tanks;
             const GROUP: Group = args[1];
             args.shift();
             args.shift();
@@ -106,11 +108,13 @@ class p5Tanks extends p5 {
                 parameterInitializers[KEY] = args[i];
             }
 
+            this.p.angleMode(this.p.DEGREES);
+
             //Specifications
             this._damage = parameterInitializers.shellMass;
             this._mass = parameterInitializers.mass * p5Tanks.SPEED_SCALAR; // 27[tons]
             this._name = parameterInitializers.name;
-            this._dispersion = p5Tanks.prototype.atan(parameterInitializers.shellMass / parameterInitializers.barrelLength) / p5Tanks.DISTANCE_SCALAR;
+            this._dispersion = this.p.atan(parameterInitializers.shellMass / parameterInitializers.barrelLength) / p5Tanks.DISTANCE_SCALAR;
             this._maxSpeed = parameterInitializers.maxSpeed * p5Tanks.SPEED_SCALAR; // 17.78 [m/s]
 
             //p5play members
@@ -144,7 +148,8 @@ class p5Tanks extends p5 {
             this._tracks.t0.mass = this._mass * p5Tanks.DISTANCE_SCALAR * .2;
             this._tracks.t1.mass = this._mass * p5Tanks.DISTANCE_SCALAR * .2;
 
-            p5Tanks.TANKS.push(this);
+
+            this.p.BARRIERS.push(this);
         }
 
 
@@ -295,12 +300,31 @@ class p5Tanks extends p5 {
             }
 
             //Handles cases where the point is behind the turret
-            if (p5Tanks.prototype.cos(this.getAngle2Turret(x, y)) < 0) {
+            if (this.p.cos(this.getAngle2Turret(x, y)) < 0) {
                 return this.decideTurretTurningDirection(x, y, 0);
             }
             return Tank.Direction.None;
         }
     }
+
+    public Barrier = class {
+        p: p5Tanks;
+        body: Sprite;
+        constructor(instance: p5Tanks, x: number, y: number, r: number);
+        constructor(instance: p5Tanks, x: number, y: number, w: number, l: number);
+        constructor(instance: p5Tanks, x: number, y: number, arg3: number, arg4?: number) {
+            this.p = instance;
+            if([...arguments]. length == 3) {
+                this.body = new this.p.Sprite(x, y, arg3);
+            } else {
+                this.body = new this.p.Sprite(x, y, arg3, arg4);
+            }
+            this.body.collider = 'static';
+            this.body.colour = this.p.color(0);
+            this.p.BARRIERS.push(this);
+        }
+    }
+    
 }
 
 export default p5Tanks;
@@ -338,7 +362,7 @@ export class Barrier {
 
 //@ts-expect-error
 p5Tanks.prototype.registerMethod('pre', function applySideDragForce() {
-    for(const TANK of p5Tanks.TANKS) {
+    for(const TANK of p5Tanks.prototype.TANKS) {
         const FORCE_DIRECTION: number = TANK.motionDirection - 180;
         const FORCE_MAGNITUDE: number = Math.abs(p5Tanks.prototype.sin(TANK.motionDirection - TANK.direction)) * TANK.speed * 5000;
         TANK.applyForce2Tracks(FORCE_DIRECTION, FORCE_MAGNITUDE);

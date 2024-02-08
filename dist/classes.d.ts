@@ -6,10 +6,11 @@ declare class p5Tanks extends p5 {
     };
     static DISTANCE_SCALAR: number;
     static SPEED_SCALAR: number;
-    static TANKS: any[];
+    TANKS: any[];
+    BARRIERS: any[];
     Tank: {
-        new (instance: p5 | p5Tanks, group: Group, x: number, y: number, width?: number, length?: number, mass?: number, maxSpeed?: number, barrelLength?: number, shellMass?: number, name?: string, wheelWidth?: number): {
-            p: p5 | p5Tanks;
+        new (instance: p5Tanks, group: Group, x: number, y: number, width?: number, length?: number, mass?: number, maxSpeed?: number, barrelLength?: number, shellMass?: number, name?: string, wheelWidth?: number): {
+            p: p5Tanks;
             _damage: number;
             _mass: number;
             _maxSpeed: number;
@@ -64,6 +65,16 @@ declare class p5Tanks extends p5 {
             getAngle2Turret(x: number, y?: number): number;
             getPerpendicularDistance2Turret(x: number, y: number): number;
             decideTurretTurningDirection(x: number, y: number, threshold?: number): Tank.Direction;
+        };
+    };
+    Barrier: {
+        new (instance: p5Tanks, x: number, y: number, r: number): {
+            p: p5Tanks;
+            body: Sprite;
+        };
+        new (instance: p5Tanks, x: number, y: number, w: number, l: number): {
+            p: p5Tanks;
+            body: Sprite;
         };
     };
 }

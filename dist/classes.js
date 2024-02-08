@@ -2,6 +2,8 @@
 class p5Tanks extends p5 {
     constructor() {
         super(...arguments);
+        this.TANKS = [];
+        this.BARRIERS = [];
         this.Tank = class {
             constructor(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11) {
                 const args = [...arguments];
@@ -41,11 +43,12 @@ class p5Tanks extends p5 {
                     const KEY = parameterKeys[i];
                     parameterInitializers[KEY] = args[i];
                 }
+                this.p.angleMode(this.p.DEGREES);
                 //Specifications
                 this._damage = parameterInitializers.shellMass;
                 this._mass = parameterInitializers.mass * p5Tanks.SPEED_SCALAR; // 27[tons]
                 this._name = parameterInitializers.name;
-                this._dispersion = p5Tanks.prototype.atan(parameterInitializers.shellMass / parameterInitializers.barrelLength) / p5Tanks.DISTANCE_SCALAR;
+                this._dispersion = this.p.atan(parameterInitializers.shellMass / parameterInitializers.barrelLength) / p5Tanks.DISTANCE_SCALAR;
                 this._maxSpeed = parameterInitializers.maxSpeed * p5Tanks.SPEED_SCALAR; // 17.78 [m/s]
                 //p5play members
                 this._turretAssembly = new this._modules.Group();
@@ -73,7 +76,7 @@ class p5Tanks extends p5 {
                 this._hull.mass = this._mass * p5Tanks.DISTANCE_SCALAR * .6;
                 this._tracks.t0.mass = this._mass * p5Tanks.DISTANCE_SCALAR * .2;
                 this._tracks.t1.mass = this._mass * p5Tanks.DISTANCE_SCALAR * .2;
-                p5Tanks.TANKS.push(this);
+                this.p.BARRIERS.push(this);
             }
             //Controls
             drive(power) {
@@ -211,17 +214,30 @@ class p5Tanks extends p5 {
                     return Tank.Direction.Left;
                 }
                 //Handles cases where the point is behind the turret
-                if (p5Tanks.prototype.cos(this.getAngle2Turret(x, y)) < 0) {
+                if (this.p.cos(this.getAngle2Turret(x, y)) < 0) {
                     return this.decideTurretTurningDirection(x, y, 0);
                 }
                 return Tank.Direction.None;
+            }
+        };
+        this.Barrier = class {
+            constructor(instance, x, y, arg3, arg4) {
+                this.p = instance;
+                if ([...arguments].length == 3) {
+                    this.body = new this.p.Sprite(x, y, arg3);
+                }
+                else {
+                    this.body = new this.p.Sprite(x, y, arg3, arg4);
+                }
+                this.body.collider = 'static';
+                this.body.colour = this.p.color(0);
+                this.p.BARRIERS.push(this);
             }
         };
     }
 }
 p5Tanks.DISTANCE_SCALAR = 15.75;
 p5Tanks.SPEED_SCALAR = 4.1 / p5Tanks.DISTANCE_SCALAR;
-p5Tanks.TANKS = [];
 export default p5Tanks;
 export var Tank;
 (function (Tank) {
@@ -249,10 +265,10 @@ export class Barrier {
 }
 Barrier.BARRIERS = [];
 //@ts-expect-error
-p5Tanks.prototype.registerMethod('pre', function applySideDragForce() {
-    for (const TANK of p5Tanks.TANKS) {
-        const FORCE_DIRECTION = TANK.motionDirection - 180;
-        const FORCE_MAGNITUDE = Math.abs(p5Tanks.prototype.sin(TANK.motionDirection - TANK.direction)) * TANK.speed * 5000;
-        TANK.applyForce2Tracks(FORCE_DIRECTION, FORCE_MAGNITUDE);
-    }
-});
+// p5Tanks.prototype.registerMethod('pre', function applySideDragForce() {
+//     for (const TANK of p5Tanks.prototype.TANKS) {
+//         const FORCE_DIRECTION = TANK.motionDirection - 180;
+//         const FORCE_MAGNITUDE = Math.abs(p5Tanks.prototype.sin(TANK.motionDirection - TANK.direction)) * TANK.speed * 5000;
+//         TANK.applyForce2Tracks(FORCE_DIRECTION, FORCE_MAGNITUDE);
+//     }
+// });

@@ -1,5 +1,5 @@
 import p5 from 'p5';
-import p5Tanks, {Tank} from 'classes';
+import p5Tanks, { Tank, Barrier } from 'classes';
 
 const ctSketch: any = (p: p5Tanks) => {
     let tankSprites: Group;
@@ -13,6 +13,7 @@ const ctSketch: any = (p: p5Tanks) => {
     }
 
     p.setup = () => {
+        p.angleMode(p.DEGREES);
         const DISPLAY: HTMLElement | null = document.getElementById("display-control-test");
         if(DISPLAY === null) {
             throw new Error("DISPLAY === null: Element with id 'display-control-test' not found.");
@@ -22,7 +23,8 @@ const ctSketch: any = (p: p5Tanks) => {
             canvas.resize(DISPLAY.offsetWidth, DISPLAY.offsetHeight);
             p.background(backgroundColour);
         })
-        p.angleMode(p.DEGREES);
+        
+        new p.Barrier(p, 250, 250, 50);
     };
     let lowest = 10;
     let highest = -10;
@@ -50,7 +52,8 @@ const ctSketch: any = (p: p5Tanks) => {
         if(p.cos(MOTDIR-DIR) > highest){
             highest = p.cos(MOTDIR-DIR);
         }
-        cromwell.turnTurret({x: p.mouse.x, y: p.mouse.y});
+        const DIRECTION = cromwell.decideTurretTurningDirection(p.mouse.x, p.mouse.y);
+        cromwell.turnTurret(DIRECTION);
     }
 
 };
