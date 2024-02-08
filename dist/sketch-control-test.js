@@ -45,9 +45,6 @@ const ctSketch = (p) => {
         if (p.cos(MOTDIR - DIR) > highest) {
             highest = p.cos(MOTDIR - DIR);
         }
-        // console.log(`Cosine of direction difference: ${p.cos(MOTDIR-DIR)}`);
-        // console.log(`Lowest cosine: ${lowest}`);
-        // console.log(`Highest cosine: ${highest}`);
     };
 };
 const ct = new p5Tanks(ctSketch, 'display-control-test');

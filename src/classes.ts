@@ -340,6 +340,6 @@ p5Tanks.prototype.registerMethod('pre', function applySideDragForce() {
     for(const TANK of p5Tanks.TANKS) {
         const FORCE_DIRECTION: number = TANK.motionDirection - 180;
         const FORCE_MAGNITUDE: number = Math.abs(p5Tanks.prototype.sin(TANK.motionDirection - TANK.direction)) * TANK.speed * 5000;
-        //TANK.applyForce2Tracks(FORCE_DIRECTION, FORCE_MAGNITUDE);
+        TANK.applyForce2Tracks(FORCE_DIRECTION, FORCE_MAGNITUDE);
     }
 })
