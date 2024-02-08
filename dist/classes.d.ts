@@ -1,58 +1,92 @@
-/// <reference types="p5play" />
-declare class Tank {
+import p5 from 'p5';
+declare class p5Tanks extends p5 {
+    mouse: {
+        x: number;
+        y: number;
+    };
     static DISTANCE_SCALAR: number;
     static SPEED_SCALAR: number;
-    static TANKS: Tank[];
-    private _damage;
-    private _mass;
-    private _maxSpeed;
-    private _name;
-    private _dispersion;
-    private _modules;
-    private _turretAssembly;
-    private _gun;
-    private _hull;
-    private _turret;
-    private _tracks;
-    private _joints;
-    constructor(group: Group, x: number, y: number, width?: number, length?: number, mass?: number, maxSpeed?: number, barrelLength?: number, shellMass?: number, name?: string, wheelWidth?: number);
-    drive(power: Direction): void;
-    steer(power: Direction): void;
-    applyForce2Tracks(direction: number, strength: number): void;
-    turnTurret(power: Direction | number | {
-        x: number;
-        y: number;
-    }): Direction;
-    setName(N: string): void;
-    get name(): string;
-    get velocity(): {
-        x: number;
-        y: number;
+    static INSTANCES: p5Tanks[];
+    TANKS: any[];
+    BARRIERS: any[];
+    constructor(arg0: (...args: any[]) => any, arg1?: string | HTMLElement | undefined);
+    Tank: {
+        new (instance: p5Tanks, group: Group, x: number, y: number, width?: number, length?: number, mass?: number, maxSpeed?: number, barrelLength?: number, shellMass?: number, name?: string, wheelWidth?: number): {
+            p: p5Tanks;
+            _damage: number;
+            _mass: number;
+            _maxSpeed: number;
+            _name: string;
+            _dispersion: number;
+            _modules: Group;
+            _turretAssembly: Group;
+            _gun: Sprite;
+            _hull: Sprite;
+            _turret: Sprite;
+            _tracks: {
+                t0: Sprite;
+                t1: Sprite;
+            };
+            _joints: {
+                jr: GlueJoint;
+                jl: GlueJoint;
+                turretAxle: WheelJoint;
+                mantlet: Joint;
+            };
+            drive(power: Tank.Direction): void;
+            steer(power: Tank.Direction): void;
+            applyForce2Tracks(direction: number, strength: number): void;
+            turnTurret(power: Tank.Direction | number | {
+                x: number;
+                y: number;
+            }): Tank.Direction;
+            name: string;
+            readonly reversing: boolean;
+            readonly velocity: {
+                x: number;
+                y: number;
+            };
+            readonly speed: number;
+            readonly trackSpeed: {
+                s0: number;
+                s1: number;
+            };
+            readonly maxSpeed: number;
+            readonly direction: number;
+            readonly dispersion: number;
+            readonly motionDirection: number;
+            readonly turretDirection: number;
+            toString(): string;
+            /**
+             * Normalizes and angle (degrees) to be between -180 and 180.
+             * @param A The angle.
+             * @returns An corresponding angle (degrees) between -180 and 180.
+             */
+            normalizeTo180(A: number): number;
+            getAngle2Turret(a: number): number;
+            getAngle2Turret(x: number, y?: number): number;
+            getPerpendicularDistance2Turret(x: number, y: number): number;
+            decideTurretTurningDirection(x: number, y: number, threshold?: number): Tank.Direction;
+        };
     };
-    get speed(): number;
-    get trackSpeed(): {
-        s0: number;
-        s1: number;
+    Barrier: {
+        new (instance: p5Tanks, x: number, y: number, r: number): {
+            p: p5Tanks;
+            body: Sprite;
+        };
+        new (instance: p5Tanks, x: number, y: number, w: number, l: number): {
+            p: p5Tanks;
+            body: Sprite;
+        };
     };
-    get maxSpeed(): number;
-    get direction(): number;
-    get dispersion(): number;
-    get motionDirection(): number;
-    get turretDirection(): number;
-    protected getAngle2Turret(xa: number, y?: number): number;
-    protected getPerpendicularDistance2Turret(x: number, y: number): number;
-    decideTurretTurningDirection(x: number, y: number, threshold?: number): Direction;
 }
-declare class Barrier {
-    static BARRIERS: Barrier[];
-    body: Sprite;
-    constructor(x: number, y: number, r: number);
-    constructor(x: number, y: number, w: number, h: number);
-}
-declare enum Direction {
-    Forwards = 300,
-    Backwards = -150,
-    Left = -8,
-    Right = 8,
-    NONE = 0
+export default p5Tanks;
+export declare namespace Tank {
+    enum Direction {
+        Forwards = 300,
+        Backwards = -150,
+        Left = -8,
+        Right = 8,
+        None = 0
+    }
 }

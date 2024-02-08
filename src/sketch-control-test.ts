@@ -1,10 +1,70 @@
-let cromwell: Tank, kv2: Tank;
-let tankSprites: Group;
+import p5 from 'p5';
+import p5Tanks, { Tank } from 'classes';
 
-let drive: boolean = false;
-let steer: boolean = false;
+const ctSketch: any = (p: p5Tanks) => {
+    let tankSprites: Group;
+    let cromwell: any;
+    
+    p.preload = () => {
+        tankSprites = new p.Group();
+        p.world.gravity.y = 0;
+        cromwell = new p.Tank(p, tankSprites, 100, 100);
+        console.log(typeof p.Tank);
+    }
 
+    p.setup = () => {
+        p.angleMode(p.DEGREES);
+        const DISPLAY: HTMLElement | null = document.getElementById("display-control-test");
+        if(DISPLAY === null) {
+            throw new Error("DISPLAY === null: Element with id 'display-control-test' not found.");
+        }
+        let canvas: p5.Renderer = p.createCanvas(DISPLAY.offsetWidth, DISPLAY.offsetHeight);
+        addEventListener('resize', () => {
+            canvas.resize(DISPLAY.offsetWidth, DISPLAY.offsetHeight);
+            p.background(backgroundColour);
+        })
+        
+        new p.Barrier(p, 250, 250, 50);
+    };
+    let lowest = 10;
+    let highest = -10;
+    p.draw = () => {
+        //p.clear();
+        p.background(backgroundColour + "10");        
 
+        if (p.keyIsDown(65)) { //LEFT
+            cromwell.steer(Tank.Direction.Left);
+        }
+        if (p.keyIsDown(68)) { //RIGHT
+            cromwell.steer(Tank.Direction.Right);
+        }
+        if (p.keyIsDown(87)) { //UP
+            cromwell.drive(Tank.Direction.Forwards);
+        }
+        if (p.keyIsDown(83)) { //DOWN
+            cromwell.drive(Tank.Direction.Backwards);
+        }
+        const MOTDIR = cromwell.motionDirection;
+        const DIR = cromwell.direction;
+        if(p.cos(MOTDIR-DIR) < lowest){
+            lowest = p.cos(MOTDIR-DIR);
+        }
+        if(p.cos(MOTDIR-DIR) > highest){
+            highest = p.cos(MOTDIR-DIR);
+        }
+        const DIRECTION = cromwell.decideTurretTurningDirection(p.mouse.x, p.mouse.y);
+        cromwell.turnTurret(DIRECTION);
+    }
+
+};
+
+const ct: object = new p5Tanks(ctSketch, 'display-control-test');
+
+console.log(p5Tanks.INSTANCES[0]?.BARRIERS.length);
+
+// let cromwell: Tank, kv2: Tank;
+// let tankSprites: Group;
+/*
 function setup() {
     const DISPLAY: HTMLElement | null = document.getElementById("display-control-test");
     if(DISPLAY === null) {
@@ -22,27 +82,27 @@ function setup() {
 
     world.gravity.y = 0;
     cromwell = new Tank(tankSprites, 100, 100);
-}
+}*/
 
-function draw() {
-    //clear();
-    background(backgroundColour + "10");
+// function draw() {
+//     //clear();
+//     background(backgroundColour + "10");
 
-    if(keyIsDown(65)) { //LEFT
-        cromwell.steer(Direction.Left);
-    }
-    if(keyIsDown(68)) { //RIGHT
-        cromwell.steer(Direction.Right);
-    }
-    if(keyIsDown(87)) { //UP
-        cromwell.drive(Direction.Forwards);
-    }
-    if(keyIsDown(83)) { //DOWN
-        cromwell.drive(Direction.Backwards);
-    }
+//     if(keyIsDown(65)) { //LEFT
+//         cromwell.steer(Direction.Left);
+//     }
+//     if(keyIsDown(68)) { //RIGHT
+//         cromwell.steer(Direction.Right);
+//     }
+//     if(keyIsDown(87)) { //UP
+//         cromwell.drive(Direction.Forwards);
+//     }
+//     if(keyIsDown(83)) { //DOWN
+//         cromwell.drive(Direction.Backwards);
+//     }
     
-    cromwell.turnTurret({x: mouse.x, y: mouse.y});
-    const DIRECTION = cromwell.decideTurretTurningDirection(mouse.x, mouse.y);
+//     cromwell.turnTurret({x: mouse.x, y: mouse.y});
+//     const DIRECTION = cromwell.decideTurretTurningDirection(mouse.x, mouse.y);
 
-    //noLoop();
-}
+//     //noLoop();
+// }
