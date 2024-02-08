@@ -1,6 +1,7 @@
 import p5 from 'p5';
 
 class p5Tanks extends p5 {
+    declare mouse: {x: number, y: number};
     static DISTANCE_SCALAR = 15.75;
     static SPEED_SCALAR = 4.1 / p5Tanks.DISTANCE_SCALAR;
     static TANKS: any[] = [];

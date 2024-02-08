@@ -50,6 +50,7 @@ const ctSketch: any = (p: p5Tanks) => {
         if(p.cos(MOTDIR-DIR) > highest){
             highest = p.cos(MOTDIR-DIR);
         }
+        cromwell.turnTurret({x: p.mouse.x, y: p.mouse.y});
     }
 
 };

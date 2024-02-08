@@ -45,6 +45,7 @@ const ctSketch = (p) => {
         if (p.cos(MOTDIR - DIR) > highest) {
             highest = p.cos(MOTDIR - DIR);
         }
+        cromwell.turnTurret({ x: p.mouse.x, y: p.mouse.y });
     };
 };
 const ct = new p5Tanks(ctSketch, 'display-control-test');
