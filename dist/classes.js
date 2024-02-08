@@ -45,7 +45,7 @@ class p5Tanks extends p5 {
                 this._damage = parameterInitializers.shellMass;
                 this._mass = parameterInitializers.mass * p5Tanks.SPEED_SCALAR; // 27[tons]
                 this._name = parameterInitializers.name;
-                this._dispersion = p5.prototype.atan(parameterInitializers.shellMass / parameterInitializers.barrelLength) / p5Tanks.DISTANCE_SCALAR;
+                this._dispersion = p5Tanks.prototype.atan(parameterInitializers.shellMass / parameterInitializers.barrelLength) / p5Tanks.DISTANCE_SCALAR;
                 this._maxSpeed = parameterInitializers.maxSpeed * p5Tanks.SPEED_SCALAR; // 17.78 [m/s]
                 //p5play members
                 this._turretAssembly = new this._modules.Group();
@@ -84,6 +84,13 @@ class p5Tanks extends p5 {
                 }
             }
             steer(power) {
+                p5Tanks.prototype.angleMode(p5Tanks.prototype.DEGREES);
+                if (this.speed > this.p.world.velocityThreshold
+                    && p5Tanks.prototype.cos(this.motionDirection - this.direction) < 0) {
+                    this._tracks.t0.applyTorque(-power);
+                    this._tracks.t1.applyTorque(-power);
+                    return;
+                }
                 this._tracks.t0.applyTorque(power);
                 this._tracks.t1.applyTorque(power);
                 // this._tracks.t0.bearing = this._hull.rotation + (90 * Math.sign(power));
@@ -121,12 +128,15 @@ class p5Tanks extends p5 {
                 return power;
             }
             //Setters
-            setName(N) {
+            set name(N) {
                 this._name = N;
             }
             //Getters
             get name() {
                 return this._name;
+            }
+            get reversing() {
+                return false;
             }
             get velocity() {
                 return {
@@ -135,25 +145,26 @@ class p5Tanks extends p5 {
                 };
             }
             get speed() {
-                return p5.prototype.dist(0, 0, this._hull.velocity.x, this._hull.velocity.y);
+                return p5Tanks.prototype.dist(0, 0, this._hull.velocity.x, this._hull.velocity.y);
             }
             get trackSpeed() {
                 return {
-                    s0: p5.prototype.dist(0, 0, this._tracks.t0.velocity.x, this._tracks.t0.velocity.y),
-                    s1: p5.prototype.dist(0, 0, this._tracks.t1.velocity.x, this._tracks.t1.velocity.y),
+                    s0: p5Tanks.prototype.dist(0, 0, this._tracks.t0.velocity.x, this._tracks.t0.velocity.y),
+                    s1: p5Tanks.prototype.dist(0, 0, this._tracks.t1.velocity.x, this._tracks.t1.velocity.y),
                 };
             }
             get maxSpeed() {
                 return this._maxSpeed;
             }
             get direction() {
-                return this._hull.rotation + 90;
+                return this.normalizeTo180(this._hull.rotation + 90);
             }
             get dispersion() {
                 return this._dispersion;
             }
             get motionDirection() {
-                return p5.prototype.atan2(this.velocity.y, this.velocity.x);
+                p5Tanks.prototype.angleMode(p5Tanks.prototype.DEGREES);
+                return this.normalizeTo180(p5Tanks.prototype.atan2(this.velocity.y, this.velocity.x));
             }
             get turretDirection() {
                 let rotation = this._turret.rotation + 90;
@@ -166,19 +177,32 @@ class p5Tanks extends p5 {
                 return `Name: ${this._name}`;
             }
             //Helpers
-            getAngle2Turret(xa, y) {
-                if (y == undefined) {
-                    //If only an angle is provided
-                    let rotation = this._turret.rotation - xa;
-                    // Normalize the angle to be between -180 and 180 degrees
-                    while (rotation < -180) {
-                        rotation += 360;
-                    }
-                    return rotation % 360;
+            /**
+             * Normalizes and angle (degrees) to be between -180 and 180.
+             * @param A The angle.
+             * @returns An corresponding angle (degrees) between -180 and 180.
+             */
+            normalizeTo180(A) {
+                let angle = A;
+                while (angle < -180) {
+                    angle += 360;
                 }
-                const DX = xa - this._turret.x;
-                const DY = y - this._turret.y;
-                let rotation = -p5.prototype.atan2(DX, DY) - this._turret.rotation;
+                while (angle > 180) {
+                    angle -= 360;
+                }
+                return angle;
+            }
+            getAngle2Turret(arg0, arg1) {
+                if (arg1 == undefined) {
+                    let a = arg0;
+                    //If only an angle is provided
+                    let rotation = this._turret.rotation - a;
+                    rotation = this.normalizeTo180(rotation);
+                    return this.normalizeTo180(rotation);
+                }
+                const DX = arg0 - this._turret.x;
+                const DY = arg1 - this._turret.y;
+                let rotation = -p5Tanks.prototype.atan2(DX, DY) - this._turret.rotation;
                 // Normalize the angle to be between -180 and 180 degrees
                 while (rotation < -180) {
                     rotation += 360;
@@ -186,12 +210,13 @@ class p5Tanks extends p5 {
                 return rotation % 360;
             }
             getPerpendicularDistance2Turret(x, y) {
-                const DISTANCE = p5.prototype.dist(x, y, this._turret.x, this._turret.y);
+                const DISTANCE = p5Tanks.prototype.dist(x, y, this._turret.x, this._turret.y);
                 const ANGLE = this.getAngle2Turret(x, y);
-                const PERPENDICULAR_DISTANCE = p5.prototype.sin(ANGLE) * DISTANCE;
+                const PERPENDICULAR_DISTANCE = p5Tanks.prototype.sin(ANGLE) * DISTANCE;
                 return PERPENDICULAR_DISTANCE;
             }
             decideTurretTurningDirection(x, y, threshold = this.dispersion * 2 / 3) {
+                p5Tanks.prototype.angleMode(p5Tanks.prototype.DEGREES);
                 if (threshold < 0) {
                     throw new Error("The input threshold of decideTurretTurningDirection cannot be a negative number");
                 }
@@ -202,7 +227,7 @@ class p5Tanks extends p5 {
                     return Tank.Direction.Left;
                 }
                 //Handles cases where the point is behind the turret
-                if (p5.prototype.cos(this.getAngle2Turret(x, y)) < 0) {
+                if (p5Tanks.prototype.cos(this.getAngle2Turret(x, y)) < 0) {
                     return this.decideTurretTurningDirection(x, y, 0);
                 }
                 return Tank.Direction.None;
@@ -234,16 +259,16 @@ export class Barrier {
             this.body = new Sprite(x, y, arg3, arg4);
         }
         this.body.collider = "static";
-        this.body.colour = p5.prototype.color(0);
+        this.body.colour = p5Tanks.prototype.color(0);
         Barrier.BARRIERS.push(this);
     }
 }
 Barrier.BARRIERS = [];
 //@ts-expect-error
-p5.prototype.registerMethod('pre', function applySideDragForce() {
+p5Tanks.prototype.registerMethod('pre', function applySideDragForce() {
     for (const TANK of p5Tanks.TANKS) {
         const FORCE_DIRECTION = TANK.motionDirection - 180;
-        const FORCE_MAGNITUDE = Math.abs(p5.prototype.sin(TANK.motionDirection - TANK.direction)) * TANK.speed * 5000;
+        const FORCE_MAGNITUDE = Math.abs(p5Tanks.prototype.sin(TANK.motionDirection - TANK.direction)) * TANK.speed * 5000;
         //TANK.applyForce2Tracks(FORCE_DIRECTION, FORCE_MAGNITUDE);
     }
 });
@@ -282,7 +307,7 @@ p5.prototype.registerMethod('pre', function applySideDragForce() {
 //         this._damage = shellMass;
 //         this._mass = mass * Tank.SPEED_SCALAR; // 27[tons]
 //         this._name = name;
-//         this._dispersion = p5.prototype.atan(shellMass / barrelLength) / Tank.DISTANCE_SCALAR;
+//         this._dispersion = p5Tanks.prototype.atan(shellMass / barrelLength) / Tank.DISTANCE_SCALAR;
 //         this._maxSpeed = maxSpeed * Tank.SPEED_SCALAR; // 17.78 [m/s]
 //         //p5play members
 //         this._modules = new group.Group();
@@ -370,12 +395,12 @@ p5.prototype.registerMethod('pre', function applySideDragForce() {
 //         }
 //     }
 //     get speed(): number {
-//         return p5.prototype.dist(0, 0 , this._hull.velocity.x, this._hull.velocity.y);
+//         return p5Tanks.prototype.dist(0, 0 , this._hull.velocity.x, this._hull.velocity.y);
 //     }
 //     get trackSpeed(): {s0: number, s1: number} {
 //         return {
-//             s0: p5.prototype.dist(0, 0 , this._tracks.t0.velocity.x, this._tracks.t0.velocity.y),
-//             s1: p5.prototype.dist(0, 0 , this._tracks.t1.velocity.x, this._tracks.t1.velocity.y),
+//             s0: p5Tanks.prototype.dist(0, 0 , this._tracks.t0.velocity.x, this._tracks.t0.velocity.y),
+//             s1: p5Tanks.prototype.dist(0, 0 , this._tracks.t1.velocity.x, this._tracks.t1.velocity.y),
 //         }
 //     }
 //     get maxSpeed(): number {
@@ -388,7 +413,7 @@ p5.prototype.registerMethod('pre', function applySideDragForce() {
 //         return this._dispersion;
 //     }
 //     get motionDirection(): number {
-//         return p5.prototype.atan2(this.velocity.y, this.velocity.x);
+//         return p5Tanks.prototype.atan2(this.velocity.y, this.velocity.x);
 //     }
 //     get turretDirection(): number {
 //         let rotation = this._turret.rotation + 90;
@@ -410,7 +435,7 @@ p5.prototype.registerMethod('pre', function applySideDragForce() {
 //         }
 //         const DX = xa - this._turret.x;
 //         const DY = y - this._turret.y;
-//         let rotation = -p5.prototype.atan2(DX, DY) - this._turret.rotation;
+//         let rotation = -p5Tanks.prototype.atan2(DX, DY) - this._turret.rotation;
 //         // Normalize the angle to be between -180 and 180 degrees
 //         while(rotation < -180) {
 //             rotation += 360;
@@ -418,9 +443,9 @@ p5.prototype.registerMethod('pre', function applySideDragForce() {
 //         return rotation % 360;
 //     }
 //     protected getPerpendicularDistance2Turret(x: number, y: number): number {
-//         const DISTANCE = p5.prototype.dist(x, y, this._turret.x, this._turret.y);
+//         const DISTANCE = p5Tanks.prototype.dist(x, y, this._turret.x, this._turret.y);
 //         const ANGLE = this.getAngle2Turret(x, y);
-//         const PERPENDICULAR_DISTANCE = p5.prototype.sin(ANGLE) * DISTANCE;
+//         const PERPENDICULAR_DISTANCE = p5Tanks.prototype.sin(ANGLE) * DISTANCE;
 //         return PERPENDICULAR_DISTANCE;
 //     }
 //     decideTurretTurningDirection(x: number, y: number, threshold: number = this.dispersion * 2/3): Tank.Direction {
@@ -434,7 +459,7 @@ p5.prototype.registerMethod('pre', function applySideDragForce() {
 //             return Tank.Direction.Left;
 //         }
 //         //Handles cases where the point is behind the turret
-//         if(p5.prototype.cos(this.getAngle2Turret(x, y)) < 0) {
+//         if(p5Tanks.prototype.cos(this.getAngle2Turret(x, y)) < 0) {
 //             return this.decideTurretTurningDirection(x, y, 0);
 //         }
 //         return Tank.Direction.None;

@@ -33,8 +33,8 @@ declare class p5Tanks extends p5 {
                 x: number;
                 y: number;
             }): Tank.Direction;
-            setName(N: string): void;
-            readonly name: string;
+            name: string;
+            readonly reversing: boolean;
             readonly velocity: {
                 x: number;
                 y: number;
@@ -50,7 +50,14 @@ declare class p5Tanks extends p5 {
             readonly motionDirection: number;
             readonly turretDirection: number;
             toString(): string;
-            getAngle2Turret(xa: number, y?: number): number;
+            /**
+             * Normalizes and angle (degrees) to be between -180 and 180.
+             * @param A The angle.
+             * @returns An corresponding angle (degrees) between -180 and 180.
+             */
+            normalizeTo180(A: number): number;
+            getAngle2Turret(a: number): number;
+            getAngle2Turret(x: number, y?: number): number;
             getPerpendicularDistance2Turret(x: number, y: number): number;
             decideTurretTurningDirection(x: number, y: number, threshold?: number): Tank.Direction;
         };

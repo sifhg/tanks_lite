@@ -24,7 +24,8 @@ const ctSketch: any = (p: p5Tanks) => {
         })
         p.angleMode(p.DEGREES);
     };
-
+    let lowest = 10;
+    let highest = -10;
     p.draw = () => {
         //p.clear();
         p.background(backgroundColour + "10");        
@@ -41,7 +42,16 @@ const ctSketch: any = (p: p5Tanks) => {
         if (p.keyIsDown(83)) { //DOWN
             cromwell.drive(Tank.Direction.Backwards);
         }
+        const MOTDIR = cromwell.motionDirection;
+        const DIR = cromwell.direction;
+        if(p.cos(MOTDIR-DIR) < lowest){
+            lowest = p.cos(MOTDIR-DIR);
+        }
+        if(p.cos(MOTDIR-DIR) > highest){
+            highest = p.cos(MOTDIR-DIR);
+        }
     }
+
 };
 
 const ct: object = new p5Tanks(ctSketch, 'display-control-test');
