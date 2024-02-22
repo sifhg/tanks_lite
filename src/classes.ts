@@ -1,4 +1,4 @@
-import p5 from 'p5';
+
 
 class p5Tanks extends p5 {
     declare mouse: {x: number, y: number};
