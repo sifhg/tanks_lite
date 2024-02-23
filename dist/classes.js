@@ -1,4 +1,4 @@
-import p5 from 'p5';
+
 class p5Tanks extends p5 {
     constructor(arg0, arg1) {
         super(arg0, arg1);
