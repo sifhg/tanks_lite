@@ -160,6 +160,18 @@ class p5Tanks extends p5 {
                 }
                 return rotation % 360;
             }
+            get pos() {
+                return {
+                    x: this._hull.x,
+                    y: this._hull.y
+                };
+            }
+            get x() {
+                return this._hull.x;
+            }
+            get y() {
+                return this._hull.y;
+            }
             toString() {
                 return `Name: ${this._name}`;
             }

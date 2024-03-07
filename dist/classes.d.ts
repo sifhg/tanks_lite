@@ -1,4 +1,4 @@
-import p5 from 'p5';
+import p5 from "p5";
 declare class p5Tanks extends p5 {
     mouse: {
         x: number;
@@ -56,6 +56,12 @@ declare class p5Tanks extends p5 {
             readonly dispersion: number;
             readonly motionDirection: number;
             readonly turretDirection: number;
+            readonly pos: {
+                x: number;
+                y: number;
+            };
+            readonly x: number;
+            readonly y: number;
             toString(): string;
             /**
              * Normalizes and angle (degrees) to be between -180 and 180.

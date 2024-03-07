@@ -1,4 +1,3 @@
-var _a;
 import p5Tanks, { Tank } from 'classes';
 const ctSketch = (p) => {
     let tankSprites;
@@ -7,7 +6,6 @@ const ctSketch = (p) => {
         tankSprites = new p.Group();
         p.world.gravity.y = 0;
         cromwell = new p.Tank(p, tankSprites, 100, 100);
-        console.log(typeof p.Tank);
     };
     p.setup = () => {
         p.angleMode(p.DEGREES);
@@ -21,12 +19,14 @@ const ctSketch = (p) => {
             p.background(backgroundColour);
         });
         new p.Barrier(p, 250, 250, 50);
+        p.camera.x = cromwell.x;
+        p.camera.y = cromwell.y;
     };
     let lowest = 10;
     let highest = -10;
     p.draw = () => {
-        //p.clear();
-        p.background(backgroundColour + "10");
+        p.clear();
+        //p.background(backgroundColour + "10");        
         if (p.keyIsDown(65)) { //LEFT
             cromwell.steer(Tank.Direction.Left);
         }
@@ -49,47 +49,12 @@ const ctSketch = (p) => {
         }
         const DIRECTION = cromwell.decideTurretTurningDirection(p.mouse.x, p.mouse.y);
         cromwell.turnTurret(DIRECTION);
+        if (Math.abs(cromwell.x - p.camera.x) > p.width / 3) {
+            p.camera.x += cromwell.velocity.x;
+        }
+        if (Math.abs(cromwell.y - p.camera.y) > p.height / 5) {
+            p.camera.y += cromwell.velocity.y;
+        }
     };
 };
 const ct = new p5Tanks(ctSketch, 'display-control-test');
-console.log((_a = p5Tanks.INSTANCES[0]) === null || _a === void 0 ? void 0 : _a.BARRIERS.length);
-// let cromwell: Tank, kv2: Tank;
-// let tankSprites: Group;
-/*
-function setup() {
-    const DISPLAY: HTMLElement | null = document.getElementById("display-control-test");
-    if(DISPLAY === null) {
-        throw new Error("DISPLAY === null: Element with id 'display-control-test' not found.");
-    }
-    let canvas: any = createCanvas(DISPLAY.offsetWidth, DISPLAY.offsetHeight);
-    canvas.parent("display-control-test");
-    addEventListener("resize", () => {
-        canvas.resize(DISPLAY.offsetWidth, DISPLAY.offsetHeight);
-        background(backgroundColour);
-    });
-    angleMode(DEGREES);
-    
-    tankSprites = new Group();
-
-    world.gravity.y = 0;
-    cromwell = new Tank(tankSprites, 100, 100);
-}*/
-// function draw() {
-//     //clear();
-//     background(backgroundColour + "10");
-//     if(keyIsDown(65)) { //LEFT
-//         cromwell.steer(Direction.Left);
-//     }
-//     if(keyIsDown(68)) { //RIGHT
-//         cromwell.steer(Direction.Right);
-//     }
-//     if(keyIsDown(87)) { //UP
-//         cromwell.drive(Direction.Forwards);
-//     }
-//     if(keyIsDown(83)) { //DOWN
-//         cromwell.drive(Direction.Backwards);
-//     }
-//     cromwell.turnTurret({x: mouse.x, y: mouse.y});
-//     const DIRECTION = cromwell.decideTurretTurningDirection(mouse.x, mouse.y);
-//     //noLoop();
-// }
