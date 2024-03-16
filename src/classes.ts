@@ -232,9 +232,9 @@ class p5Tanks extends p5 {
         get dimensions(): object {
             return {
                 hull: {width: this._hull.w / p5Tanks.DISTANCE_SCALAR, length: this._hull.h / p5Tanks.DISTANCE_SCALAR},
-                tracks: {width: this._tracks.t0.w},
-                turret: {radius: this._turret.r},
-                gun: {width: this._gun.h, length: this._gun.w}
+                tracks: {width: this._tracks.t0.w / p5Tanks.DISTANCE_SCALAR},
+                turret: {radius: this._turret.r / p5Tanks.DISTANCE_SCALAR},
+                gun: {width: this._gun.w / p5Tanks.DISTANCE_SCALAR, length: this._gun.h / p5Tanks.DISTANCE_SCALAR}
             };
         }
         get direction(): number {
