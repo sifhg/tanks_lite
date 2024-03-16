@@ -52,6 +52,7 @@ declare class p5Tanks extends p5 {
                 s1: number;
             };
             readonly maxSpeed: number;
+            readonly dimensions: object;
             readonly direction: number;
             readonly dispersion: number;
             readonly motionDirection: number;

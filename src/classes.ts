@@ -229,6 +229,14 @@ class p5Tanks extends p5 {
         get maxSpeed(): number {
             return this._maxSpeed;
         }
+        get dimensions(): object {
+            return {
+                hull: {width: this._hull.w / p5Tanks.DISTANCE_SCALAR, length: this._hull.h / p5Tanks.DISTANCE_SCALAR},
+                tracks: {width: this._tracks.t0.w},
+                turret: {radius: this._turret.r},
+                gun: {width: this._gun.h, length: this._gun.w}
+            };
+        }
         get direction(): number {
             return this.normalizeTo180(this._hull.rotation + 90);
         }
@@ -258,6 +266,7 @@ class p5Tanks extends p5 {
         get y(): number {
             return this._hull.y;
         }
+
         toString() {
             return `Name: ${this._name}`;
         }

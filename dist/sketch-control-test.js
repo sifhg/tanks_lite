@@ -6,6 +6,7 @@ const ctSketch = (p) => {
         tankSprites = new p.Group();
         p.world.gravity.y = 0;
         cromwell = new p.Tank(p, tankSprites, 100, 100);
+        console.log(cromwell.dimensions);
     };
     p.setup = () => {
         p.angleMode(p.DEGREES);
