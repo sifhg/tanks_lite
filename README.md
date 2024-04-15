@@ -20,3 +20,6 @@ The game provides different tanks with different features such as:
 ### AI vs. AI
 
 ## AI Algorithm
+
+
+https://arxiv.org/abs/2107.06011
