@@ -1,11 +1,13 @@
-import p5Tanks, { Tank } from 'classes';
+import p5Tanks, { Tank } from "classes";
 const ctSketch = (p) => {
     let tankSprites;
     let cromwell;
+    let kv2;
     p.preload = () => {
         tankSprites = new p.Group();
         p.world.gravity.y = 0;
         cromwell = new p.Tank(p, tankSprites, 100, 100);
+        kv2 = new p.Tank(p, tankSprites, 50, 50, 3.35, 6.67, 52, 7.78, 3.57, 51.5, "kv-2", 0.7);
         console.log(cromwell.dimensions);
     };
     p.setup = () => {
@@ -15,7 +17,7 @@ const ctSketch = (p) => {
             throw new Error("DISPLAY === null: Element with id 'display-control-test' not found.");
         }
         let canvas = p.createCanvas(DISPLAY.offsetWidth, DISPLAY.offsetHeight);
-        addEventListener('resize', () => {
+        addEventListener("resize", () => {
             canvas.resize(DISPLAY.offsetWidth, DISPLAY.offsetHeight);
             p.background(backgroundColour);
         });
@@ -27,17 +29,21 @@ const ctSketch = (p) => {
     let highest = -10;
     p.draw = () => {
         p.clear();
-        //p.background(backgroundColour + "10");        
-        if (p.keyIsDown(65)) { //LEFT
+        //p.background(backgroundColour + "10");
+        if (p.keyIsDown(65)) {
+            //LEFT
             cromwell.steer(Tank.Direction.Left);
         }
-        if (p.keyIsDown(68)) { //RIGHT
+        if (p.keyIsDown(68)) {
+            //RIGHT
             cromwell.steer(Tank.Direction.Right);
         }
-        if (p.keyIsDown(87)) { //UP
+        if (p.keyIsDown(87)) {
+            //UP
             cromwell.drive(Tank.Direction.Forwards);
         }
-        if (p.keyIsDown(83)) { //DOWN
+        if (p.keyIsDown(83)) {
+            //DOWN
             cromwell.drive(Tank.Direction.Backwards);
         }
         const MOTDIR = cromwell.motionDirection;
@@ -58,4 +64,4 @@ const ctSketch = (p) => {
         }
     };
 };
-const ct = new p5Tanks(ctSketch, 'display-control-test');
+const ct = new p5Tanks(ctSketch, "display-control-test");
