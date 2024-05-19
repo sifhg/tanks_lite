@@ -1,4 +1,4 @@
-[
+const TANK_CONFIGS = [
   {
     "name": "Cromwell",
     "width": 2.908,
@@ -20,3 +20,5 @@
     "wheelWidth": 0.7
   }
 ]
+
+export default TANK_CONFIGS;

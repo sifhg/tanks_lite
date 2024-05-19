@@ -6,8 +6,8 @@ const ctSketch = (p) => {
     p.preload = () => {
         tankSprites = new p.Group();
         p.world.gravity.y = 0;
-        cromwell = new p.Tank(p, tankSprites, 100, 100);
-        kv2 = new p.Tank(p, tankSprites, 50, 50, 3.35, 6.67, 52, 7.78, 3.57, 51.5, "kv-2", 0.7);
+        cromwell = new p.Tank(p, tankSprites, 100, 100, "KV-2");
+        kv2 = new p.Tank(p, tankSprites, 50, 50, "Cromwell");
         console.log(cromwell.dimensions);
     };
     p.setup = () => {

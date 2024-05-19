@@ -1,4 +1,5 @@
 import p5 from "p5";
+import TANK_CONFIGS from "./tank-configs";
 
 class p5Tanks extends p5 {
   declare mouse: { x: number; y: number };
@@ -59,11 +60,18 @@ class p5Tanks extends p5 {
       wheelWidth?: number
     );
     constructor(
+      instance: p5Tanks,
+      group: Group,
+      x: number,
+      y: number,
+      name: string
+    );
+    constructor(
       arg0: p5Tanks,
       arg1: Group,
       arg2: number,
       arg3?: number,
-      arg4?: number,
+      arg4?: number | string,
       arg5?: number,
       arg6?: number,
       arg7?: number,
@@ -125,9 +133,22 @@ class p5Tanks extends p5 {
           }\nArgument structure: (${args.map((item) => item.constructor.name)})`
         );
       }
-      for (let i = 0; i < args.length; i++) {
-        const KEY: string = parameterKeys[i] as string;
-        parameterInitializers[KEY] = args[i];
+
+      if(args.length === 1) {
+        const TANK_CONFIG = TANK_CONFIGS.filter((type) => type.name === args[0])[0]!;
+        parameterInitializers.name = TANK_CONFIG.name;
+        parameterInitializers.width = TANK_CONFIG.width;
+        parameterInitializers.length = TANK_CONFIG.length;
+        parameterInitializers.mass = TANK_CONFIG.mass;
+        parameterInitializers.maxSpeed = TANK_CONFIG.maxSpeed;
+        parameterInitializers.barrelLength = TANK_CONFIG.barrelLength;
+        parameterInitializers.shellMass = TANK_CONFIG.shellMass;
+        parameterInitializers.wheelWidth = TANK_CONFIG.wheelWidth;
+      }else {
+        for (let i = 0; i < args.length; i++) {
+          const KEY: string = parameterKeys[i] as string;
+          parameterInitializers[KEY] = args[i];
+        }
       }
 
       this.p.angleMode(this.p.DEGREES);
