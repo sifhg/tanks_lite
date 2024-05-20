@@ -4,7 +4,7 @@ import Titlebar from "./components/Titlebar";
 function App() {
   return (
     <>
-      <Titlebar tabs={["Save", "Save as", "Load"]} />
+      <Titlebar tabs={["New", "Save", "Save as", "Load"]} />
     </>
   );
 }

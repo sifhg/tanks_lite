@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from "electron";
+import { app, BrowserWindow, ipcMain } from "electron";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
@@ -34,7 +34,6 @@ function createWindow() {
     webPreferences: {
       preload: path.join(__dirname, "preload.mjs"),
     },
-    frame: false,
   });
 
   // Test active push message to Renderer-process.
@@ -69,3 +68,28 @@ app.on("activate", () => {
 });
 
 app.whenReady().then(createWindow);
+
+// IPC
+ipcMain.on(
+  "window-control",
+  (event, data: "minimize" | "maximize" | "restore" | "close") => {
+    switch (data) {
+      case "minimize":
+        win?.minimize();
+        break;
+      case "maximize":
+        win?.maximize();
+        break;
+      case "restore":
+        win?.restore();
+        break;
+      case "close":
+        win?.close();
+        break;
+      default:
+        throw new Error(
+          "IPC from renderer to main of 'window-control' event, did not relevant message. 'minimize', 'maximize', 'restore', or 'close'."
+        );
+    }
+  }
+);
