@@ -43,6 +43,7 @@ body {
     padding: .125rem .75rem;
     transition: .2s;
     user-select: none;
+    z-index: 1;
   }
   .titlebar-tab:not(.filler):not(.close):hover {
     background-color: var(--contrast-light);
@@ -52,6 +53,7 @@ body {
   }
   .filler {
     flex-grow: 1;
+    -webkit-app-region: drag;
   }
   .titlebar-tab-icon {
     color: var(--text-light);
