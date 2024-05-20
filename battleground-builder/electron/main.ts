@@ -29,13 +29,12 @@ process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL
 let win: BrowserWindow | null;
 
 function createWindow() {
-  console.log(VITE_DEV_SERVER_URL);
-  console.log(__dirname);
   win = new BrowserWindow({
     icon: path.join(process.env.VITE_PUBLIC, "favicon64.ico"),
     webPreferences: {
       preload: path.join(__dirname, "preload.mjs"),
     },
+    frame: false,
   });
 
   // Test active push message to Renderer-process.

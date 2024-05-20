@@ -1,6 +1,58 @@
+body {
+  height: 100vh;
+  margin: 0;
+}
+
 #root {
   font-size: 15px;
   font-family: inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  border: 1px solid;
-  margin: 0;
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--background-light);
+  color: var(--text-dark);
+
+  /* Colour palette */
+  --background-light: #F8F0E5;
+  --background-medium: #E6D7C3;
+  --background-dark: #D4BB9F;
+  --contrast-dark: #102C57;
+  --contrast-light: #37649E;
+  --danger: #D42646;
+  --success: #50E693;
+  --warning: #F7EF57;
+  --info: #50C8E6;
+  --text-light: hsl(30, 15%, 75%);
+  --text-dark: #040b16;
+}
+
+.titlebar {
+  display: flex;
+  width: 100%;
+  position: relative;
+  height: 2rem;
+  background-color: var(--contrast-dark);
+  cursor: default;
+  color: var(--text-light);
+
+  .titlebar-tab {
+    display: flex;
+    align-items: center;
+    padding: .125rem .75rem;
+    transition: .2s;
+  }
+  .titlebar-tab:not(.filler):not(.close):hover {
+    background-color: var(--contrast-light);
+  }
+  .titlebar-tab.close:hover {
+    background-color: var(--danger);
+  }
+  .filler {
+    flex-grow: 1;
+  }
+  .titlebar-tab-icon {
+    color: var(--text-light);
+  }
 }
