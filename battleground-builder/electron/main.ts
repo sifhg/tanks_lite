@@ -1,9 +1,7 @@
 import { app, BrowserWindow, ipcMain } from "electron";
-import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 
-const require = createRequire(import.meta.url);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // The built directory structure
@@ -34,6 +32,7 @@ function createWindow() {
     webPreferences: {
       preload: path.join(__dirname, "preload.mjs"),
     },
+    frame: false,
   });
 
   // Test active push message to Renderer-process.
@@ -91,5 +90,6 @@ ipcMain.on(
           "IPC from renderer to main of 'window-control' event, did not relevant message. 'minimize', 'maximize', 'restore', or 'close'."
         );
     }
+    event.reply("window-data", { isMaximized: win?.isMaximized() });
   }
 );
