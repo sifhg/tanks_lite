@@ -42,6 +42,7 @@ body {
     align-items: center;
     padding: .125rem .75rem;
     transition: .2s;
+    user-select: none;
   }
   .titlebar-tab:not(.filler):not(.close):hover {
     background-color: var(--contrast-light);
