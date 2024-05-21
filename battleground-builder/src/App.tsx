@@ -29,8 +29,7 @@ function App() {
               defaultSize={25}
               minSize={12.5}
             >
-              Assets
-              <AssetCards></AssetCards>
+              <AssetCards />
             </Panel>
           </PanelGroup>
         </Panel>

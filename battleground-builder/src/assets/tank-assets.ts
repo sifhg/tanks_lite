@@ -1,4 +1,19 @@
-const TANK_CONFIGS = [
+type TankConfig = {
+  name: string;
+  width: number;
+  length: number;
+  mass: number;
+  maxSpeed: number;
+  barrelLength: number;
+  shellMass: number;
+  wheelWidth: number;
+};
+type BarrierConfig = {
+  name: string;
+  path: { x: number; y: number }[];
+};
+
+const TANK_CONFIGS: (TankConfig | BarrierConfig)[] = [
   {
     name: "Cromwell",
     width: 2.908,
@@ -19,6 +34,16 @@ const TANK_CONFIGS = [
     shellMass: 51.5,
     wheelWidth: 0.7,
   },
+  {
+    name: "block",
+    path: [
+      { x: 1, y: 1 },
+      { x: -1, y: 1 },
+      { x: -1, y: -1 },
+      { x: 1, y: -1 },
+    ],
+  },
 ];
 
+export type { TankConfig, BarrierConfig };
 export default TANK_CONFIGS;

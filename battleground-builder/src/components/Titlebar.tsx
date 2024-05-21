@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Minimize, Maximize, Restore, Close } from "../assets/icons";
 
 interface Props {

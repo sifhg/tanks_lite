@@ -43,57 +43,75 @@ function AssetCards(props: Props) {
     };
   }
   return (
-    <svg width="96" height="128" xmlns="http://www.w3.org/2000/svg">
-      <rect
-        width="100%"
-        height="100%"
-        stroke="black"
-        strokeWidth="2"
-        fill="none"
-      />
+    <>
+      {TANK_CONFIGS.map((config, index) => {
+        let tankDimensions;
+        if (!("path" in config)) {
+          tankDimensions = getTankDimensions(96, 128, config);
+        }
 
-      {[TANK_CONFIGS[0]].map((config, index) => {
-        const TANK_DIMENSIONS = getTankDimensions(96, 128, config);
-        return [
-          <rect
-            x={TANK_DIMENSIONS.hull.x}
-            y={TANK_DIMENSIONS.hull.y}
-            width={TANK_DIMENSIONS.hull.w}
-            height={TANK_DIMENSIONS.hull.h}
-            fill="green"
-            fillOpacity={"75%"}
-          />,
-          <rect
-            x={TANK_DIMENSIONS.track0.x}
-            y={TANK_DIMENSIONS.track0.y}
-            width={TANK_DIMENSIONS.track0.w}
-            height={TANK_DIMENSIONS.track0.h}
-            fill="green"
-            fillOpacity={"60%"}
-          />,
-          <rect
-            x={TANK_DIMENSIONS.track1.x}
-            y={TANK_DIMENSIONS.track1.y}
-            width={TANK_DIMENSIONS.track1.w}
-            height={TANK_DIMENSIONS.track1.h}
-            fill="green"
-            fillOpacity={"60%"}
-          />,
-        ];
+        return (
+          <svg
+            key={`tank-asset-card-${index}-${config.name}`}
+            width="96"
+            height="128"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            {"path" in config ? (
+              <>
+                <path />
+              </>
+            ) : (
+              <>
+                <rect
+                  x={tankDimensions?.hull.x}
+                  y={tankDimensions?.hull.y}
+                  width={tankDimensions?.hull.w}
+                  height={tankDimensions?.hull.h}
+                  fill="green"
+                  fillOpacity={"75%"}
+                />
+                <rect
+                  x={tankDimensions?.track0.x}
+                  y={tankDimensions?.track0.y}
+                  width={tankDimensions?.track0.w}
+                  height={tankDimensions?.track0.h}
+                  fill="green"
+                  fillOpacity={"60%"}
+                />
+                <rect
+                  x={tankDimensions?.track1.x}
+                  y={tankDimensions?.track1.y}
+                  width={tankDimensions?.track1.w}
+                  height={tankDimensions?.track1.h}
+                  fill="green"
+                  fillOpacity={"60%"}
+                />
+                <rect
+                  width="100%"
+                  height="100%"
+                  stroke="black"
+                  strokeWidth="2"
+                  fill="none"
+                />
+              </>
+            )}
+
+            <text
+              x="48"
+              y="15"
+              fontSize="15"
+              textAnchor="middle"
+              fill="black"
+              fontWeight={750}
+              fontFamily="inter"
+            >
+              {config.name}
+            </text>
+          </svg>
+        );
       })}
-
-      <text
-        x="48"
-        y="15"
-        font-size="15"
-        text-anchor="middle"
-        fill="black"
-        fontWeight={750}
-        fontFamily="inter"
-      >
-        {TANK_CONFIGS[0].name}
-      </text>
-    </svg>
+    </>
   );
 }
 
