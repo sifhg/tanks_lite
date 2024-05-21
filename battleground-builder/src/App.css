@@ -1,6 +1,7 @@
 body {
   height: 100vh;
   margin: 0;
+  overflow-y: hidden;
 }
 
 #root {
@@ -57,5 +58,17 @@ body {
   }
   .titlebar-tab-icon {
     color: var(--text-light);
+  }
+}
+
+#panel-region {
+  .side-panel {
+    background-color: var(--background-dark);
+  }
+  #preview {
+    background-color: var(--background-light);
+  }
+  #asset-map {
+    background-color: var(--background-medium);
   }
 }
