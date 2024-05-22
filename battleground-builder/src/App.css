@@ -65,7 +65,7 @@ body {
   .side-panel {
     background-color: var(--background-dark);
   }
-  #preview {
+  #preview-canvas {
     background-color: var(--background-light);
   }
   #asset-map {
