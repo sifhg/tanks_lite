@@ -1,9 +1,11 @@
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
+import { Stage } from "react-konva";
 import "./App.css";
 import Titlebar from "./components/Titlebar";
 import AssetCards from "./components/AssetCards";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TankConfig, BarrierConfig } from "./assets/tank-assets";
+import PreviewStage from "./components/PreviewStage";
 
 interface TankInstance extends TankConfig {
   pos: { x: number; y: number };
@@ -19,9 +21,11 @@ function App() {
   const [assetInstances, setAssetInstances] = useState<
     Map<string, AssetInstance>
   >(new Map());
-  function addInstance(key: string, asset: AssetInstance) {
+  function addInstances(assetEntrances: [string, AssetInstance][]) {
     const NEW_INSTANCES = new Map([...assetInstances.entries()]);
-    NEW_INSTANCES.set(key, asset);
+    for (const ENTRANCE of assetEntrances) {
+      NEW_INSTANCES.set(ENTRANCE[0], ENTRANCE[1]);
+    }
     setAssetInstances(NEW_INSTANCES);
   }
 
@@ -41,7 +45,7 @@ function App() {
         <Panel defaultSize={50} minSize={31.25}>
           <PanelGroup direction={"vertical"}>
             <Panel id="preview" className="panel" defaultSize={75} minSize={50}>
-              Preview
+              <PreviewStage instanceMap={assetInstances} selection={[]} />
             </Panel>
             <PanelResizeHandle />
             <Panel
