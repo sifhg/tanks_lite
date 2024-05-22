@@ -1,11 +1,13 @@
+import { useState } from "react";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { Stage } from "react-konva";
+import { TankConfig, BarrierConfig } from "./assets/tank-assets";
 import "./App.css";
 import Titlebar from "./components/Titlebar";
 import AssetCards from "./components/AssetCards";
-import { useEffect, useState } from "react";
-import { TankConfig, BarrierConfig } from "./assets/tank-assets";
 import PreviewStage from "./components/PreviewStage";
+import InstanceList from "./components/InstanceList";
+import InstanceManipulators from "./function_bundles/InstanceManipulators";
 
 interface TankInstance extends TankConfig {
   pos: { x: number; y: number };
@@ -29,14 +31,22 @@ function App() {
 
   const [assetInstances, setAssetInstances] = useState<
     Map<string, AssetInstance>
-  >(new Map());
-  function addInstances(assetEntrances: [string, AssetInstance][]) {
-    const NEW_INSTANCES = new Map([...assetInstances.entries()]);
-    for (const ENTRANCE of assetEntrances) {
-      NEW_INSTANCES.set(ENTRANCE[0], ENTRANCE[1]);
-    }
-    setAssetInstances(NEW_INSTANCES);
-  }
+  >(
+    new Map([
+      [
+        "tank-0",
+        {
+          name: "tank-0",
+          pos: { x: 50, y: 50 },
+          rotation: 0,
+          path: [
+            { x: 10, y: 10 },
+            { x: 50, y: 0 },
+          ],
+        },
+      ],
+    ])
+  );
 
   return (
     <>
@@ -48,7 +58,7 @@ function App() {
           defaultSize={12.5}
           minSize={12.5}
         >
-          Asset instances
+          <InstanceList instances={assetInstances} />
         </Panel>
         <PanelResizeHandle />
         <Panel defaultSize={50} minSize={31.25}>
