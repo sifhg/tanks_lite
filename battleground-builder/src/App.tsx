@@ -18,6 +18,15 @@ interface BarrierInstance extends BarrierConfig {
 type AssetInstance = TankInstance | BarrierInstance;
 
 function App() {
+  addEventListener("contextmenu", (event) => {
+    event.preventDefault();
+  });
+  addEventListener("mousedown", (event) => {
+    if (event.button === 1) {
+      event.preventDefault();
+    }
+  });
+
   const [assetInstances, setAssetInstances] = useState<
     Map<string, AssetInstance>
   >(new Map());
