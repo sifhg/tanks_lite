@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
-import { Stage } from "react-konva";
 import { TankConfig, BarrierConfig } from "./assets/tank-assets";
 import "./App.css";
 import Titlebar from "./components/Titlebar";

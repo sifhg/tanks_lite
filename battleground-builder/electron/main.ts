@@ -36,6 +36,14 @@ function createWindow() {
   });
   win.setMinimumSize(512, 384);
 
+  //Listener to inform renderer if window is maximized.
+  win.on("maximize", () => {
+    win?.webContents.send("window-data", { isMaximized: win?.isMaximized() });
+  });
+  win.on("unmaximize", () => {
+    win?.webContents.send("window-data", { isMaximized: win?.isMaximized() });
+  });
+
   // Test active push message to Renderer-process.
   win.webContents.on("did-finish-load", () => {
     win?.webContents.send("main-process-message", new Date().toLocaleString());
@@ -91,6 +99,5 @@ ipcMain.on(
           "IPC from renderer to main of 'window-control' event, did not relevant message. 'minimize', 'maximize', 'restore', or 'close'."
         );
     }
-    event.reply("window-data", { isMaximized: win?.isMaximized() });
   }
 );

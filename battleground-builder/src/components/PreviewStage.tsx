@@ -92,8 +92,8 @@ function PreviewStage(props: Props) {
         setMouseHistory([{ x: MOUSE_POS.x, y: MOUSE_POS.y }, mouseHistory[0]]);
         if (event.evt.buttons === 4) {
           const DELTA_POS = {
-            x: mouseHistory[1].x - mouseHistory[0].x,
-            y: mouseHistory[1].y - mouseHistory[0].y,
+            x: (mouseHistory[1].x - mouseHistory[0].x) / zoomFactor,
+            y: (mouseHistory[1].y - mouseHistory[0].y) / zoomFactor,
           };
           StageNavigators.offset(
             {
