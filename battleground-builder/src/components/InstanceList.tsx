@@ -8,9 +8,12 @@ function InstanceList(props: Props) {
     <>
       {[...props.instances.entries()].map((entry) => {
         return (
-          <details key={`instance-list-element${entry[0]}`}>
+          <details
+            className="instance-list-element"
+            key={`instance-list-element${entry[0]}`}
+          >
             <summary>{entry[0]}</summary>
-            <p>More data...</p>
+            <b>Position:</b> {entry[1].pos.x}, {entry[1].pos.y}
           </details>
         );
       })}

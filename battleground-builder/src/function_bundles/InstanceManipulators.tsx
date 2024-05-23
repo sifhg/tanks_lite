@@ -12,6 +12,22 @@ const InstanceManipulators = {
     }
     setAssetInstances(NEW_INSTANCES);
   },
+  getPath: (assetInstance: AssetInstance): string => {
+    if ("path" in assetInstance) {
+      // Path for barriers
+      const PATH = assetInstance.path;
+      const DATA =
+        "M" +
+        PATH.map((position) => {
+          return `L ${position.x} ${position.y}`;
+        }) +
+        "Z";
+      return DATA;
+    } else {
+      // Path for tanks
+      return "M20 0 L20 5 L0 5 L0 0 Z";
+    }
+  },
 };
 
 export default InstanceManipulators;
