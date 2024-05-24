@@ -1,5 +1,4 @@
 import {
-  TANK_CONFIGS,
   getAssets,
   getPath,
   TankConfig,
@@ -10,7 +9,6 @@ function AssetCards() {
   return (
     <>
       {getAssets().map((config: TankConfig | BarrierConfig, index: number) => {
-        console.log(config.name + "\n" + getPath(index));
         return (
           <svg
             key={`asset-card-${config.name}-${index}`}
