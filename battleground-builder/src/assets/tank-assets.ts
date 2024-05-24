@@ -15,7 +15,7 @@ type BarrierConfig = {
 
 const DISTANCE_SCALAR = 15.75;
 
-const TANK_CONFIGS = [
+const TANK_CONFIGS = JSON.stringify([
   {
     name: "Cromwell",
     width: 2.908,
@@ -39,11 +39,11 @@ const TANK_CONFIGS = [
   {
     name: "block-barrier",
     path: [
-      { x: 1, y: 1 },
-      { x: -1, y: 1 },
-      { x: -1, y: -1 },
-      { x: 1, y: -1 },
-    ].slice(),
+      { x: 0.5, y: 0.5 },
+      { x: -0.5, y: 0.5 },
+      { x: -0.5, y: -0.5 },
+      { x: 0.5, y: -0.5 },
+    ],
   },
   {
     name: "round-barrier",
@@ -70,16 +70,16 @@ const TANK_CONFIGS = [
       { x: 0.9510565162951535, y: -0.3090169943749477 },
     ],
   },
-];
+]);
 
 const ASSET_MAP = new Map<string, TankConfig | BarrierConfig>(
-  TANK_CONFIGS.map((config) => {
+  JSON.parse(TANK_CONFIGS).map((config: TankConfig | BarrierConfig) => {
     return [config.name, config];
   })
 );
 
-const getPath = (configName: string): string[] => {
-  const ASSET = ASSET_MAP.get(configName)!;
+const getPath = (index: number): string[] => {
+  const ASSET = getAssets()[index];
   if ("path" in ASSET) {
     // Path for assets with specified paths
     let path = `M ${ASSET.path[0].x * DISTANCE_SCALAR} ${
@@ -125,7 +125,9 @@ const getPath = (configName: string): string[] => {
     "Z";
   return [HULL, TRACK_0, TRACK_1, TURRET];
 };
+const getAssets = (): (TankConfig | BarrierConfig)[] => {
+  return JSON.parse(TANK_CONFIGS);
+};
 
-console.log(TANK_CONFIGS);
 export type { TankConfig, BarrierConfig };
-export { TANK_CONFIGS, DISTANCE_SCALAR, getPath };
+export { TANK_CONFIGS, DISTANCE_SCALAR, getPath, getAssets };
