@@ -13,7 +13,9 @@ type BarrierConfig = {
   path: { x: number; y: number }[];
 };
 
-const TANK_CONFIGS: (TankConfig | BarrierConfig)[] = [
+const DISTANCE_SCALAR = 15.75;
+
+const TANK_CONFIGS = [
   {
     name: "Cromwell",
     width: 2.908,
@@ -41,7 +43,7 @@ const TANK_CONFIGS: (TankConfig | BarrierConfig)[] = [
       { x: -1, y: 1 },
       { x: -1, y: -1 },
       { x: 1, y: -1 },
-    ],
+    ].slice(),
   },
   {
     name: "round-barrier",
@@ -80,21 +82,50 @@ const getPath = (configName: string): string[] => {
   const ASSET = ASSET_MAP.get(configName)!;
   if ("path" in ASSET) {
     // Path for assets with specified paths
-    const PATH =
-      "M " +
-      ASSET.path.map((position) => {
-        return `L ${position.x} ${position.y} `;
-      }) +
-      "Z";
-    return [PATH];
+    let path = `M ${ASSET.path[0].x * DISTANCE_SCALAR} ${
+      ASSET.path[0].y * DISTANCE_SCALAR
+    } `;
+    for (const NODE of ASSET.path.splice(1)) {
+      path += `L ${NODE.x * DISTANCE_SCALAR} ${NODE.y * DISTANCE_SCALAR} `;
+    }
+    path += "Z";
+    return [path];
   }
+  const HULL_DIMENSIONS = {
+    w: ASSET.width * DISTANCE_SCALAR,
+    h: ASSET.length * DISTANCE_SCALAR,
+  };
+  const TRACK_WIDTH = ASSET.wheelWidth;
+
   // Paths for tank assets
-  const HULL = "";
-  const TRACK_0 = "";
-  const TRACK_1 = "";
-  const TURRET = "";
+  const HULL =
+    `M ${HULL_DIMENSIONS.w / 2} ${HULL_DIMENSIONS.h / 2} ` +
+    `L ${-HULL_DIMENSIONS.w / 2} ${HULL_DIMENSIONS.h / 2} ` +
+    `L ${-HULL_DIMENSIONS.w / 2} ${-HULL_DIMENSIONS.h / 2} ` +
+    `L ${HULL_DIMENSIONS.w / 2} ${-HULL_DIMENSIONS.h / 2} Z`;
+  const TRACK_0 =
+    `M ${-HULL_DIMENSIONS.w / 2} ${HULL_DIMENSIONS.h / 2} ` +
+    `l ${-TRACK_WIDTH} ${0} ` +
+    `l ${0} ${-HULL_DIMENSIONS.h} ` +
+    `l ${TRACK_WIDTH} ${0} Z`;
+  const TRACK_1 =
+    `M ${HULL_DIMENSIONS.w / 2} ${HULL_DIMENSIONS.h / 2} ` +
+    `l ${TRACK_WIDTH} ${0} ` +
+    `l ${0} ${-HULL_DIMENSIONS.h} ` +
+    `l ${-TRACK_WIDTH} ${0} Z`;
+  const TURRET =
+    `M ${HULL_DIMENSIONS.w / 2} 0 ` +
+    ((R: number): string => {
+      let dataLines = "";
+      for (let a = 0; a < Math.PI * 2; a += (Math.PI * 2) / 20) {
+        dataLines += `L ${Math.cos(a) * R} ${Math.sin(a) * R} `;
+      }
+      return dataLines;
+    })(HULL_DIMENSIONS.w / 2) +
+    "Z";
   return [HULL, TRACK_0, TRACK_1, TURRET];
 };
 
+console.log(TANK_CONFIGS);
 export type { TankConfig, BarrierConfig };
-export { TANK_CONFIGS, getPath };
+export { TANK_CONFIGS, DISTANCE_SCALAR, getPath };
