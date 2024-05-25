@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { AssetInstance } from "../App";
-import { Stage, Layer, Path } from "react-konva";
+import { Stage, Layer } from "react-konva";
 import StageNavigators from "../function_bundles/StageNavigator";
 import InstancePreviews from "./InstancePreviews";
 import { AssetConfig } from "../assets/tank-assets";
@@ -29,6 +29,11 @@ function PreviewStage(props: Props) {
     { x: 0, y: 0 },
     { x: 0, y: 0 },
   ]);
+  const [relativeMousePos, setRelativeMousePos] = useState<{
+    x: number;
+    y: number;
+  }>({ x: 0, y: 0 });
+  const [mouseInCanvas, setMouseInCanvas] = useState<boolean>(false);
 
   useEffect(() => {
     const PREVIEW_WINDOW = document.getElementById("preview")!;
@@ -96,6 +101,9 @@ function PreviewStage(props: Props) {
       }}
       onMouseMove={(event) => {
         const MOUSE_POS = event.target.getStage()?.getPointerPosition()!;
+        setRelativeMousePos(
+          event.target.getStage()?.getRelativePointerPosition()!
+        );
         setMouseHistory([{ x: MOUSE_POS.x, y: MOUSE_POS.y }, mouseHistory[0]]);
         if (event.evt.buttons === 4) {
           const DELTA_POS = {
@@ -118,19 +126,35 @@ function PreviewStage(props: Props) {
             rotation: 0,
             pos: event.target.getStage()?.getRelativePointerPosition()!,
           };
+
           InstanceManipulators.addInstances(
-            [[`${NEW_INSTANCE.name}-${new Date().getTime()}`, NEW_INSTANCE]],
+            [
+              [
+                `${NEW_INSTANCE.name}-${[...new Date().getTime().toString()]
+                  .reverse()
+                  .join("")}`,
+                NEW_INSTANCE,
+              ],
+            ],
             props.instanceMap,
             props.setAssetInstance
           );
         }
         console.log("Add instance");
       }}
+      onMouseEnter={() => {
+        setMouseInCanvas(true);
+      }}
+      onMouseLeave={() => {
+        setMouseInCanvas(false);
+      }}
     >
       <Layer>
         <InstancePreviews
           instances={[...props.instanceMap.values()]}
           unplacedInstance={props.unplacedInstance}
+          mousePos={relativeMousePos}
+          mouseInCanvas={mouseInCanvas}
         />
       </Layer>
     </Stage>

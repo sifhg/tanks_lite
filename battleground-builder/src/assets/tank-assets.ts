@@ -89,6 +89,11 @@ function getPathFunction(input: number | string): string[] {
     index = getAssets().findIndex((config) => config.name === input);
   }
   const ASSET = getAssets()[index];
+  if (ASSET === undefined && typeof input === "string") {
+    console.warn(`No asset of name '${input}' exists in tank-assets.ts`);
+    return [];
+  }
+
   if ("path" in ASSET) {
     // Path for assets with specified paths
     let path = `M ${ASSET.path[0].x * DISTANCE_SCALAR} ${

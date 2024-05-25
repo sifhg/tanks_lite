@@ -6,6 +6,8 @@ import { Path } from "react-konva";
 interface Props {
   instances: AssetInstance[];
   unplacedInstance: AssetConfig | null;
+  mousePos: { x: number; y: number };
+  mouseInCanvas: boolean;
 }
 
 function InstancePreviews(props: Props) {
@@ -13,26 +15,22 @@ function InstancePreviews(props: Props) {
     <>
       {props.instances.map((instance, index) => {
         const isTank = "path" in instance ? false : true;
-        if (isTank) {
-          return null;
-        } else {
-          return (
-            <Path
-              key={`asset-instance-barrier-${index}`}
-              data={InstanceManipulators.getPath(instance)}
-              x={instance.pos.x}
-              y={instance.pos.y}
-              fill="black"
-              opacity={0.75}
-              stroke={"black"}
-            />
-          );
-        }
+        return (
+          <Path
+            key={`asset-instance-${isTank ? "tank" : "barrier"}-${index}`}
+            data={getPath(instance.name)[0]}
+            x={instance.pos.x}
+            y={instance.pos.y}
+            fill={isTank ? "green" : "black"}
+            opacity={0.75}
+            stroke={"black"}
+          />
+        );
       })}
-      {props.unplacedInstance ? (
+      {props.unplacedInstance && props.mouseInCanvas ? (
         <Path
-          x={150}
-          y={150}
+          x={props.mousePos.x}
+          y={props.mousePos.y}
           fillEnabled={false}
           stroke={"green"}
           strokeWidth={2}

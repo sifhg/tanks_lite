@@ -32,24 +32,7 @@ function App() {
 
   const [assetInstances, setAssetInstances] = useState<
     Map<string, AssetInstance>
-  >(
-    new Map([
-      [
-        "tank-0",
-        {
-          name: "tank-0",
-          pos: { x: 50, y: 50 },
-          rotation: 0,
-          path: [
-            { x: 10, y: 10 },
-            { x: 10, y: 0 },
-            { x: 0, y: 0 },
-            { x: 0, y: 10 },
-          ],
-        },
-      ],
-    ])
-  );
+  >(new Map());
   const [unplacedInstance, setUnplacedInstance] = useState<AssetConfig | null>(
     null
   );
