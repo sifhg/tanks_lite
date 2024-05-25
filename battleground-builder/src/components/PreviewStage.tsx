@@ -3,10 +3,14 @@ import { AssetInstance } from "../App";
 import { Stage, Layer, Path } from "react-konva";
 import StageNavigators from "../function_bundles/StageNavigator";
 import InstancePreviews from "./InstancePreviews";
+import { AssetConfig } from "../assets/tank-assets";
+import InstanceManipulators from "../function_bundles/InstanceManipulators";
 
 interface Props {
   instanceMap: Map<string, AssetInstance>;
   selection: string[];
+  unplacedInstance: AssetConfig | null;
+  setAssetInstance: (assetEntries: Map<string, AssetInstance>) => void;
 }
 
 function PreviewStage(props: Props) {
@@ -75,13 +79,15 @@ function PreviewStage(props: Props) {
             setStageOffset
           );
         } else if (event.evt.ctrlKey) {
-          const NEW_OFFSET_X = stageOffset.x + STEP_SIZE * DIRECTION;
+          const NEW_OFFSET_X =
+            stageOffset.x + (STEP_SIZE / zoomFactor) * DIRECTION;
           StageNavigators.offset(
             { x: NEW_OFFSET_X, y: stageOffset.y },
             setStageOffset
           );
         } else {
-          const NEW_OFFSET_Y = stageOffset.y + STEP_SIZE * DIRECTION;
+          const NEW_OFFSET_Y =
+            stageOffset.y + (STEP_SIZE / zoomFactor) * DIRECTION;
           StageNavigators.offset(
             { x: stageOffset.x, y: NEW_OFFSET_Y },
             setStageOffset
@@ -105,9 +111,27 @@ function PreviewStage(props: Props) {
           );
         }
       }}
+      onMouseUp={(event) => {
+        if (props.unplacedInstance) {
+          const NEW_INSTANCE: AssetInstance = {
+            ...props.unplacedInstance!,
+            rotation: 0,
+            pos: event.target.getStage()?.getRelativePointerPosition()!,
+          };
+          InstanceManipulators.addInstances(
+            [[`${NEW_INSTANCE.name}-${new Date().getTime()}`, NEW_INSTANCE]],
+            props.instanceMap,
+            props.setAssetInstance
+          );
+        }
+        console.log("Add instance");
+      }}
     >
       <Layer>
-        <InstancePreviews instances={[...props.instanceMap.values()]} />
+        <InstancePreviews
+          instances={[...props.instanceMap.values()]}
+          unplacedInstance={props.unplacedInstance}
+        />
       </Layer>
     </Stage>
   );

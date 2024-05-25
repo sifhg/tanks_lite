@@ -1,9 +1,11 @@
 import { AssetInstance } from "../App";
+import { AssetConfig, getPath } from "../assets/tank-assets";
 import InstanceManipulators from "../function_bundles/InstanceManipulators";
 import { Path } from "react-konva";
 
 interface Props {
   instances: AssetInstance[];
+  unplacedInstance: AssetConfig | null;
 }
 
 function InstancePreviews(props: Props) {
@@ -27,6 +29,16 @@ function InstancePreviews(props: Props) {
           );
         }
       })}
+      {props.unplacedInstance ? (
+        <Path
+          x={150}
+          y={150}
+          fillEnabled={false}
+          stroke={"green"}
+          strokeWidth={2}
+          data={getPath(props.unplacedInstance.name)[0]}
+        />
+      ) : null}
     </>
   );
 }

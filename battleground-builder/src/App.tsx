@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
-import { TankConfig, BarrierConfig } from "./assets/tank-assets";
+import { TankConfig, BarrierConfig, AssetConfig } from "./assets/tank-assets";
 import "./App.css";
 import Titlebar from "./components/Titlebar";
 import AssetCards from "./components/AssetCards";
 import PreviewStage from "./components/PreviewStage";
 import InstanceList from "./components/InstanceList";
-import InstanceManipulators from "./function_bundles/InstanceManipulators";
 
 interface TankInstance extends TankConfig {
   pos: { x: number; y: number };
@@ -26,6 +25,9 @@ function App() {
     if (event.button === 1) {
       event.preventDefault();
     }
+  });
+  addEventListener("mouseup", () => {
+    setUnplacedInstance(null);
   });
 
   const [assetInstances, setAssetInstances] = useState<
@@ -48,6 +50,9 @@ function App() {
       ],
     ])
   );
+  const [unplacedInstance, setUnplacedInstance] = useState<AssetConfig | null>(
+    null
+  );
 
   return (
     <>
@@ -65,7 +70,12 @@ function App() {
         <Panel defaultSize={50} minSize={31.25}>
           <PanelGroup direction={"vertical"}>
             <Panel id="preview" className="panel" defaultSize={75} minSize={50}>
-              <PreviewStage instanceMap={assetInstances} selection={[]} />
+              <PreviewStage
+                instanceMap={assetInstances}
+                selection={[]}
+                unplacedInstance={unplacedInstance}
+                setAssetInstance={setAssetInstances}
+              />
             </Panel>
             <PanelResizeHandle />
             <Panel
@@ -74,7 +84,7 @@ function App() {
               defaultSize={25}
               minSize={12.5}
             >
-              <AssetCards />
+              <AssetCards introduceInstance={setUnplacedInstance} />
             </Panel>
           </PanelGroup>
         </Panel>

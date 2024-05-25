@@ -2,6 +2,7 @@ body {
   height: 100vh;
   margin: 0;
   overflow-y: hidden;
+  border: 1px;
 }
 
 #root {
@@ -71,4 +72,20 @@ body {
   #asset-map {
     background-color: var(--background-medium);
   }
+  .asset-card {
+    display: inline-block;
+    margin: .5rem .5rem;
+    padding: .25rem;
+    border: .25rem var(--contrast-light) solid;
+    border-radius: 1rem;
+    user-select: none; 
+  }
+  .asset-card:hover {
+    border-color: var(--contrast-dark);
+  }
+  .asset-card.adding {
+    border: .125rem var(--contrast-dark) solid;
+    margin: .625rem;
+  }
 }
+
