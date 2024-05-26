@@ -3,7 +3,7 @@ import { AssetInstance } from "../App";
 import { Stage, Layer } from "react-konva";
 import StageNavigators from "../function_bundles/StageNavigator";
 import InstancePreviews from "./InstancePreviews";
-import { AssetConfig } from "../assets/tank-assets";
+import { AssetConfig, getPath } from "../assets/tank-assets";
 import InstanceManipulators from "../function_bundles/InstanceManipulators";
 
 interface Props {
@@ -123,8 +123,11 @@ function PreviewStage(props: Props) {
         if (props.unplacedInstance) {
           const NEW_INSTANCE: AssetInstance = {
             ...props.unplacedInstance!,
-            rotation: 0,
             pos: event.target.getStage()?.getRelativePointerPosition()!,
+            isTank: !("path" in props.unplacedInstance),
+            relativePath: getPath(props.unplacedInstance.name).map((path) => {
+              return InstanceManipulators.data2Vec(path);
+            })!,
           };
 
           InstanceManipulators.addInstances(

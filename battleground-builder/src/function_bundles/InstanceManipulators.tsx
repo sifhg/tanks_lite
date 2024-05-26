@@ -13,6 +13,32 @@ const InstanceManipulators = {
     }
     setInstances(NEW_INSTANCES);
   },
+  data2Vec: (data: string): { x: number; y: number }[] => {
+    const CLEANED_DATA = [...data]
+      .filter((char) => {
+        return ". -00123456789".includes(char);
+      })
+      .join("")
+      .trim()
+      .replace(/\s{2,}/g, " ")
+      .split(" ");
+    const PATH: { x: number; y: number }[] = [];
+    for (let pairIndex = 0; pairIndex < CLEANED_DATA.length; pairIndex += 2) {
+      PATH.push({
+        x: Number(CLEANED_DATA[pairIndex]),
+        y: Number(CLEANED_DATA[pairIndex + 1]),
+      });
+    }
+    return PATH;
+  },
+  vec2Data: (path: { x: number; y: number }[]): string => {
+    let data = `M ${path[0].x} ${path[0].y}`;
+    for (const COORDINATE of path.splice(1)) {
+      data += `L ${COORDINATE.x} ${COORDINATE.y}`;
+    }
+    data += "Z";
+    return data;
+  },
 };
 
 export default InstanceManipulators;

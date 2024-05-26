@@ -8,12 +8,14 @@ import PreviewStage from "./components/PreviewStage";
 import InstanceList from "./components/InstanceList";
 
 interface TankInstance extends TankConfig {
+  isTank: boolean;
   pos: { x: number; y: number };
-  rotation: number;
+  relativePath: { x: number; y: number }[][];
 }
 interface BarrierInstance extends BarrierConfig {
+  isTank: boolean;
   pos: { x: number; y: number };
-  rotation: number;
+  relativePath: { x: number; y: number }[][];
 }
 type AssetInstance = TankInstance | BarrierInstance;
 
