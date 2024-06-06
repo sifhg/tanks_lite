@@ -35,6 +35,7 @@ function PreviewStage(props: Props) {
   }>({ x: 0, y: 0 });
   const [mouseInCanvas, setMouseInCanvas] = useState<boolean>(false);
 
+  //Update stage size on first render
   useEffect(() => {
     const PREVIEW_WINDOW = document.getElementById("preview")!;
     setWindowSize(

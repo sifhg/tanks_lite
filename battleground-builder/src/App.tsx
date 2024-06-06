@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { TankConfig, BarrierConfig, AssetConfig } from "./assets/tank-assets";
 import "./App.css";
@@ -38,6 +38,9 @@ function App() {
   const [unplacedInstance, setUnplacedInstance] = useState<AssetConfig | null>(
     null
   );
+  useEffect(() => {
+    console.log([...assetInstances.entries()]);
+  }, [assetInstances]);
 
   return (
     <>

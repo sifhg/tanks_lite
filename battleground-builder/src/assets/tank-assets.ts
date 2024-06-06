@@ -109,7 +109,7 @@ function getPathFunction(input: number | string): string[] {
     w: ASSET.width * DISTANCE_SCALAR,
     h: ASSET.length * DISTANCE_SCALAR,
   };
-  const TRACK_WIDTH = ASSET.wheelWidth;
+  const TRACK_WIDTH = ASSET.wheelWidth * DISTANCE_SCALAR;
 
   // Paths for tank assets
   const HULL =

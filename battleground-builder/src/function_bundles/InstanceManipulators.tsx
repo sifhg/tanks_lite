@@ -2,6 +2,12 @@ import { AssetInstance } from "../App";
 import { DISTANCE_SCALAR, getPath } from "../assets/tank-assets";
 
 const InstanceManipulators = {
+  /**
+   *
+   * @param instanceEntries
+   * @param instanceMap
+   * @param setInstances
+   */
   addInstances: (
     instanceEntries: [string, AssetInstance][],
     instanceMap: Map<string, AssetInstance>,
