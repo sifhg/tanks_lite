@@ -16,15 +16,23 @@ function InstancePreviews(props: Props) {
       {props.instances.map((instance, index) => {
         const isTank = "path" in instance ? false : true;
         return (
-          <Path
-            key={`asset-instance-${isTank ? "tank" : "barrier"}-${index}`}
-            data={InstanceManipulators.vec2Data(instance.relativePath[0])}
-            x={instance.pos.x}
-            y={instance.pos.y}
-            fill={isTank ? "green" : "black"}
-            opacity={0.75}
-            stroke={"black"}
-          />
+          <>
+            {instance.relativePath.map((path, pathIndex) => {
+              return (
+                <Path
+                  key={`asset-instance-${
+                    isTank ? "tank" : "barrier"
+                  }-${index}-${pathIndex}`}
+                  data={InstanceManipulators.vec2Data(path)}
+                  x={instance.pos.x}
+                  y={instance.pos.y}
+                  fill={isTank ? "green" : "black"}
+                  opacity={0.75}
+                  stroke={"black"}
+                />
+              );
+            })}
+          </>
         );
       })}
       {props.unplacedInstance && props.mouseInCanvas ? (

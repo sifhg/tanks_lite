@@ -110,6 +110,10 @@ function getPathFunction(input: number | string): string[] {
     h: ASSET.length * DISTANCE_SCALAR,
   };
   const TRACK_WIDTH = ASSET.wheelWidth * DISTANCE_SCALAR;
+  const TURRET_CENTER = {
+    x: 0,
+    y: +HULL_DIMENSIONS.h / 2 - (HULL_DIMENSIONS.h * 2) / 3,
+  };
 
   // Paths for tank assets
   const HULL =
@@ -119,20 +123,22 @@ function getPathFunction(input: number | string): string[] {
     `L ${HULL_DIMENSIONS.w / 2} ${-HULL_DIMENSIONS.h / 2} Z`;
   const TRACK_0 =
     `M ${-HULL_DIMENSIONS.w / 2} ${HULL_DIMENSIONS.h / 2} ` +
-    `l ${-TRACK_WIDTH} ${0} ` +
-    `l ${0} ${-HULL_DIMENSIONS.h} ` +
-    `l ${TRACK_WIDTH} ${0} Z`;
+    `L ${-HULL_DIMENSIONS.w / 2 - TRACK_WIDTH} ${HULL_DIMENSIONS.h / 2} ` +
+    `L ${-HULL_DIMENSIONS.w / 2 - TRACK_WIDTH} ${-HULL_DIMENSIONS.h / 2} ` +
+    `L ${-HULL_DIMENSIONS.w / 2} ${-HULL_DIMENSIONS.h / 2} Z`;
   const TRACK_1 =
     `M ${HULL_DIMENSIONS.w / 2} ${HULL_DIMENSIONS.h / 2} ` +
-    `l ${TRACK_WIDTH} ${0} ` +
-    `l ${0} ${-HULL_DIMENSIONS.h} ` +
-    `l ${-TRACK_WIDTH} ${0} Z`;
+    `L ${HULL_DIMENSIONS.w / 2 + TRACK_WIDTH} ${HULL_DIMENSIONS.h / 2} ` +
+    `L ${HULL_DIMENSIONS.w / 2 + TRACK_WIDTH} ${-HULL_DIMENSIONS.h / 2} ` +
+    `L ${HULL_DIMENSIONS.w / 2} ${-HULL_DIMENSIONS.h / 2} Z`;
   const TURRET =
-    `M ${HULL_DIMENSIONS.w / 2} 0 ` +
+    `M ${HULL_DIMENSIONS.w / 2} ${TURRET_CENTER.y} ` +
     ((R: number): string => {
       let dataLines = "";
-      for (let a = 0; a < Math.PI * 2; a += (Math.PI * 2) / 20) {
-        dataLines += `L ${Math.cos(a) * R} ${Math.sin(a) * R} `;
+      for (let a = 0; a < Math.PI * 2; a += (Math.PI * 2) / 32) {
+        dataLines += `L ${Math.cos(a) * R} ${
+          Math.sin(a) * R + TURRET_CENTER.y
+        } `;
       }
       return dataLines;
     })(HULL_DIMENSIONS.w / 2) +
