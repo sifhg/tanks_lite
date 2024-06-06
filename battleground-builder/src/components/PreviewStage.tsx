@@ -5,6 +5,7 @@ import StageNavigators from "../function_bundles/StageNavigator";
 import InstancePreviews from "./InstancePreviews";
 import { AssetConfig, getPath } from "../assets/tank-assets";
 import InstanceManipulators from "../function_bundles/InstanceManipulators";
+import Gizmo from "./Gizmo/Gizmo";
 
 interface Props {
   instanceMap: Map<string, AssetInstance>;
@@ -160,6 +161,7 @@ function PreviewStage(props: Props) {
           mousePos={relativeMousePos}
           mouseInCanvas={mouseInCanvas}
         />
+        <Gizmo selection={undefined} />
       </Layer>
     </Stage>
   );
