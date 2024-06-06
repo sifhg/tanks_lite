@@ -3,10 +3,10 @@ import { DISTANCE_SCALAR, getPath } from "../assets/tank-assets";
 
 const InstanceManipulators = {
   /**
-   *
-   * @param instanceEntries
-   * @param instanceMap
-   * @param setInstances
+   * This function adds an array of asset instances to the instance map.
+   * @param instanceEntries An array of entries – consisting of a key string and an asset instance to add to the map
+   * @param instanceMap The currect instance map state
+   * @param setInstances A function to modify the map state
    */
   addInstances: (
     instanceEntries: [string, AssetInstance][],
@@ -19,6 +19,11 @@ const InstanceManipulators = {
     }
     setInstances(NEW_INSTANCES);
   },
+  /**
+   * Takes an SVG path data string and returns a corresponding array of vector points.
+   * @param data SVG path data string
+   * @returns
+   */
   data2Vec: (data: string): { x: number; y: number }[] => {
     const CLEANED_DATA = [...data]
       .filter((char) => {
@@ -37,9 +42,15 @@ const InstanceManipulators = {
     }
     return PATH;
   },
+  /**
+   * Takes an array of vector points of a shape as an input and returns a data string for an SVG path.
+   * @param path Array of vector points.
+   * @returns SVG path data string.
+   */
   vec2Data: (path: { x: number; y: number }[]): string => {
-    let data = `M ${path[0].x} ${path[0].y}`;
-    for (const COORDINATE of path.splice(1)) {
+    const INPUT_PATH = [...path];
+    let data = `M ${INPUT_PATH[0].x} ${INPUT_PATH[0].y}`;
+    for (const COORDINATE of INPUT_PATH.splice(1)) {
       data += `L ${COORDINATE.x} ${COORDINATE.y}`;
     }
     data += "Z";

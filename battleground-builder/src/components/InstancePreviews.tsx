@@ -18,7 +18,7 @@ function InstancePreviews(props: Props) {
         return (
           <Path
             key={`asset-instance-${isTank ? "tank" : "barrier"}-${index}`}
-            data={InstanceManipulators.vec2Data(instance.relativePath[1])}
+            data={InstanceManipulators.vec2Data(instance.relativePath[0])}
             x={instance.pos.x}
             y={instance.pos.y}
             fill={isTank ? "green" : "black"}
