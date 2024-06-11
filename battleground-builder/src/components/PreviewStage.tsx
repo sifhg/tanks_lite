@@ -161,7 +161,11 @@ function PreviewStage(props: Props) {
           mousePos={relativeMousePos}
           mouseInCanvas={mouseInCanvas}
         />
-        <Gizmo selection={undefined} />
+        <Gizmo
+          selection={[]}
+          instanceMap={props.instanceMap}
+          modifier={"scale"}
+        />
       </Layer>
     </Stage>
   );

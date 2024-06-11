@@ -56,6 +56,50 @@ const InstanceManipulators = {
     data += "Z";
     return data;
   },
+  /**
+   * Returns an object of the outmost point positions among the instances with given keys.
+   * @param keys An array of keys for the items to consider.
+   * @param instanceMap The instance map containing the instances on stage.
+   * @returns { x0: number; y0: number; x1: number; y1: number }
+   */
+  getEdges: (
+    keys: string[],
+    instanceMap: Map<string, AssetInstance>
+  ):
+    | {
+        x0: number;
+        y0: number;
+        x1: number;
+        y1: number;
+      }
+    | undefined => {
+    if (!keys) {
+      return undefined;
+    }
+    const ALL_POSITIONS = keys
+      .map((key) => {
+        const CENTER = instanceMap.get(key)?.pos!;
+        const RELATIVE_POINTS = instanceMap.get(key)?.relativePath.flat()!;
+        const ABSOLUTE_POINTS = RELATIVE_POINTS.map((point) => {
+          return { x: point.x + CENTER.x, y: point.y + CENTER.y };
+        });
+        return ABSOLUTE_POINTS;
+      })
+      .flat();
+    const Xs: number[] = [];
+    const Ys: number[] = [];
+    ALL_POSITIONS.forEach((pointPos) => {
+      Xs.push(pointPos.x);
+      Ys.push(pointPos.y);
+    });
+
+    return {
+      x0: Math.min(...Xs),
+      y0: Math.min(...Ys),
+      x1: Math.max(...Xs),
+      y1: Math.max(...Ys),
+    };
+  },
 };
 
 export default InstanceManipulators;
