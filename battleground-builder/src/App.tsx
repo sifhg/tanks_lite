@@ -6,6 +6,10 @@ import Titlebar from "./components/Titlebar";
 import AssetCards from "./components/AssetCards";
 import PreviewStage from "./components/PreviewStage";
 import InstanceList from "./components/InstanceList";
+import InstanceManipulators, {
+  Tool,
+} from "./function_bundles/InstanceManipulators";
+import Toolbar from "./components/Toolbar";
 
 interface TankInstance extends TankConfig {
   isTank: boolean;
@@ -38,13 +42,18 @@ function App() {
   const [unplacedInstance, setUnplacedInstance] = useState<AssetConfig | null>(
     null
   );
+  const [tool, setTool] = useState<Tool>("select");
   useEffect(() => {
-    console.log([...assetInstances.entries()]);
+    console.log([...assetInstances.keys()]);
+    console.log(
+      InstanceManipulators.getEdges([...assetInstances.keys()], assetInstances)
+    );
   }, [assetInstances]);
 
   return (
     <>
       <Titlebar tabs={["New", "Save", "Save as", "Load"]} />
+      <Toolbar selectedTool={tool} setTool={setTool} />
       <PanelGroup id={"panel-region"} direction={"horizontal"}>
         <Panel
           id="asset-instance-map"

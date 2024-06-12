@@ -125,6 +125,7 @@ function PreviewStage(props: Props) {
         if (props.unplacedInstance) {
           const NEW_INSTANCE: AssetInstance = {
             ...props.unplacedInstance!,
+            name: `${props.unplacedInstance.name}-${crypto.randomUUID()}`,
             pos: event.target.getStage()?.getRelativePointerPosition()!,
             isTank: !("path" in props.unplacedInstance),
             relativePath: getPath(props.unplacedInstance.name).map((path) => {
@@ -133,14 +134,7 @@ function PreviewStage(props: Props) {
           };
 
           InstanceManipulators.addInstances(
-            [
-              [
-                `${NEW_INSTANCE.name}-${[...new Date().getTime().toString()]
-                  .reverse()
-                  .join("")}`,
-                NEW_INSTANCE,
-              ],
-            ],
+            [[NEW_INSTANCE.name, NEW_INSTANCE]],
             props.instanceMap,
             props.setAssetInstance
           );

@@ -1,6 +1,7 @@
 import { AssetInstance } from "../App";
 import { DISTANCE_SCALAR, getPath } from "../assets/tank-assets";
 
+type Tool = null | "select" | "move" | "rotate" | "scale";
 const InstanceManipulators = {
   /**
    * This function adds an array of asset instances to the instance map.
@@ -73,15 +74,21 @@ const InstanceManipulators = {
         y1: number;
       }
     | undefined => {
-    if (!keys) {
+    if (!keys || keys.length === 0) {
       return undefined;
     }
     const ALL_POSITIONS = keys
       .map((key) => {
         const CENTER = instanceMap.get(key)?.pos!;
         const RELATIVE_POINTS = instanceMap.get(key)?.relativePath.flat()!;
-        const ABSOLUTE_POINTS = RELATIVE_POINTS.map((point) => {
-          return { x: point.x + CENTER.x, y: point.y + CENTER.y };
+        const ABSOLUTE_POINTS: { x: number; y: number }[] = [];
+        RELATIVE_POINTS.forEach((point) => {
+          if (isFinite(point.x) && isFinite(point.y)) {
+            ABSOLUTE_POINTS.push({
+              x: point.x + CENTER.x,
+              y: point.y + CENTER.y,
+            });
+          }
         });
         return ABSOLUTE_POINTS;
       })
@@ -103,3 +110,4 @@ const InstanceManipulators = {
 };
 
 export default InstanceManipulators;
+export type { Tool };

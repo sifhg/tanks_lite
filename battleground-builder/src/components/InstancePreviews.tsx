@@ -13,16 +13,16 @@ interface Props {
 function InstancePreviews(props: Props) {
   return (
     <>
-      {props.instances.map((instance, index) => {
+      {props.instances.map((instance) => {
         const isTank = "path" in instance ? false : true;
         return (
           <>
             {instance.relativePath.map((path, pathIndex) => {
               return (
                 <Path
-                  key={`asset-instance-${
-                    isTank ? "tank" : "barrier"
-                  }-${index}-${pathIndex}`}
+                  key={`asset-instance-${isTank ? "tank" : "barrier"}-${
+                    instance.name
+                  }-${pathIndex}`}
                   data={InstanceManipulators.vec2Data(path)}
                   x={instance.pos.x}
                   y={instance.pos.y}
