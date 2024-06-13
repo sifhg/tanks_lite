@@ -62,16 +62,25 @@ body {
   }
 }
 
-.toolbar {
-  display: flex;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  width: 100%;
-  background-color: var(--background-dark);
-}
-
 #panel-region {
+  .panel {
+    position: relative;
+  }
+  .toolbox {
+    position: absolute;
+    z-index: 1;
+    top: 0px;
+    right: 0px;
+    #zoom-select {
+      display: inline-block;
+    }
+    #manipulation-tools{
+      display: inline-block;
+      button {
+        display: block;
+      }
+    }
+  }
   .side-panel {
     background-color: var(--background-dark);
   }

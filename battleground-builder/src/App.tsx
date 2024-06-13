@@ -9,7 +9,7 @@ import InstanceList from "./components/InstanceList";
 import InstanceManipulators, {
   Tool,
 } from "./function_bundles/InstanceManipulators";
-import Toolbar from "./components/Toolbar";
+import Toolbox from "./components/Toolbox";
 
 interface TankInstance extends TankConfig {
   isTank: boolean;
@@ -53,7 +53,6 @@ function App() {
   return (
     <>
       <Titlebar tabs={["New", "Save", "Save as", "Load"]} />
-      <Toolbar selectedTool={tool} setTool={setTool} />
       <PanelGroup id={"panel-region"} direction={"horizontal"}>
         <Panel
           id="asset-instance-map"
@@ -72,6 +71,8 @@ function App() {
                 selection={[]}
                 unplacedInstance={unplacedInstance}
                 setAssetInstance={setAssetInstances}
+                tool={tool}
+                setTool={setTool}
               />
             </Panel>
             <PanelResizeHandle />

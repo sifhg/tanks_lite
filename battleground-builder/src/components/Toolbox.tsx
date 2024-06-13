@@ -1,47 +1,46 @@
 import { Tool } from "../function_bundles/InstanceManipulators";
 
-interface ToolbarProps {
+interface ToolboxProps {
   selectedTool: Tool;
   setTool: (tool: Tool) => void;
+  zoomFactor: number;
+  setZoomFactor: (newFactor: number) => void;
 }
 
-function Toolbar(props: ToolbarProps) {
+function Toolbox(props: ToolboxProps) {
   return (
-    <menu className="toolbar">
-      <li>
+    <div className="toolbox">
+      <div id="zoom-select">
+        <button>Reset</button>
+      </div>
+      <div id="manipulation-tools">
         <button
           className={props.selectedTool === "select" ? "selected tool" : "tool"}
           onClick={() => props.setTool("select")}
         >
           Select
         </button>
-      </li>
-      <li>
         <button
           className={props.selectedTool === "move" ? "selected tool" : "tool"}
           onClick={() => props.setTool("move")}
         >
           Move
         </button>
-      </li>
-      <li>
         <button
           className={props.selectedTool === "rotate" ? "selected tool" : "tool"}
           onClick={() => props.setTool("rotate")}
         >
           Rotate
         </button>
-      </li>
-      <li>
         <button
           className={props.selectedTool === "scale" ? "selected tool" : "tool"}
           onClick={() => props.setTool("scale")}
         >
           Scale
         </button>
-      </li>
-    </menu>
+      </div>
+    </div>
   );
 }
 
-export default Toolbar;
+export default Toolbox;
