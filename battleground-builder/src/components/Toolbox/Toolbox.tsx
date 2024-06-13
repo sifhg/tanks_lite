@@ -1,4 +1,5 @@
-import { Tool } from "../function_bundles/InstanceManipulators";
+import { Tool } from "../../function_bundles/InstanceManipulators";
+import ZoomInput from "./ZoomInput";
 
 interface ToolboxProps {
   selectedTool: Tool;
@@ -9,9 +10,17 @@ interface ToolboxProps {
 
 function Toolbox(props: ToolboxProps) {
   return (
-    <div className="toolbox">
-      <div id="zoom-select">
-        <button>Reset</button>
+    <>
+      <div
+        id="zoom-select"
+        onMouseLeave={(event) => {
+          document.getElementById("zoom-input")?.blur();
+        }}
+      >
+        <ZoomInput
+          zoomFactor={props.zoomFactor}
+          setZoomFactor={props.setZoomFactor}
+        />
       </div>
       <div id="manipulation-tools">
         <button
@@ -39,7 +48,7 @@ function Toolbox(props: ToolboxProps) {
           Scale
         </button>
       </div>
-    </div>
+    </>
   );
 }
 

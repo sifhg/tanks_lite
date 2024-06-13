@@ -66,21 +66,30 @@ body {
   .panel {
     position: relative;
   }
-  .toolbox {
+  #zoom-select {
+    display: inline-block;
     position: absolute;
     z-index: 1;
-    top: 0px;
+    right: 4rem;
+    opacity: 50%;
+  }
+  #zoom-select:hover {
+    opacity: 100%;
+  }
+  #manipulation-tools{
+    display: inline-block;
+    position: absolute;
+    z-index: 1;
     right: 0px;
-    #zoom-select {
-      display: inline-block;
-    }
-    #manipulation-tools{
-      display: inline-block;
-      button {
-        display: block;
-      }
+    opacity: 50%;
+    button {
+      display: block;
     }
   }
+  #manipulation-tools:hover {
+    opacity: 100%;
+  }
+
   .side-panel {
     background-color: var(--background-dark);
   }

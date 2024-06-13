@@ -8,7 +8,7 @@ import InstanceManipulators, {
   Tool,
 } from "../function_bundles/InstanceManipulators";
 import Gizmo from "./Gizmo/Gizmo";
-import Toolbox from "./Toolbox";
+import Toolbox from "./Toolbox/Toolbox";
 
 interface Props {
   instanceMap: Map<string, AssetInstance>;

@@ -9,7 +9,7 @@ import InstanceList from "./components/InstanceList";
 import InstanceManipulators, {
   Tool,
 } from "./function_bundles/InstanceManipulators";
-import Toolbox from "./components/Toolbox";
+import Toolbox from "./components/Toolbox/Toolbox";
 
 interface TankInstance extends TankConfig {
   isTank: boolean;
