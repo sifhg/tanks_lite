@@ -69,7 +69,10 @@ function PreviewStage(props: Props) {
         selectedTool={props.tool}
         setTool={props.setTool}
         zoomFactor={zoomFactor}
+        stageOffsetX={stageOffset.x}
+        stageOffsetY={stageOffset.y}
         setZoomFactor={setZoomFactor}
+        setStageOffset={setStageOffset}
       />
       <Stage
         id="preview-canvas"

@@ -3,13 +3,29 @@ import StageNavigators from "../../function_bundles/StageNavigator";
 
 interface ZoomInputProps {
   zoomFactor: number;
+  stageOffsetX: number;
+  stageOffsetY: number;
   setZoomFactor: (newZoomFactor: number) => void;
+  setStageOffset: (stageOffset: { x: number; y: number }) => void;
 }
 
 function ZoomInput(props: ZoomInputProps) {
   const DISPLAY_VALUE = Math.floor(props.zoomFactor * 100);
   const MIN_VALUE = 0.01;
   const MAX_VALUE = 10;
+
+  const STAGE = document.getElementById("preview-canvas");
+  if (!STAGE) {
+    return null;
+  }
+  const STAGE_SIZE = {
+    w: STAGE.offsetWidth! / props.zoomFactor,
+    h: STAGE.offsetHeight! / props.zoomFactor,
+  };
+  const RELATIVE_STAGE_CENTER = {
+    x: props.stageOffsetX + STAGE_SIZE.w / 2,
+    y: props.stageOffsetY + STAGE_SIZE.h / 2,
+  };
   function validInput(event: React.FormEvent<HTMLInputElement>): boolean {
     const ALLOWED_CHARACTERS = "0123456789";
     const LAST_INPUT: string = [...event.currentTarget.value].pop()!;
@@ -39,12 +55,35 @@ function ZoomInput(props: ZoomInputProps) {
           if (event.key === "Enter") {
             const NEW_VALUE = Number(event.currentTarget.value) / 100;
             if (NEW_VALUE < MIN_VALUE) {
-              props.setZoomFactor(MIN_VALUE);
-              props.setZoomFactor(MIN_VALUE);
+              StageNavigators.zoom(
+                MIN_VALUE,
+                RELATIVE_STAGE_CENTER.x,
+                RELATIVE_STAGE_CENTER.y,
+                props.zoomFactor,
+                props.setZoomFactor,
+                { x: props.stageOffsetX, y: props.stageOffsetY },
+                props.setStageOffset
+              );
             } else if (NEW_VALUE > MAX_VALUE) {
-              props.setZoomFactor(MAX_VALUE);
+              StageNavigators.zoom(
+                MAX_VALUE,
+                RELATIVE_STAGE_CENTER.x,
+                RELATIVE_STAGE_CENTER.y,
+                props.zoomFactor,
+                props.setZoomFactor,
+                { x: props.stageOffsetX, y: props.stageOffsetY },
+                props.setStageOffset
+              );
             } else {
-              props.setZoomFactor(NEW_VALUE);
+              StageNavigators.zoom(
+                NEW_VALUE,
+                RELATIVE_STAGE_CENTER.x,
+                RELATIVE_STAGE_CENTER.y,
+                props.zoomFactor,
+                props.setZoomFactor,
+                { x: props.stageOffsetX, y: props.stageOffsetY },
+                props.setStageOffset
+              );
             }
             event.currentTarget.value = "" + props.zoomFactor * 100;
             event.currentTarget.blur();
@@ -53,7 +92,15 @@ function ZoomInput(props: ZoomInputProps) {
       />
       <button
         onClick={() => {
-          props.setZoomFactor(1);
+          StageNavigators.zoom(
+            1,
+            RELATIVE_STAGE_CENTER.x,
+            RELATIVE_STAGE_CENTER.y,
+            props.zoomFactor,
+            props.setZoomFactor,
+            { x: props.stageOffsetX, y: props.stageOffsetY },
+            props.setStageOffset
+          );
         }}
       >
         Reset

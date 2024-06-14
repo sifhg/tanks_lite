@@ -5,7 +5,10 @@ interface ToolboxProps {
   selectedTool: Tool;
   setTool: (tool: Tool) => void;
   zoomFactor: number;
-  setZoomFactor: (newFactor: number) => void;
+  stageOffsetX: number;
+  stageOffsetY: number;
+  setZoomFactor: (newZoomFactor: number) => void;
+  setStageOffset: (stageOffset: { x: number; y: number }) => void;
 }
 
 function Toolbox(props: ToolboxProps) {
@@ -19,7 +22,10 @@ function Toolbox(props: ToolboxProps) {
       >
         <ZoomInput
           zoomFactor={props.zoomFactor}
+          stageOffsetX={props.stageOffsetX}
+          stageOffsetY={props.stageOffsetY}
           setZoomFactor={props.setZoomFactor}
+          setStageOffset={props.setStageOffset}
         />
       </div>
       <div id="manipulation-tools">

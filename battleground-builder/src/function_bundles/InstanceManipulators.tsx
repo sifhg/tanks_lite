@@ -1,5 +1,4 @@
 import { AssetInstance } from "../App";
-import { DISTANCE_SCALAR, getPath } from "../assets/tank-assets";
 
 type Tool = null | "select" | "move" | "rotate" | "scale";
 const InstanceManipulators = {
@@ -14,11 +13,22 @@ const InstanceManipulators = {
     instanceMap: Map<string, AssetInstance>,
     setInstances: (assetEntries: Map<string, AssetInstance>) => void
   ): void => {
-    const NEW_INSTANCES = new Map([...instanceMap.entries()]);
+    const NEW_INSTANCE_MAP = new Map([...instanceMap.entries()]);
     for (const ENTRY of instanceEntries) {
-      NEW_INSTANCES.set(ENTRY[0], ENTRY[1]);
+      NEW_INSTANCE_MAP.set(ENTRY[0], ENTRY[1]);
     }
-    setInstances(NEW_INSTANCES);
+    setInstances(NEW_INSTANCE_MAP);
+  },
+  removeInstances: (
+    keys: string[],
+    instanceMap: Map<string, AssetInstance>,
+    setInstances: (assetEntries: Map<string, AssetInstance>) => void
+  ): void => {
+    const NEW_INSTANCE_MAP = new Map([...instanceMap.entries()]);
+    for (const KEY of keys) {
+      NEW_INSTANCE_MAP.delete(KEY);
+    }
+    setInstances(NEW_INSTANCE_MAP);
   },
   /**
    * Takes an SVG path data string and returns a corresponding array of vector points.

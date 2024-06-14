@@ -1,15 +1,14 @@
 import { useEffect, useState } from "react";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { TankConfig, BarrierConfig, AssetConfig } from "./assets/tank-assets";
+import InstanceManipulators, {
+  Tool,
+} from "./function_bundles/InstanceManipulators";
 import "./App.css";
 import Titlebar from "./components/Titlebar";
 import AssetCards from "./components/AssetCards";
 import PreviewStage from "./components/PreviewStage";
 import InstanceList from "./components/InstanceList";
-import InstanceManipulators, {
-  Tool,
-} from "./function_bundles/InstanceManipulators";
-import Toolbox from "./components/Toolbox/Toolbox";
 
 interface TankInstance extends TankConfig {
   isTank: boolean;
@@ -42,6 +41,7 @@ function App() {
   const [unplacedInstance, setUnplacedInstance] = useState<AssetConfig | null>(
     null
   );
+  const [selection, setSelection] = useState<string[]>([]);
   const [tool, setTool] = useState<Tool>("select");
   useEffect(() => {
     console.log([...assetInstances.keys()]);
