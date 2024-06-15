@@ -9,8 +9,7 @@ import Titlebar from "./components/Titlebar";
 import AssetCards from "./components/AssetCards";
 import PreviewStage from "./components/PreviewStage";
 import InstanceList from "./components/InstanceList";
-import SelectionHandlers from "./function_bundles/SelectionHandlers";
-import { useClearUnplacedInstance } from "./eventHandlers";
+import { useClearUnplacedInstance, useSelectAll } from "./eventHandlers";
 
 interface TankInstance extends TankConfig {
   isTank: boolean;
@@ -34,6 +33,12 @@ function App() {
   const [selection, setSelection] = useState<string[]>([]);
   const [tool, setTool] = useState<Tool>("select");
   useClearUnplacedInstance(setUnplacedInstance);
+  useSelectAll(
+    [...assetInstances.keys()],
+    selection,
+    setSelection,
+    assetInstances
+  );
   useEffect(() => {
     console.log([...assetInstances.keys()]);
     console.log(

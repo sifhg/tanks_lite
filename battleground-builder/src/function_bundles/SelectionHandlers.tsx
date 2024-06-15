@@ -15,7 +15,7 @@ const SelectionHandlers = {
       //Checks if an instance corresponding to the key exists
       if (instanceMap) {
         const EXISTING_KEYS = [...instanceMap.keys()];
-        if (EXISTING_KEYS.includes(KEY)) {
+        if (!EXISTING_KEYS.includes(KEY)) {
           throw new Error(
             `Key "${KEY}" does not exist and cannot be selected.`
           );
