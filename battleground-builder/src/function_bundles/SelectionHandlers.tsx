@@ -10,6 +10,7 @@ const SelectionHandlers = {
     setSelection: (selection: string[]) => void,
     instanceMap?: Map<string, AssetInstance>
   ) => {
+    const NEW_SELECTION = [...selection];
     for (const KEY of keys) {
       //Checks if an instance corresponding to the key exists
       if (instanceMap) {
@@ -21,11 +22,15 @@ const SelectionHandlers = {
         }
       }
       if (SelectionHandlers.isSelected(KEY, selection)) {
-        throw new Error(
+        console.warn(
           `Key "${KEY}" is already selected and cannot be selected again.`
         );
+      } else {
+        NEW_SELECTION.push(KEY);
       }
     }
-    setSelection([...selection, ...keys]);
+    setSelection(NEW_SELECTION);
   },
 };
+
+export default SelectionHandlers;

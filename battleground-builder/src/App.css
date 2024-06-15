@@ -3,6 +3,7 @@ body {
   margin: 0;
   overflow-y: hidden;
   border: 1px;
+  user-select: none;
 }
 
 #root {

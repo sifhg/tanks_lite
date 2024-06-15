@@ -9,6 +9,8 @@ import Titlebar from "./components/Titlebar";
 import AssetCards from "./components/AssetCards";
 import PreviewStage from "./components/PreviewStage";
 import InstanceList from "./components/InstanceList";
+import SelectionHandlers from "./function_bundles/SelectionHandlers";
+import { useClearUnplacedInstance } from "./eventHandlers";
 
 interface TankInstance extends TankConfig {
   isTank: boolean;
@@ -23,18 +25,6 @@ interface BarrierInstance extends BarrierConfig {
 type AssetInstance = TankInstance | BarrierInstance;
 
 function App() {
-  addEventListener("contextmenu", (event) => {
-    event.preventDefault();
-  });
-  addEventListener("mousedown", (event) => {
-    if (event.button === 1) {
-      event.preventDefault();
-    }
-  });
-  addEventListener("mouseup", () => {
-    setUnplacedInstance(null);
-  });
-
   const [assetInstances, setAssetInstances] = useState<
     Map<string, AssetInstance>
   >(new Map());
@@ -43,6 +33,7 @@ function App() {
   );
   const [selection, setSelection] = useState<string[]>([]);
   const [tool, setTool] = useState<Tool>("select");
+  useClearUnplacedInstance(setUnplacedInstance);
   useEffect(() => {
     console.log([...assetInstances.keys()]);
     console.log(
