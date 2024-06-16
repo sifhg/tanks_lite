@@ -58,7 +58,10 @@ function App() {
           defaultSize={12.5}
           minSize={12.5}
         >
-          <InstanceList instances={assetInstances} />
+          <InstanceList
+            instances={assetInstances}
+            selection={selectedInstances}
+          />
         </Panel>
         <PanelResizeHandle />
         <Panel defaultSize={50} minSize={31.25}>

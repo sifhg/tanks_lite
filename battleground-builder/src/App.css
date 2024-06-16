@@ -93,6 +93,24 @@ body {
 
   .side-panel {
     background-color: var(--background-dark);
+
+    .instance-list-element {
+      border-bottom: solid var(--contrast-light) 1px;
+      margin-bottom: .25rem;
+      margin: .25rem .125rem;
+      padding: .25rem;
+      summary {
+        margin-bottom: .25rem;
+        overflow-wrap: normal;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+    .instance-list-element.selected {
+      background-color: var(--contrast-light);
+      color: var(--text-light);
+    }
   }
   #preview-canvas {
     background-color: var(--background-light);

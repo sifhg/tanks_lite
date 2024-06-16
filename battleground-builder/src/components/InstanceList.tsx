@@ -2,6 +2,7 @@ import { AssetInstance } from "../App";
 
 interface Props {
   instances: Map<string, AssetInstance>;
+  selection: string[];
 }
 function InstanceList(props: Props) {
   return (
@@ -9,7 +10,9 @@ function InstanceList(props: Props) {
       {[...props.instances.entries()].map((entry) => {
         return (
           <details
-            className="instance-list-element"
+            className={`instance-list-element ${
+              props.selection.includes(entry[0]) ? "selected" : ""
+            }`}
             key={`instance-list-element${entry[0]}`}
           >
             <summary>{entry[0]}</summary>
