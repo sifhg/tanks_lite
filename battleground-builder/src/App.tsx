@@ -1,15 +1,20 @@
+// External libraries
 import { useEffect, useState } from "react";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
-import { TankConfig, BarrierConfig, AssetConfig } from "./assets/tank-assets";
-import InstanceManipulators, {
-  Tool,
-} from "./function_bundles/InstanceManipulators";
-import "./App.css";
+
+// Internal components and utilities
 import Titlebar from "./components/Titlebar";
 import AssetCards from "./components/AssetCards";
 import PreviewStage from "./components/PreviewStage";
 import InstanceList from "./components/InstanceList";
+import { TankConfig, BarrierConfig, AssetConfig } from "./assets/tank-assets";
+import InstanceManipulators, {
+  Tool,
+} from "./function_bundles/InstanceManipulators";
 import { useClearUnplacedInstance, useSelectAll } from "./eventHandlers";
+
+// Styling
+import "./App.css";
 
 interface TankInstance extends TankConfig {
   isTank: boolean;
@@ -24,27 +29,24 @@ interface BarrierInstance extends BarrierConfig {
 type AssetInstance = TankInstance | BarrierInstance;
 
 function App() {
+  // States
   const [assetInstances, setAssetInstances] = useState<
     Map<string, AssetInstance>
   >(new Map());
   const [unplacedInstance, setUnplacedInstance] = useState<AssetConfig | null>(
     null
   );
-  const [selection, setSelection] = useState<string[]>([]);
-  const [tool, setTool] = useState<Tool>("select");
+  const [selectedInstances, setSelectedInstances] = useState<string[]>([]);
+  const [activeTool, setActiveTool] = useState<Tool>("select");
+
+  // Hooks
   useClearUnplacedInstance(setUnplacedInstance);
   useSelectAll(
     [...assetInstances.keys()],
-    selection,
-    setSelection,
+    selectedInstances,
+    setSelectedInstances,
     assetInstances
   );
-  useEffect(() => {
-    console.log([...assetInstances.keys()]);
-    console.log(
-      InstanceManipulators.getEdges([...assetInstances.keys()], assetInstances)
-    );
-  }, [assetInstances]);
 
   return (
     <>
@@ -64,11 +66,11 @@ function App() {
             <Panel id="preview" className="panel" defaultSize={75} minSize={50}>
               <PreviewStage
                 instanceMap={assetInstances}
-                selection={[]}
+                selection={selectedInstances}
                 unplacedInstance={unplacedInstance}
                 setAssetInstance={setAssetInstances}
-                tool={tool}
-                setTool={setTool}
+                tool={activeTool}
+                setTool={setActiveTool}
               />
             </Panel>
             <PanelResizeHandle />
