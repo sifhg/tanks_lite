@@ -31,6 +31,10 @@ body {
   --text-dark: #040b16;
 }
 
+.bounding-box {
+  stroke: #D42646;
+}
+
 .titlebar {
   display: flex;
   width: 100%;

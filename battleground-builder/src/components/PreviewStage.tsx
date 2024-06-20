@@ -174,7 +174,7 @@ function PreviewStage(props: Props) {
             mouseInCanvas={mouseInCanvas}
           />
           <Gizmo
-            selection={[]}
+            selection={props.selection}
             instanceMap={props.instanceMap}
             modifier={"scale"}
           />

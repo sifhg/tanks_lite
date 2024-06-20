@@ -2,16 +2,10 @@ import { Group } from "react-konva";
 import BoundingBox from "./BoundingBox";
 import InstanceManipulators from "../../function_bundles/InstanceManipulators";
 import { AssetInstance } from "../../App";
+import { useEffect, useRef, useState } from "react";
+import style from "../../App.css";
 
 type Modifier = "select" | "move" | "rotate" | "scale";
-
-const COLOURS = {
-  info: "#000000",
-};
-document.addEventListener("DOMContentLoaded", () => {
-  const ROOT_STYLES = getComputedStyle(document.documentElement);
-  COLOURS.info = ROOT_STYLES.getPropertyValue("--info");
-});
 
 interface GizmoProps {
   selection: string[];
@@ -19,11 +13,17 @@ interface GizmoProps {
   modifier: Modifier;
 }
 function Gizmo(props: GizmoProps) {
+  const COLOURS = {
+    info: getComputedStyle(document.getElementById("root")!).getPropertyValue(
+      "--info"
+    ),
+  };
+
   const BOUNDARIES = InstanceManipulators.getEdges(
     props.selection,
     props.instanceMap
   );
-  //console.log(BOUNDARIES);
+  console.log(BOUNDARIES);
 
   return !BOUNDARIES ? (
     <></>
@@ -31,10 +31,11 @@ function Gizmo(props: GizmoProps) {
     <Group>
       <BoundingBox
         key="bounding-box"
-        x0={BOUNDARIES!.x0}
-        y0={BOUNDARIES!.y0}
-        x1={BOUNDARIES!.x1}
-        y1={BOUNDARIES!.y1}
+        x0={BOUNDARIES.x0}
+        y0={BOUNDARIES.y0}
+        x1={BOUNDARIES.x1}
+        y1={BOUNDARIES.y1}
+        strokeColour={COLOURS.info}
       />
     </Group>
   );
