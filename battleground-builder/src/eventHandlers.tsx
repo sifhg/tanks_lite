@@ -52,4 +52,36 @@ function useSelectAll(
   }, [keys, selection, setSelection, instanceMap, SelectionHandlers.select]);
 }
 
-export { useClearUnplacedInstance, useSelectAll };
+function useSelectionBox(
+  startDrag: () => void,
+  endDrag: () => void,
+  dragPos: { x: number; y: number } | null
+) {
+  let isMouseDown: boolean = false;
+  useEffect(() => {
+    const handleMouseDown = () => {
+      isMouseDown = true;
+    };
+    window.addEventListener("mousedown", handleMouseDown);
+    return () => window.removeEventListener("mousedown", handleMouseDown);
+  }, [isMouseDown]);
+  useEffect(() => {
+    const handleMouseUp = () => {
+      isMouseDown = false;
+      endDrag();
+    };
+    window.addEventListener("mouseup", handleMouseUp);
+    return () => window.removeEventListener("mouseup", handleMouseUp);
+  });
+  useEffect(() => {
+    const handleDragging = () => {
+      if (isMouseDown && !dragPos) {
+        startDrag();
+      }
+    };
+    window.addEventListener("mousemove", handleDragging);
+    return () => window.removeEventListener("dragstart", handleDragging);
+  }, [startDrag]);
+}
+
+export { useClearUnplacedInstance, useSelectAll, useSelectionBox };

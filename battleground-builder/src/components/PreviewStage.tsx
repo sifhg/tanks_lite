@@ -9,6 +9,8 @@ import InstanceManipulators, {
 } from "../function_bundles/InstanceManipulators";
 import Gizmo from "./Gizmo/Gizmo";
 import Toolbox from "./Toolbox/Toolbox";
+import SelectionBox from "./SelectionBox";
+import { useSelectionBox } from "../eventHandlers";
 
 interface Props {
   instanceMap: Map<string, AssetInstance>;
@@ -35,6 +37,10 @@ function PreviewStage(props: Props) {
     { x: 0, y: 0 },
     { x: 0, y: 0 },
   ]);
+  const [dragPosition, setDragPosition] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
   const [relativeMousePos, setRelativeMousePos] = useState<{
     x: number;
     y: number;
@@ -62,6 +68,15 @@ function PreviewStage(props: Props) {
       });
     }).observe(PREVIEW_WINDOW);
   }, []);
+
+  //Hooks
+  const onDragStart = () => {
+    setDragPosition(mouseHistory[0]);
+  };
+  const onDragEnd = () => {
+    setDragPosition(null);
+  };
+  useSelectionBox(onDragStart, onDragEnd, dragPosition);
 
   return (
     <>
@@ -178,6 +193,9 @@ function PreviewStage(props: Props) {
             instanceMap={props.instanceMap}
             modifier={"scale"}
           />
+          {dragPosition ? null : (
+            <SelectionBox x0={50} y0={50} x1={150} y1={150} />
+          )}
         </Layer>
       </Stage>
     </>
@@ -185,3 +203,14 @@ function PreviewStage(props: Props) {
 }
 
 export default PreviewStage;
+
+/**
+  Select tool:
+    - Dragging always makes a selection box.
+    - Just clicking selects only that item and deselcts everything else.
+    - Shift clicking an item adds that item to the selection.
+    - Ctrl clicking an item removes that item from the selection.
+    - Release from a drag selects everything that touches the selection box and deselcts everything else.
+    - Shift + release from a drag adds the items within the selection box to the selection.
+    - Ctrl + release from a drag deselects everything that touches the selection box.
+ */

@@ -2,8 +2,6 @@ import { Group } from "react-konva";
 import BoundingBox from "./BoundingBox";
 import InstanceManipulators from "../../function_bundles/InstanceManipulators";
 import { AssetInstance } from "../../App";
-import { useEffect, useRef, useState } from "react";
-import style from "../../App.css";
 
 type Modifier = "select" | "move" | "rotate" | "scale";
 
