@@ -10,7 +10,6 @@ import InstanceManipulators, {
 import Gizmo from "./Gizmo/Gizmo";
 import Toolbox from "./Toolbox/Toolbox";
 import SelectionBox from "./SelectionBox";
-import { useSelectionBox } from "../eventHandlers";
 
 interface PreviewStageProps {
   instanceMap: Map<string, AssetInstance>;
@@ -68,15 +67,6 @@ function PreviewStage(props: PreviewStageProps) {
       });
     }).observe(PREVIEW_WINDOW);
   }, []);
-
-  //Hooks
-  const onDragStart = () => {
-    setDragPosition(mouseHistory[0]);
-  };
-  const onDragEnd = () => {
-    setDragPosition(null);
-  };
-  useSelectionBox(onDragStart, onDragEnd, dragPosition);
 
   return (
     <>
@@ -153,6 +143,14 @@ function PreviewStage(props: PreviewStageProps) {
               setStageOffset
             );
           }
+          if (
+            event.evt.buttons === 1 &&
+            !dragPosition &&
+            !props.unplacedInstance
+          ) {
+            setDragPosition(relativeMousePos);
+            console.log("Creating selection box.");
+          }
         }}
         onMouseUp={(event) => {
           if (props.unplacedInstance) {
@@ -172,7 +170,7 @@ function PreviewStage(props: PreviewStageProps) {
               props.setAssetInstance
             );
           }
-          console.log("Add instance");
+          setDragPosition(null);
         }}
         onMouseEnter={() => {
           setMouseInCanvas(true);
@@ -193,9 +191,14 @@ function PreviewStage(props: PreviewStageProps) {
             instanceMap={props.instanceMap}
             modifier={"scale"}
           />
-          {dragPosition ? null : (
-            <SelectionBox x0={50} y0={50} x1={150} y1={150} />
-          )}
+          {dragPosition ? (
+            <SelectionBox
+              x0={dragPosition.x}
+              y0={dragPosition.y}
+              x1={relativeMousePos.x}
+              y1={relativeMousePos.y}
+            />
+          ) : null}
         </Layer>
       </Stage>
     </>

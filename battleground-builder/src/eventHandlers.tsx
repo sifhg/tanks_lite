@@ -52,36 +52,4 @@ function useSelectAll(
   }, [keys, selection, setSelection, instanceMap, SelectionHandlers.select]);
 }
 
-function useSelectionBox(
-  startDrag: () => void,
-  endDrag: () => void,
-  dragPos: { x: number; y: number } | null
-) {
-  let isMouseDown: boolean = false;
-  useEffect(() => {
-    const handleMouseDown = () => {
-      isMouseDown = true;
-    };
-    window.addEventListener("mousedown", handleMouseDown);
-    return () => window.removeEventListener("mousedown", handleMouseDown);
-  }, [isMouseDown]);
-  useEffect(() => {
-    const handleMouseUp = () => {
-      isMouseDown = false;
-      endDrag();
-    };
-    window.addEventListener("mouseup", handleMouseUp);
-    return () => window.removeEventListener("mouseup", handleMouseUp);
-  }, [isMouseDown, endDrag]);
-  useEffect(() => {
-    const handleDragging = () => {
-      if (isMouseDown && !dragPos) {
-        startDrag();
-      }
-    };
-    window.addEventListener("mousemove", handleDragging);
-    return () => window.removeEventListener("dragstart", handleDragging);
-  }, [isMouseDown, dragPos, startDrag]);
-}
-
-export { useClearUnplacedInstance, useSelectAll, useSelectionBox };
+export { useClearUnplacedInstance, useSelectAll };
