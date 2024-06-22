@@ -36,7 +36,9 @@ function App() {
   const [unplacedInstance, setUnplacedInstance] = useState<AssetConfig | null>(
     null
   );
-  const [selectedInstances, setSelectedInstances] = useState<string[]>([]);
+  const [selectedInstances, setSelectedInstances] = useState<Set<string>>(
+    new Set<string>()
+  );
   const [activeTool, setActiveTool] = useState<Tool>("select");
 
   // Hooks

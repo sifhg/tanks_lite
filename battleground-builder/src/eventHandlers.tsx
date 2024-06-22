@@ -37,8 +37,8 @@ function useClearUnplacedInstance(
 
 function useSelectAll(
   keys: string[],
-  selection: string[],
-  setSelection: (keys: string[]) => void,
+  selection: Set<string>,
+  setSelection: (keys: Set<string>) => void,
   instanceMap: Map<string, AssetInstance>
 ) {
   useEffect(() => {
@@ -72,7 +72,7 @@ function useSelectionBox(
     };
     window.addEventListener("mouseup", handleMouseUp);
     return () => window.removeEventListener("mouseup", handleMouseUp);
-  });
+  }, [isMouseDown, endDrag]);
   useEffect(() => {
     const handleDragging = () => {
       if (isMouseDown && !dragPos) {
@@ -81,7 +81,7 @@ function useSelectionBox(
     };
     window.addEventListener("mousemove", handleDragging);
     return () => window.removeEventListener("dragstart", handleDragging);
-  }, [startDrag]);
+  }, [isMouseDown, dragPos, startDrag]);
 }
 
 export { useClearUnplacedInstance, useSelectAll, useSelectionBox };

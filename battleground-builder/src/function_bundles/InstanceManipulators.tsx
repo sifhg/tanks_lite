@@ -74,7 +74,7 @@ const InstanceManipulators = {
    * @returns { x0: number; y0: number; x1: number; y1: number }
    */
   getEdges: (
-    keys: string[],
+    keys: Set<string>,
     instanceMap: Map<string, AssetInstance>
   ):
     | {
@@ -84,25 +84,24 @@ const InstanceManipulators = {
         y1: number;
       }
     | undefined => {
-    if (!keys || keys.length === 0) {
+    const KEY_ARRAY = [...keys];
+    if (!KEY_ARRAY || KEY_ARRAY.length === 0) {
       return undefined;
     }
-    const ALL_POSITIONS = keys
-      .map((key) => {
-        const CENTER = instanceMap.get(key)?.pos!;
-        const RELATIVE_POINTS = instanceMap.get(key)?.relativePath.flat()!;
-        const ABSOLUTE_POINTS: { x: number; y: number }[] = [];
-        RELATIVE_POINTS.forEach((point) => {
-          if (isFinite(point.x) && isFinite(point.y)) {
-            ABSOLUTE_POINTS.push({
-              x: point.x + CENTER.x,
-              y: point.y + CENTER.y,
-            });
-          }
-        });
-        return ABSOLUTE_POINTS;
-      })
-      .flat();
+    const ALL_POSITIONS = KEY_ARRAY.map((key) => {
+      const CENTER = instanceMap.get(key)?.pos!;
+      const RELATIVE_POINTS = instanceMap.get(key)?.relativePath.flat()!;
+      const ABSOLUTE_POINTS: { x: number; y: number }[] = [];
+      RELATIVE_POINTS.forEach((point) => {
+        if (isFinite(point.x) && isFinite(point.y)) {
+          ABSOLUTE_POINTS.push({
+            x: point.x + CENTER.x,
+            y: point.y + CENTER.y,
+          });
+        }
+      });
+      return ABSOLUTE_POINTS;
+    }).flat();
     const Xs: number[] = [];
     const Ys: number[] = [];
     ALL_POSITIONS.forEach((pointPos) => {

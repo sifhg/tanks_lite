@@ -6,7 +6,7 @@ import { AssetInstance } from "../../App";
 type Modifier = "select" | "move" | "rotate" | "scale";
 
 interface GizmoProps {
-  selection: string[];
+  selection: Set<string>;
   instanceMap: Map<string, AssetInstance>;
   modifier: Modifier;
 }

@@ -12,16 +12,16 @@ import Toolbox from "./Toolbox/Toolbox";
 import SelectionBox from "./SelectionBox";
 import { useSelectionBox } from "../eventHandlers";
 
-interface Props {
+interface PreviewStageProps {
   instanceMap: Map<string, AssetInstance>;
-  selection: string[];
+  selection: Set<string>;
   unplacedInstance: AssetConfig | null;
   setAssetInstance: (assetEntries: Map<string, AssetInstance>) => void;
   tool: Tool;
   setTool: (tool: Tool) => void;
 }
 
-function PreviewStage(props: Props) {
+function PreviewStage(props: PreviewStageProps) {
   const [windowSize, setWindowSize] = useState<{ w: number; h: number }>({
     w: 50,
     h: 50,

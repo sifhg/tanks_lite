@@ -1,16 +1,16 @@
 import { AssetInstance } from "../App";
 
 const SelectionHandlers = {
-  isSelected: (key: string, selection: string[]): boolean => {
-    return selection.includes(key);
+  isSelected: (key: string, selection: Set<string>): boolean => {
+    return selection.has(key);
   },
   select: (
     keys: string[],
-    selection: string[],
-    setSelection: (selection: string[]) => void,
+    selection: Set<string>,
+    setSelection: (selection: Set<string>) => void,
     instanceMap?: Map<string, AssetInstance>
   ) => {
-    const NEW_SELECTION = [...selection];
+    const NEW_SELECTION = new Set([...selection]);
     for (const KEY of keys) {
       //Checks if an instance corresponding to the key exists
       if (instanceMap) {
@@ -26,7 +26,7 @@ const SelectionHandlers = {
           `Key "${KEY}" is already selected and cannot be selected again.`
         );
       } else {
-        NEW_SELECTION.push(KEY);
+        NEW_SELECTION.add(KEY);
       }
     }
     setSelection(NEW_SELECTION);
