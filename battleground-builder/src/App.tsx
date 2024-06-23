@@ -75,6 +75,7 @@ function App() {
               <PreviewStage
                 instanceMap={assetInstances}
                 selection={selectedInstances}
+                setSelection={setSelectedInstances}
                 unplacedInstance={unplacedInstance}
                 setAssetInstance={setAssetInstances}
                 tool={activeTool}

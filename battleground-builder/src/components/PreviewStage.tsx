@@ -14,6 +14,7 @@ import SelectionBox from "./SelectionBox";
 interface PreviewStageProps {
   instanceMap: Map<string, AssetInstance>;
   selection: Set<string>;
+  setSelection: (selection: Set<string>) => void;
   unplacedInstance: AssetConfig | null;
   setAssetInstance: (assetEntries: Map<string, AssetInstance>) => void;
   tool: Tool;
@@ -177,6 +178,13 @@ function PreviewStage(props: PreviewStageProps) {
         }}
         onMouseLeave={() => {
           setMouseInCanvas(false);
+        }}
+        onClick={(event) => {
+          if (props.tool === "select") {
+            if (!event.target.className) {
+              props.setSelection(new Set<string>());
+            }
+          }
         }}
       >
         <Layer>

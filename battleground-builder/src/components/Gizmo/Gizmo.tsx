@@ -21,7 +21,6 @@ function Gizmo(props: GizmoProps) {
     props.selection,
     props.instanceMap
   );
-  console.log(BOUNDARIES);
 
   return !BOUNDARIES ? (
     <></>
