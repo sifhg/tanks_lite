@@ -75,7 +75,7 @@ body {
     display: inline-block;
     position: absolute;
     z-index: 1;
-    right: 4rem;
+    right: 2.75rem;
     opacity: 50%;
   }
   #zoom-select:hover {
@@ -86,13 +86,18 @@ body {
     position: absolute;
     z-index: 1;
     right: 0px;
-    opacity: 50%;
     button {
       display: block;
+    }
+    button:not(.selected) {
+      opacity: 50%;
     }
   }
   #manipulation-tools:hover {
     opacity: 100%;
+    button {
+      opacity: 100%;
+    }
   }
 
   .side-panel {

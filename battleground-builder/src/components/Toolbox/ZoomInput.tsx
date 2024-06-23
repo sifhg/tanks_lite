@@ -1,5 +1,6 @@
 import React from "react";
 import StageNavigators from "../../function_bundles/StageNavigator";
+import { Reset } from "../../assets/icons";
 
 interface ZoomInputProps {
   zoomFactor: number;
@@ -103,7 +104,7 @@ function ZoomInput(props: ZoomInputProps) {
           );
         }}
       >
-        Reset
+        <Reset />
       </button>
     </>
   );

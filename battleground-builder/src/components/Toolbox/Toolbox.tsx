@@ -1,3 +1,4 @@
+import { Select, Move, Rotate, Scale } from "../../assets/icons";
 import { Tool } from "../../function_bundles/InstanceManipulators";
 import ZoomInput from "./ZoomInput";
 
@@ -12,11 +13,16 @@ interface ToolboxProps {
 }
 
 function Toolbox(props: ToolboxProps) {
+  const COLOURS = {
+    constrastDark: getComputedStyle(
+      document.getElementById("root")!
+    ).getPropertyValue("--contrast-dark"),
+  };
   return (
     <>
       <div
         id="zoom-select"
-        onMouseLeave={(event) => {
+        onMouseLeave={() => {
           document.getElementById("zoom-input")?.blur();
         }}
       >
@@ -33,25 +39,41 @@ function Toolbox(props: ToolboxProps) {
           className={props.selectedTool === "select" ? "selected tool" : "tool"}
           onClick={() => props.setTool("select")}
         >
-          Select
+          <Select
+            className="tool-icon"
+            fill={
+              props.selectedTool === "select" ? COLOURS.constrastDark : null
+            }
+          />
         </button>
         <button
           className={props.selectedTool === "move" ? "selected tool" : "tool"}
           onClick={() => props.setTool("move")}
         >
-          Move
+          <Move
+            className="tool-icon"
+            fill={props.selectedTool === "move" ? COLOURS.constrastDark : null}
+          />
         </button>
         <button
           className={props.selectedTool === "rotate" ? "selected tool" : "tool"}
           onClick={() => props.setTool("rotate")}
         >
-          Rotate
+          <Rotate
+            className="tool-icon"
+            fill={
+              props.selectedTool === "rotate" ? COLOURS.constrastDark : null
+            }
+          />
         </button>
         <button
           className={props.selectedTool === "scale" ? "selected tool" : "tool"}
           onClick={() => props.setTool("scale")}
         >
-          Scale
+          <Scale
+            className="tool-icon"
+            fill={props.selectedTool === "scale" ? COLOURS.constrastDark : null}
+          />
         </button>
       </div>
     </>
