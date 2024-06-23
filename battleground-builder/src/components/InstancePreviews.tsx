@@ -42,6 +42,8 @@ function InstancePreviews(props: Props) {
                         ]);
                         NEW_SELECTION.add(instance.name);
                         props.setSelection(NEW_SELECTION);
+                      } else {
+                        props.setSelection(new Set<string>([instance.name]));
                       }
                     }
                   }}
