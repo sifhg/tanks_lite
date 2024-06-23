@@ -8,10 +8,12 @@ import AssetCards from "./components/AssetCards";
 import PreviewStage from "./components/PreviewStage";
 import InstanceList from "./components/InstanceList";
 import { TankConfig, BarrierConfig, AssetConfig } from "./assets/tank-assets";
-import InstanceManipulators, {
-  Tool,
-} from "./function_bundles/InstanceManipulators";
-import { useClearUnplacedInstance, useSelectAll } from "./eventHandlers";
+import { Tool } from "./function_bundles/InstanceManipulators";
+import {
+  useClearUnplacedInstance,
+  useSelectAll,
+  useSelectTool,
+} from "./eventHandlers";
 
 // Styling
 import "./App.css";
@@ -49,6 +51,7 @@ function App() {
     setSelectedInstances,
     assetInstances
   );
+  useSelectTool(setActiveTool);
 
   return (
     <>

@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { AssetConfig } from "./assets/tank-assets";
 import SelectionHandlers from "./function_bundles/SelectionHandlers";
 import { AssetInstance } from "./App";
+import { Tool } from "./function_bundles/InstanceManipulators";
 
 function useClearUnplacedInstance(
   setUnplacedInstance: (unplacedInstance: AssetConfig | null) => void
@@ -52,4 +53,27 @@ function useSelectAll(
   }, [keys, selection, setSelection, instanceMap, SelectionHandlers.select]);
 }
 
-export { useClearUnplacedInstance, useSelectAll };
+function useSelectTool(setActiveTool: (tool: Tool) => void) {
+  useEffect(() => {
+    const handleToolSelection = (event: KeyboardEvent) => {
+      switch (event.key.toLowerCase()) {
+        case "q":
+          setActiveTool("select");
+          break;
+        case "w":
+          setActiveTool("move");
+          break;
+        case "e":
+          setActiveTool("rotate");
+          break;
+        case "r":
+          setActiveTool("scale");
+          break;
+      }
+    };
+    window.addEventListener("keypress", handleToolSelection);
+    return () => window.removeEventListener("keypress", handleToolSelection);
+  }, [setActiveTool]);
+}
+
+export { useClearUnplacedInstance, useSelectAll, useSelectTool };
