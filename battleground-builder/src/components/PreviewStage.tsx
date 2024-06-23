@@ -183,6 +183,8 @@ function PreviewStage(props: PreviewStageProps) {
           if (props.tool === "select") {
             if (!event.target.className) {
               props.setSelection(new Set<string>());
+            } else {
+              console.log(event.target);
             }
           }
         }}
@@ -193,6 +195,9 @@ function PreviewStage(props: PreviewStageProps) {
             unplacedInstance={props.unplacedInstance}
             mousePos={relativeMousePos}
             mouseInCanvas={mouseInCanvas}
+            selection={props.selection}
+            setSelection={props.setSelection}
+            tool={props.tool}
           />
           <Gizmo
             selection={props.selection}

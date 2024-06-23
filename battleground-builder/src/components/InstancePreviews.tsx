@@ -1,6 +1,8 @@
 import { AssetInstance } from "../App";
 import { AssetConfig, getPath } from "../assets/tank-assets";
-import InstanceManipulators from "../function_bundles/InstanceManipulators";
+import InstanceManipulators, {
+  Tool,
+} from "../function_bundles/InstanceManipulators";
 import { Path } from "react-konva";
 
 interface Props {
@@ -8,6 +10,9 @@ interface Props {
   unplacedInstance: AssetConfig | null;
   mousePos: { x: number; y: number };
   mouseInCanvas: boolean;
+  selection: Set<string>;
+  setSelection: (selection: Set<string>) => void;
+  tool: Tool;
 }
 
 function InstancePreviews(props: Props) {
@@ -29,6 +34,17 @@ function InstancePreviews(props: Props) {
                   fill={isTank ? "green" : "black"}
                   opacity={0.75}
                   stroke={"black"}
+                  onClick={(event) => {
+                    if (props.tool === "select") {
+                      if (event.evt.shiftKey) {
+                        const NEW_SELECTION = new Set([
+                          ...props.selection.values(),
+                        ]);
+                        NEW_SELECTION.add(instance.name);
+                        props.setSelection(NEW_SELECTION);
+                      }
+                    }
+                  }}
                 />
               );
             })}
