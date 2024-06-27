@@ -222,11 +222,11 @@ export default PreviewStage;
 
 /**
   Select tool:
-    - Dragging always makes a selection box.
-    - Just clicking selects only that item and deselcts everything else.
-    - Shift clicking an item adds that item to the selection.
-    - Ctrl clicking an item removes that item from the selection.
-    - Release from a drag selects everything that touches the selection box and deselcts everything else.
-    - Shift + release from a drag adds the items within the selection box to the selection.
-    - Ctrl + release from a drag deselects everything that touches the selection box.
+    -[x] Dragging always makes a selection box.
+    -[x] Just clicking selects only that item and deselcts everything else.
+    -[x] Shift clicking an item adds that item to the selection.
+    -[x] Ctrl clicking an item removes that item from the selection.
+    -[ ] Release from a drag selects everything that touches the selection box and deselcts everything else.
+    -[ ] Shift + release from a drag adds the items within the selection box to the selection.
+    -[ ] Ctrl + release from a drag deselects everything that touches the selection box.
  */

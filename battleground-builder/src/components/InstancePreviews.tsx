@@ -4,6 +4,7 @@ import InstanceManipulators, {
   Tool,
 } from "../function_bundles/InstanceManipulators";
 import { Path } from "react-konva";
+import SelectionHandlers from "../function_bundles/SelectionHandlers";
 
 interface Props {
   instances: AssetInstance[];
@@ -37,11 +38,17 @@ function InstancePreviews(props: Props) {
                   onClick={(event) => {
                     if (props.tool === "select") {
                       if (event.evt.shiftKey) {
-                        const NEW_SELECTION = new Set([
-                          ...props.selection.values(),
-                        ]);
-                        NEW_SELECTION.add(instance.name);
-                        props.setSelection(NEW_SELECTION);
+                        SelectionHandlers.select(
+                          [instance.name],
+                          props.selection,
+                          props.setSelection
+                        );
+                      } else if (event.evt.ctrlKey) {
+                        SelectionHandlers.deselect(
+                          [instance.name],
+                          props.selection,
+                          props.setSelection
+                        );
                       } else {
                         props.setSelection(new Set<string>([instance.name]));
                       }
