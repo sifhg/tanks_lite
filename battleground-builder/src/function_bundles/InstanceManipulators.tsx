@@ -19,6 +19,12 @@ const InstanceManipulators = {
     }
     setInstances(NEW_INSTANCE_MAP);
   },
+  /**
+   * This function removes an array of asset instance from the instance map.
+   * @param keys An array of keys representing the instances to remove
+   * @param instanceMap The current instance map state
+   * @param setInstances A function to modify the map state
+   */
   removeInstances: (
     keys: string[],
     instanceMap: Map<string, AssetInstance>,

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AssetInstance } from "../App";
 import { Stage, Layer } from "react-konva";
 import StageNavigators from "../function_bundles/StageNavigator";
@@ -46,6 +46,8 @@ function PreviewStage(props: PreviewStageProps) {
     y: number;
   }>({ x: 0, y: 0 });
   const [mouseInCanvas, setMouseInCanvas] = useState<boolean>(false);
+
+  const stageRef = useRef<HTMLDivElement>(null); // Create a ref for the stage element
 
   //Update stage size on first rendering
   useEffect(() => {
