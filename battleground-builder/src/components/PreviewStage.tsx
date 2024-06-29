@@ -239,6 +239,7 @@ function PreviewStage(props: PreviewStageProps) {
             selection={props.selection}
             instanceMap={props.instanceMap}
             modifier={"scale"}
+            tool={props.tool}
           />
           {dragPosition ? (
             <SelectionBox

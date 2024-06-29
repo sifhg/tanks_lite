@@ -62,6 +62,7 @@ function InstancePreviews(props: Props) {
       })}
       {props.unplacedInstance && props.mouseInCanvas ? (
         <Path
+          key={"unplaced-instance"}
           x={props.mousePos.x}
           y={props.mousePos.y}
           fillEnabled={false}
