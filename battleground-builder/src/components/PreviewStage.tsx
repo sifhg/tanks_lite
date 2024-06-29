@@ -10,6 +10,7 @@ import InstanceManipulators, {
 import Gizmo from "./Gizmo/Gizmo";
 import Toolbox from "./Toolbox/Toolbox";
 import SelectionBox from "./SelectionBox";
+import SelectionHandlers from "../function_bundles/SelectionHandlers";
 
 interface PreviewStageProps {
   instanceMap: Map<string, AssetInstance>;
@@ -173,6 +174,38 @@ function PreviewStage(props: PreviewStageProps) {
               props.setAssetInstance
             );
           }
+          if (dragPosition) {
+            const SELECTION_BOX_SCOPE = SelectionHandlers.isInSelectionBox(
+              {
+                x0: dragPosition.x,
+                y0: dragPosition.y,
+                x1: relativeMousePos.x,
+                y1: relativeMousePos.y,
+              },
+              props.instanceMap
+            );
+            if (event.evt.shiftKey) {
+              SelectionHandlers.select(
+                SELECTION_BOX_SCOPE,
+                props.selection,
+                props.setSelection,
+                props.instanceMap
+              );
+            } else if (event.evt.ctrlKey) {
+              SelectionHandlers.deselect(
+                SELECTION_BOX_SCOPE,
+                props.selection,
+                props.setSelection,
+                props.instanceMap
+              );
+            } else {
+              SelectionHandlers.selectOnly(
+                SELECTION_BOX_SCOPE,
+                props.setSelection,
+                props.instanceMap
+              );
+            }
+          }
           setDragPosition(null);
         }}
         onMouseEnter={() => {
@@ -221,14 +254,3 @@ function PreviewStage(props: PreviewStageProps) {
 }
 
 export default PreviewStage;
-
-/**
-  Select tool:
-    -[x] Dragging always makes a selection box.
-    -[x] Just clicking selects only that item and deselcts everything else.
-    -[x] Shift clicking an item adds that item to the selection.
-    -[x] Ctrl clicking an item removes that item from the selection.
-    -[ ] Release from a drag selects everything that touches the selection box and deselcts everything else.
-    -[ ] Shift + release from a drag adds the items within the selection box to the selection.
-    -[ ] Ctrl + release from a drag deselects everything that touches the selection box.
- */

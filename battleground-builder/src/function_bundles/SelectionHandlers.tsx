@@ -1,5 +1,5 @@
 import { AssetInstance } from "../App";
-import { boxBox, boxPolygon } from "intersects";
+import { boxPolygon } from "intersects";
 
 const SelectionHandlers = {
   /**
@@ -11,7 +11,13 @@ const SelectionHandlers = {
   isSelected: (key: string, selection: Set<string>): boolean => {
     return selection.has(key);
   },
-
+  /**
+   * Adds instance keys to the list of selected instances.
+   * @param keys An array of keys of the instances to select
+   * @param selection A set of the currently selected instances' keys
+   * @param setSelection A function for changing the selection state
+   * @param instanceMap A Map of the current asset instances
+   */
   select: (
     keys: string[],
     selection: Set<string>,
@@ -38,6 +44,22 @@ const SelectionHandlers = {
       }
     }
     setSelection(NEW_SELECTION);
+  },
+  selectOnly: (
+    keys: string[],
+    setSelection: (selection: Set<string>) => void,
+    instanceMap?: Map<string, AssetInstance>
+  ) => {
+    if (instanceMap) {
+      for (const KEY of keys) {
+        if (!instanceMap.has(KEY)) {
+          throw new Error(
+            `Key "${KEY}" does not exist and cannot be selected.`
+          );
+        }
+      }
+    }
+    setSelection(new Set<string>(keys));
   },
   deselect: (
     keys: string[],
@@ -92,25 +114,25 @@ const SelectionHandlers = {
     for (const KEY of KEYS) {
       const POS = instanceMap.get(KEY)!.pos;
       const RELATIVE_PATHS = instanceMap.get(KEY)!.relativePath;
-      let intersection = false;
       for (const PATH of RELATIVE_PATHS) {
         const ABSOLUTE_PATH = PATH.map((point) => {
           return [point.x + POS.x, point.y + POS.y];
         }).flat();
-        intersection = boxPolygon(
-          SELECTION_BOX[0],
-          SELECTION_BOX[1],
-          SELECTION_BOX[2],
-          SELECTION_BOX[3],
-          ABSOLUTE_PATH
-        );
-        if (intersection) {
+        if (
+          boxPolygon(
+            SELECTION_BOX[0],
+            SELECTION_BOX[1],
+            SELECTION_BOX[2],
+            SELECTION_BOX[3],
+            ABSOLUTE_PATH
+          )
+        ) {
           INTERSECTIONS.push(KEY);
           break;
         }
       }
     }
-    return ["Hej"];
+    return INTERSECTIONS;
   },
 };
 
