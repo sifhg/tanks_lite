@@ -42,6 +42,9 @@ function ZoomInput(props: ZoomInputProps) {
           event.currentTarget.value = event.currentTarget.value.split("%")[0];
           event.currentTarget.select();
         }}
+        onChange={(event) => {
+          event.target.value = event.target.value;
+        }}
         onInputCapture={(event) => {
           event.currentTarget.value = event.currentTarget.value;
           if (!validInput(event)) {

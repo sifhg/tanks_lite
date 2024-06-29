@@ -150,7 +150,8 @@ function PreviewStage(props: PreviewStageProps) {
           if (
             event.evt.buttons === 1 &&
             !dragPosition &&
-            !props.unplacedInstance
+            !props.unplacedInstance &&
+            (!event.target.className || props.tool === "select")
           ) {
             setDragPosition(relativeMousePos);
             console.log("Creating selection box.");
