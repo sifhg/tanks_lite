@@ -157,6 +157,16 @@ function PreviewStage(props: PreviewStageProps) {
             console.log("Creating selection box.");
           }
         }}
+        onDragMove={(event) => {
+          const MOUSE_POS = event.target.getStage()?.getPointerPosition()!;
+          setRelativeMousePos(
+            event.target.getStage()?.getRelativePointerPosition()!
+          );
+          setMouseHistory([
+            { x: MOUSE_POS.x, y: MOUSE_POS.y },
+            mouseHistory[0],
+          ]);
+        }}
         onMouseUp={(event) => {
           if (props.unplacedInstance) {
             const NEW_INSTANCE: AssetInstance = {
@@ -219,8 +229,6 @@ function PreviewStage(props: PreviewStageProps) {
           if (props.tool === "select") {
             if (!event.target.className) {
               props.setSelection(new Set<string>());
-            } else {
-              console.log(event.target);
             }
           }
         }}
@@ -241,6 +249,8 @@ function PreviewStage(props: PreviewStageProps) {
             modifier={"scale"}
             tool={props.tool}
             zoomFactor={zoomFactor}
+            setInstanceMap={props.setAssetInstance}
+            mouseHistory={mouseHistory}
           />
           {dragPosition ? (
             <SelectionBox

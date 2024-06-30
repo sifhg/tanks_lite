@@ -1,7 +1,10 @@
 import { Rect, Circle, Group, Path } from "react-konva";
-import { Tool } from "../../function_bundles/InstanceManipulators";
+import InstanceManipulators, {
+  Tool,
+} from "../../function_bundles/InstanceManipulators";
 import { MovePath } from "../../assets/icons";
 import { useState } from "react";
+import { AssetInstance } from "../../App";
 
 interface HandlesProps {
   x0: number;
@@ -10,6 +13,19 @@ interface HandlesProps {
   y1: number;
   tool: Tool;
   zoomFactor: number;
+  selection: Set<string>;
+  instanceMap: Map<string, AssetInstance>;
+  setInstanceMap: (instanceMap: Map<string, AssetInstance>) => void;
+  mouseHistory: [
+    {
+      x: number;
+      y: number;
+    },
+    {
+      x: number;
+      y: number;
+    }
+  ];
   fillColour?: string;
   strokeColour?: string;
 }
@@ -51,17 +67,52 @@ function Hanldes(props: HandlesProps) {
   ];
 
   return (
-    <Path
-      data={MovePath}
-      x={(props.x0 + props.x1) / 2}
-      y={(props.y0 + props.y1) / 2}
-      fill={COLOURS.fill}
-      opacity={0.75}
-      strokeWidth={0.5}
-      stroke={"black"}
-      scaleX={24 / (960 * props.zoomFactor)}
-      scaleY={24 / (960 * props.zoomFactor)}
-    />
+    <>
+      {props.tool === "select"
+        ? [null]
+        : props.tool === "move"
+        ? [
+            ...[...props.selection].map((key) => {
+              const POSITION = props.instanceMap.get(key)!.pos;
+              const PATHS = props.instanceMap.get(key)!.relativePath;
+              return PATHS.map((path, index) => {
+                return (
+                  <Path
+                    key={`move-shadow-${key}-${index}`}
+                    data={InstanceManipulators.vec2Data(path, POSITION)}
+                    fillEnabled
+                    fill="black"
+                    strokeEnabled={false}
+                    draggable
+                    onDragMove={() => {
+                      // InstanceManipulators.move(
+                      //   props.selection,
+                      //   (props.mouseHistory[0].x - props.mouseHistory[1].x) /
+                      //     props.zoomFactor,
+                      //   (props.mouseHistory[0].y - props.mouseHistory[1].y) /
+                      //     props.zoomFactor,
+                      //   props.instanceMap,
+                      //   props.setInstanceMap
+                      // );
+                    }}
+                  />
+                );
+              });
+            }),
+            <Path
+              data={MovePath}
+              x={(props.x0 + props.x1) / 2}
+              y={(props.y0 + props.y1) / 2}
+              fill={COLOURS.fill}
+              opacity={0.75}
+              strokeWidth={0.5}
+              stroke={"black"}
+              scaleX={24 / (960 * props.zoomFactor)}
+              scaleY={24 / (960 * props.zoomFactor)}
+            />,
+          ]
+        : null}
+    </>
   );
 }
 

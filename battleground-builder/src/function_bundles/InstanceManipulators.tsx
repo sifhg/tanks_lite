@@ -64,11 +64,17 @@ const InstanceManipulators = {
    * @param path Array of vector points.
    * @returns SVG path data string.
    */
-  vec2Data: (path: { x: number; y: number }[]): string => {
+  vec2Data: (
+    path: { x: number; y: number }[],
+    pos?: { x: number; y: number }
+  ): string => {
+    const POSITION = pos ? pos : { x: 0, y: 0 };
     const INPUT_PATH = [...path];
-    let data = `M ${INPUT_PATH[0].x} ${INPUT_PATH[0].y}`;
+    let data = `M ${INPUT_PATH[0].x + POSITION.x} ${
+      INPUT_PATH[0].y + POSITION.y
+    }`;
     for (const COORDINATE of INPUT_PATH.splice(1)) {
-      data += `L ${COORDINATE.x} ${COORDINATE.y}`;
+      data += `L ${COORDINATE.x + POSITION.x} ${COORDINATE.y + POSITION.y}`;
     }
     data += "Z";
     return data;
@@ -121,6 +127,39 @@ const InstanceManipulators = {
       x1: Math.max(...Xs),
       y1: Math.max(...Ys),
     };
+  },
+  /**
+   * Moves an instance with a specified displacement.
+   * @param keys Keys of the instances to move
+   * @param offsetX The distance to move the instance along the X-axis
+   * @param offsetY The distance to move the instance along the Y-axis
+   * @param instanceMap The current instance map state
+   * @param setInstances A function to modify the instance map state
+   */
+  move: (
+    keys: Set<string> | string[],
+    offsetX: number,
+    offsetY: number,
+    instanceMap: Map<string, AssetInstance>,
+    setInstances: (assetEntries: Map<string, AssetInstance>) => void
+  ) => {
+    const NEW_INSTANCE_MAP = new Map([...instanceMap.entries()]);
+    keys.forEach((key) => {
+      const NEW_INSTANCE = NEW_INSTANCE_MAP!.get(key);
+      const INITIAL_POSITION = NEW_INSTANCE!.pos;
+      NEW_INSTANCE!.pos = {
+        x: INITIAL_POSITION.x + offsetX,
+        y: INITIAL_POSITION.y + offsetY,
+      };
+      if (NEW_INSTANCE) {
+        NEW_INSTANCE_MAP.set(key, NEW_INSTANCE);
+      } else {
+        throw new Error(
+          `An instance of key "${key} does not exist and cannot be moved."`
+        );
+      }
+    });
+    setInstances(NEW_INSTANCE_MAP);
   },
 };
 

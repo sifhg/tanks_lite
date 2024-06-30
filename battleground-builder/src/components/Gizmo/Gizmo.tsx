@@ -11,9 +11,20 @@ type Modifier = "select" | "move" | "rotate" | "scale";
 interface GizmoProps {
   selection: Set<string>;
   instanceMap: Map<string, AssetInstance>;
+  setInstanceMap: (instanceMap: Map<string, AssetInstance>) => void;
   modifier: Modifier;
   tool: Tool;
   zoomFactor: number;
+  mouseHistory: [
+    {
+      x: number;
+      y: number;
+    },
+    {
+      x: number;
+      y: number;
+    }
+  ];
 }
 function Gizmo(props: GizmoProps) {
   const COLOURS = {
@@ -46,6 +57,10 @@ function Gizmo(props: GizmoProps) {
         y1={BOUNDARIES.y1}
         tool={props.tool}
         zoomFactor={props.zoomFactor}
+        selection={props.selection}
+        instanceMap={props.instanceMap}
+        setInstanceMap={props.setInstanceMap}
+        mouseHistory={props.mouseHistory}
       />
     </Group>
   );
