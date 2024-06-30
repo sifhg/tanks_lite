@@ -161,6 +161,23 @@ const InstanceManipulators = {
     });
     setInstances(NEW_INSTANCE_MAP);
   },
+  moveTo: (
+    keys: Set<string> | string[],
+    newPosX: number,
+    newPosY: number,
+    instanceMap: Map<string, AssetInstance>,
+    setInstances: (assetEntries: Map<string, AssetInstance>) => void
+  ) => {
+    const NEW_INSTANCE_MAP = new Map([...instanceMap.entries()]);
+    keys.forEach((key) => {
+      const NEW_INSTANCE = NEW_INSTANCE_MAP!.get(key);
+      NEW_INSTANCE!.pos = {
+        x: newPosX,
+        y: newPosY,
+      };
+    });
+    setInstances(NEW_INSTANCE_MAP);
+  },
 };
 
 export default InstanceManipulators;
