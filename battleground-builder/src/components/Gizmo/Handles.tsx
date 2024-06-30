@@ -9,11 +9,16 @@ interface HandlesProps {
   x1: number;
   y1: number;
   tool: Tool;
+  zoomFactor: number;
   fillColour?: string;
+  strokeColour?: string;
 }
 
 function Hanldes(props: HandlesProps) {
-  const FILL_COLOUR = props.fillColour ? props.fillColour : "#FFFFFF";
+  const COLOURS = {
+    fill: props.fillColour ? props.fillColour : "#FFFFFF",
+    stroke: props.strokeColour ? props.strokeColour : "#000000",
+  };
   const HANDLE_SIZE = 7;
 
   /**
@@ -50,8 +55,12 @@ function Hanldes(props: HandlesProps) {
       data={MovePath}
       x={(props.x0 + props.x1) / 2}
       y={(props.y0 + props.y1) / 2}
-      fill={FILL_COLOUR}
+      fill={COLOURS.fill}
+      opacity={0.75}
+      strokeWidth={0.5}
       stroke={"black"}
+      scaleX={24 / (960 * props.zoomFactor)}
+      scaleY={24 / (960 * props.zoomFactor)}
     />
   );
 }

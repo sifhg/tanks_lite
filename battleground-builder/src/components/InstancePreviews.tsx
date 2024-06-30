@@ -36,6 +36,7 @@ function InstancePreviews(props: Props) {
                   opacity={0.75}
                   stroke={"black"}
                   onClick={(event) => {
+                    console.log(event.evt.button === 0);
                     if (props.tool === "select") {
                       if (event.evt.shiftKey) {
                         SelectionHandlers.select(

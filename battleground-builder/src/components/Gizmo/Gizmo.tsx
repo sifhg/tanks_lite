@@ -13,6 +13,7 @@ interface GizmoProps {
   instanceMap: Map<string, AssetInstance>;
   modifier: Modifier;
   tool: Tool;
+  zoomFactor: number;
 }
 function Gizmo(props: GizmoProps) {
   const COLOURS = {
@@ -44,6 +45,7 @@ function Gizmo(props: GizmoProps) {
         x1={BOUNDARIES.x1}
         y1={BOUNDARIES.y1}
         tool={props.tool}
+        zoomFactor={props.zoomFactor}
       />
     </Group>
   );
