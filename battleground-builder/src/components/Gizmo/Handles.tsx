@@ -65,6 +65,8 @@ function Hanldes(props: HandlesProps) {
     HANDLE_POSITIONS[3],
     HANDLE_POSITIONS[4],
   ];
+  const [dragDifference, setDragDifference] =
+    useState<[{ x: number; y: number }, { x: number; y: number }]>();
 
   return (
     <>
@@ -74,22 +76,20 @@ function Hanldes(props: HandlesProps) {
         ? [
             <Path
               data={MovePath}
+              key={"move-icon"}
               x={(props.x0 + props.x1) / 2}
               y={(props.y0 + props.y1) / 2}
-              fill={COLOURS.fill}
-              opacity={0.75}
-              strokeWidth={0.5}
+              fill={`${COLOURS.fill}`}
+              opacity={1}
+              strokeEnabled
               stroke={"black"}
+              strokeWidth={1}
               scaleX={24 / (960 * props.zoomFactor)}
               scaleY={24 / (960 * props.zoomFactor)}
             />,
             ...[...props.selection].map((key) => {
               const POSITION = props.instanceMap.get(key)!.pos;
               const PATHS = props.instanceMap.get(key)!.relativePath;
-              const initialDragPos = useRef({
-                instancePos: { ...POSITION },
-                mouse: { ...props.mouseHistory[0] },
-              });
               return PATHS.map((path, index) => {
                 return (
                   <Path
@@ -100,23 +100,33 @@ function Hanldes(props: HandlesProps) {
                     draggable
                     x={POSITION.x}
                     y={POSITION.y}
-                    onDragStart={() => {
-                      initialDragPos.current = {
-                        instancePos: { ...POSITION },
-                        mouse: { ...props.mouseHistory[0] },
-                      };
+                    onDragStart={(event) => {
+                      setDragDifference([
+                        {
+                          x: event.target.x(),
+                          y: event.target.y(),
+                        },
+                        {
+                          x: event.target.x(),
+                          y: event.target.y(),
+                        },
+                      ]);
+                      console.log("dragDifference[0] is set");
                     }}
                     onDragMove={(event) => {
-                      InstanceManipulators.moveTo(
+                      setDragDifference([
+                        {
+                          x: event.target.x(),
+                          y: event.target.y(),
+                        },
+                        dragDifference![0],
+                      ]);
+
+                      console.log(dragDifference![0].x - dragDifference![1].x);
+                      InstanceManipulators.move(
                         props.selection,
-                        initialDragPos.current.instancePos.x -
-                          (initialDragPos.current.mouse.x -
-                            props.mouseHistory[0].x) /
-                            props.zoomFactor,
-                        initialDragPos.current.instancePos.y -
-                          (initialDragPos.current.mouse.y -
-                            props.mouseHistory[0].y) /
-                            props.zoomFactor,
+                        dragDifference![0].x - dragDifference![1].x,
+                        dragDifference![0].y - dragDifference![1].y,
                         props.instanceMap,
                         props.setInstanceMap
                       );
