@@ -65,6 +65,10 @@ function Hanldes(props: HandlesProps) {
     HANDLE_POSITIONS[3],
     HANDLE_POSITIONS[4],
   ];
+  const handleRefs = {
+    handles: HANDLE_POSITIONS.map(() => useRef(null)),
+    handleShadows: HANDLE_POSITIONS.map(() => useRef(null)),
+  };
   const [dragDifference, setDragDifference] =
     useState<[{ x: number; y: number }, { x: number; y: number }]>();
 
@@ -82,7 +86,7 @@ function Hanldes(props: HandlesProps) {
               fill={`${COLOURS.fill}`}
               opacity={1}
               strokeEnabled
-              stroke={"black"}
+              stroke={COLOURS.stroke}
               strokeWidth={1}
               scaleX={24 / (960 * props.zoomFactor)}
               scaleY={24 / (960 * props.zoomFactor)}
@@ -135,6 +139,29 @@ function Hanldes(props: HandlesProps) {
                 );
               });
             }),
+          ]
+        : props.tool === "rotate"
+        ? [
+            <Group key={"rotation-handles"}>
+              {CORNER_POSITIONS.map((pos, index) => {
+                return (
+                  <>
+                    <Circle
+                      key={"rotation-handle" + index}
+                      stroke={COLOURS.stroke}
+                      strokeWidth={1 / 2}
+                      fill={COLOURS.fill}
+                      radius={HANDLE_SIZE / 2}
+                      ref={handleRefs.handles[index]}
+                      x={pos.x}
+                      y={pos.y}
+                      scaleX={1 / props.zoomFactor}
+                      scaleY={1 / props.zoomFactor}
+                    />
+                  </>
+                );
+              })}
+            </Group>,
           ]
         : null}
     </>
