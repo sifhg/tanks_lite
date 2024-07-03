@@ -47,8 +47,7 @@ function PreviewStage(props: PreviewStageProps) {
     y: number;
   }>({ x: 0, y: 0 });
   const [mouseInCanvas, setMouseInCanvas] = useState<boolean>(false);
-
-  const stageRef = useRef<HTMLDivElement>(null); // Create a ref for the stage element
+  const [isGizmoActive, setIsGizmoActive] = useState<boolean>(false);
 
   //Update stage size on first rendering
   useEffect(() => {
@@ -151,7 +150,8 @@ function PreviewStage(props: PreviewStageProps) {
             event.evt.buttons === 1 &&
             !dragPosition &&
             !props.unplacedInstance &&
-            (!event.target.className || props.tool === "select")
+            (!event.target.className || props.tool === "select") &&
+            !isGizmoActive
           ) {
             setDragPosition(relativeMousePos);
             console.log("Creating selection box.");
@@ -251,6 +251,7 @@ function PreviewStage(props: PreviewStageProps) {
             zoomFactor={zoomFactor}
             setInstanceMap={props.setAssetInstance}
             mouseHistory={mouseHistory}
+            setActiveGizmo={setIsGizmoActive}
           />
           {dragPosition ? (
             <SelectionBox

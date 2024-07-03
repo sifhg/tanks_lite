@@ -25,6 +25,7 @@ interface GizmoProps {
       y: number;
     }
   ];
+  setActiveGizmo?: (isActive: boolean) => void;
 }
 function Gizmo(props: GizmoProps) {
   const COLOURS = {
@@ -65,6 +66,16 @@ function Gizmo(props: GizmoProps) {
         setInstanceMap={props.setInstanceMap}
         mouseHistory={props.mouseHistory}
         hoverColour={COLOURS.info}
+        onMouseDown={() => {
+          if (props.setActiveGizmo) {
+            props.setActiveGizmo(true);
+          }
+        }}
+        onMouseUp={() => {
+          if (props.setActiveGizmo) {
+            props.setActiveGizmo(false);
+          }
+        }}
       />
     </Group>
   );

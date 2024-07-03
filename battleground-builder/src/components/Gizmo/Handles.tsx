@@ -29,6 +29,8 @@ interface HandlesProps {
   fillColour?: string;
   strokeColour?: string;
   hoverColour?: string;
+  onMouseDown?: () => any;
+  onMouseUp?: () => any;
 }
 
 function Hanldes(props: HandlesProps) {
@@ -177,6 +179,8 @@ function Hanldes(props: HandlesProps) {
                       onMouseOut={() => {
                         handleRefs.handles[index].current.fill(COLOURS.fill);
                       }}
+                      onMouseDown={props.onMouseDown}
+                      onMouseUp={props.onMouseUp}
                     />
                   </>
                 );
