@@ -28,12 +28,14 @@ interface HandlesProps {
   ];
   fillColour?: string;
   strokeColour?: string;
+  hoverColour?: string;
 }
 
 function Hanldes(props: HandlesProps) {
   const COLOURS = {
     fill: props.fillColour ? props.fillColour : "#FFFFFF",
     stroke: props.strokeColour ? props.strokeColour : "#000000",
+    hover: props.hoverColour ? props.hoverColour : "#D42646",
   };
   const HANDLE_SIZE = 7;
 
@@ -66,8 +68,8 @@ function Hanldes(props: HandlesProps) {
     HANDLE_POSITIONS[4],
   ];
   const handleRefs = {
-    handles: HANDLE_POSITIONS.map(() => useRef(null)),
-    handleShadows: HANDLE_POSITIONS.map(() => useRef(null)),
+    handles: HANDLE_POSITIONS.map(() => useRef<any>(null)),
+    handleShadows: HANDLE_POSITIONS.map(() => useRef<any>(null)),
   };
   const [dragDifference, setDragDifference] =
     useState<[{ x: number; y: number }, { x: number; y: number }]>();
@@ -157,6 +159,24 @@ function Hanldes(props: HandlesProps) {
                       y={pos.y}
                       scaleX={1 / props.zoomFactor}
                       scaleY={1 / props.zoomFactor}
+                    />
+                    <Circle
+                      key={"rotation-handle-shadow" + index}
+                      strokeEnabled={false}
+                      fillEnabled
+                      radius={HANDLE_SIZE / 2}
+                      ref={handleRefs.handleShadows[index]}
+                      x={pos.x}
+                      y={pos.y}
+                      scaleX={1 / props.zoomFactor}
+                      scaleY={1 / props.zoomFactor}
+                      draggable
+                      onMouseOver={() => {
+                        handleRefs.handles[index].current.fill(COLOURS.hover);
+                      }}
+                      onMouseOut={() => {
+                        handleRefs.handles[index].current.fill(COLOURS.fill);
+                      }}
                     />
                   </>
                 );

@@ -31,6 +31,9 @@ function Gizmo(props: GizmoProps) {
     info: getComputedStyle(document.getElementById("root")!).getPropertyValue(
       "--info"
     ),
+    constrastLight: getComputedStyle(
+      document.getElementById("root")!
+    ).getPropertyValue("--contrast-light"),
   };
 
   const BOUNDARIES = InstanceManipulators.getEdges(
@@ -61,6 +64,7 @@ function Gizmo(props: GizmoProps) {
         instanceMap={props.instanceMap}
         setInstanceMap={props.setInstanceMap}
         mouseHistory={props.mouseHistory}
+        hoverColour={COLOURS.info}
       />
     </Group>
   );
