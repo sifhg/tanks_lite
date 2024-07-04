@@ -5,32 +5,22 @@ import InstanceManipulators, {
 import { MovePath } from "../../assets/icons";
 import { useRef, useState } from "react";
 import { AssetInstance } from "../../App";
+import { PathData } from "./Gizmo";
 
 interface HandlesProps {
   x0: number;
   y0: number;
   x1: number;
   y1: number;
-  tool: Tool;
-  zoomFactor: number;
-  selection: Set<string>;
-  instanceMap: Map<string, AssetInstance>;
-  setInstanceMap: (instanceMap: Map<string, AssetInstance>) => void;
-  mouseHistory: [
-    {
-      x: number;
-      y: number;
-    },
-    {
-      x: number;
-      y: number;
-    }
-  ];
+  selectedPaths: PathData;
+  tool?: Tool;
+  moveContent?: (x: number, y: number) => void;
+  zoomFactor?: number;
   fillColour?: string;
   strokeColour?: string;
   hoverColour?: string;
-  onMouseDown?: () => any;
-  onMouseUp?: () => any;
+  onGizmoActive?: () => any;
+  onGizmoPassive?: () => any;
 }
 
 function Hanldes(props: HandlesProps) {
@@ -83,8 +73,8 @@ function Hanldes(props: HandlesProps) {
         : props.tool === "move"
         ? [
             <Path
-              data={MovePath}
               key={"move-icon"}
+              data={MovePath}
               x={(props.x0 + props.x1) / 2}
               y={(props.y0 + props.y1) / 2}
               fill={`${COLOURS.fill}`}
@@ -92,100 +82,56 @@ function Hanldes(props: HandlesProps) {
               strokeEnabled
               stroke={COLOURS.stroke}
               strokeWidth={1}
-              scaleX={24 / (960 * props.zoomFactor)}
-              scaleY={24 / (960 * props.zoomFactor)}
+              scaleX={24 / (960 * (props.zoomFactor ? props.zoomFactor : 1))}
+              scaleY={24 / (960 * (props.zoomFactor ? props.zoomFactor : 1))}
             />,
-            ...[...props.selection].map((key) => {
-              const POSITION = props.instanceMap.get(key)!.pos;
-              const PATHS = props.instanceMap.get(key)!.relativePath;
-              return PATHS.map((path, index) => {
-                return (
-                  <Path
-                    key={`move-shadow-${key}-${index}`}
-                    data={InstanceManipulators.vec2Data(path)}
-                    fillEnabled
-                    strokeEnabled={false}
-                    draggable
-                    x={POSITION.x}
-                    y={POSITION.y}
-                    onDragStart={(event) => {
-                      setDragDifference([
-                        {
-                          x: event.target.x(),
-                          y: event.target.y(),
-                        },
-                        {
-                          x: event.target.x(),
-                          y: event.target.y(),
-                        },
-                      ]);
-                      console.log("dragDifference[0] is set");
-                    }}
-                    onDragMove={(event) => {
-                      setDragDifference([
-                        {
-                          x: event.target.x(),
-                          y: event.target.y(),
-                        },
-                        dragDifference![0],
-                      ]);
-
-                      console.log(dragDifference![0].x - dragDifference![1].x);
-                      InstanceManipulators.move(
-                        props.selection,
+            ...[...props.selectedPaths].map((path, index) => {
+              const PATH =
+                typeof path === "string"
+                  ? path
+                  : InstanceManipulators.vec2Data(
+                      path as { x: number; y: number }[]
+                    );
+              return (
+                <Path
+                  key={`move-shadow-${index}`}
+                  data={PATH}
+                  fillEnabled
+                  strokeEnabled={false}
+                  draggable
+                  fill="black"
+                  x={0}
+                  y={0}
+                  onDragStart={(event) => {
+                    setDragDifference([
+                      {
+                        x: event.target.x(),
+                        y: event.target.y(),
+                      },
+                      {
+                        x: event.target.x(),
+                        y: event.target.y(),
+                      },
+                    ]);
+                  }}
+                  onDragMove={(event) => {
+                    setDragDifference([
+                      {
+                        x: event.target.x(),
+                        y: event.target.y(),
+                      },
+                      dragDifference![0],
+                    ]);
+                    if (props.moveContent) {
+                      props.moveContent(
                         dragDifference![0].x - dragDifference![1].x,
-                        dragDifference![0].y - dragDifference![1].y,
-                        props.instanceMap,
-                        props.setInstanceMap
+                        dragDifference![0].y - dragDifference![1].y
                       );
-                    }}
-                  />
-                );
-              });
+                    }
+                  }}
+                />
+              );
             }),
-          ]
-        : props.tool === "rotate"
-        ? [
-            <Group key={"rotation-handles"}>
-              {CORNER_POSITIONS.map((pos, index) => {
-                return (
-                  <>
-                    <Circle
-                      key={"rotation-handle" + index}
-                      stroke={COLOURS.stroke}
-                      strokeWidth={1 / 2}
-                      fill={COLOURS.fill}
-                      radius={HANDLE_SIZE / 2}
-                      ref={handleRefs.handles[index]}
-                      x={pos.x}
-                      y={pos.y}
-                      scaleX={1 / props.zoomFactor}
-                      scaleY={1 / props.zoomFactor}
-                    />
-                    <Circle
-                      key={"rotation-handle-shadow" + index}
-                      strokeEnabled={false}
-                      fillEnabled
-                      radius={HANDLE_SIZE / 2}
-                      ref={handleRefs.handleShadows[index]}
-                      x={pos.x}
-                      y={pos.y}
-                      scaleX={1 / props.zoomFactor}
-                      scaleY={1 / props.zoomFactor}
-                      draggable
-                      onMouseOver={() => {
-                        handleRefs.handles[index].current.fill(COLOURS.hover);
-                      }}
-                      onMouseOut={() => {
-                        handleRefs.handles[index].current.fill(COLOURS.fill);
-                      }}
-                      onMouseDown={props.onMouseDown}
-                      onMouseUp={props.onMouseUp}
-                    />
-                  </>
-                );
-              })}
-            </Group>,
           ]
         : null}
     </>
