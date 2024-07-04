@@ -3,22 +3,20 @@ import BoundingBox from "./BoundingBox";
 import InstanceManipulators, {
   Tool,
 } from "../../function_bundles/InstanceManipulators";
-import { AssetInstance } from "../../App";
 import Hanldes from "./Handles";
 
-type Modifier = "select" | "move" | "rotate" | "scale";
 type PathData =
   | Array<String | { x: number; y: number }[]>
   | Set<String | { x: number; y: number }[]>;
 
 interface GizmoProps {
-  selection: Set<string>;
-  instanceMap: Map<string, AssetInstance>;
-  setInstanceMap: (instanceMap: Map<string, AssetInstance>) => void;
-  modifier: Modifier;
-  tool: Tool;
-  zoomFactor: number;
-  mouseHistory: [
+  selectedPaths: PathData;
+  tool?: Tool;
+  moveContent?: (x: number, y: number) => void;
+  rotateContent?: () => void;
+  scaleContent?: () => void;
+  zoomFactor?: number;
+  mouseHistory?: [
     {
       x: number;
       y: number;

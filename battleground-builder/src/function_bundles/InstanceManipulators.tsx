@@ -85,7 +85,7 @@ const InstanceManipulators = {
    * @param instanceMap The instance map containing the instances on stage.
    * @returns { x0: number; y0: number; x1: number; y1: number }
    */
-  getEdges: (
+  getEdgesFromKeys: (
     keys: Set<string>,
     instanceMap: Map<string, AssetInstance>
   ):
@@ -128,6 +128,27 @@ const InstanceManipulators = {
       y1: Math.max(...Ys),
     };
   },
+  getEdgesFromPath: (paths: Array<{x: number, y: number}[] | string>): {
+    x0: number;
+    y0: number;
+    x1: number;
+    y1: number;
+  } => {
+    const PATHS = paths.map((path) => {
+      if(typeof path === "string") {
+        return InstanceManipulators.data2Vec(path);
+      }else {
+        return path;
+      }
+    })
+    
+    return {
+      x0: 0;
+      y0: 0;
+      x1: 0;
+      y1: 0;
+    }
+  }
   /**
    * Moves an instance with a specified displacement.
    * @param keys Keys of the instances to move
