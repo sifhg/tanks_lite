@@ -1,56 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="./dist/tank-configs.js"></script>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script type="importmap">
+      {
+        "imports": {
+          "p5": "./node_modules/p5/lib/p5.js",
+          "p5play": "./node_modules/p5play/p5play.js",
+          "classes": "./dist/classes.js",
+          "tank-configs": "./dist/tank-configs.js"
+        }
+      }
+    </script>
+    <!-- <script type="module" src="./dist/tank-configs.js"></script> -->
     <script src="./node_modules/p5/lib/p5.js"></script>
     <script src="./node_modules/planck/dist/planck.min.js"></script>
     <script src="./node_modules/p5play/p5play.js"></script>
 
-    <link rel="stylesheet" href="style.css">
-    
-    <title>Tanks Lite</title>
-    <link rel="icon" type="image/x-icon" href="./favicon/favicon64.ico">
-    <meta name="author" content="Sif Høg">
-    <meta name="description" content="Tanks Lite is a 2D tank game developed using p5.js, created as a platform to experiment with artificial intelligence algorithms.">
-    <meta name="keywords" content="mini-game, AI, tanks, p5.js, TensorFlow">
-</head>
-<body>
-    <script type="importmap">
-        {
-            "imports":
-            {
-                "p5": "./node_modules/p5/lib/p5.js",
-                "p5play": "./node_modules/p5play/p5play.js",
-                "classes": "./dist/classes.js"
-            }
-        }
-    </script>
+    <link rel="stylesheet" href="style.css" />
 
-    <script src="dist/events.js" defer></script>
-    <!-- <script src="dist/classes.js" defer></script> -->
+    <title>Tanks Lite</title>
+    <link rel="icon" type="image/x-icon" href="./favicon/favicon64.ico" />
+    <meta name="author" content="Sif Høg" />
+    <meta
+      name="description"
+      content="Tanks Lite is a 2D tank game developed using p5.js, created as a platform to experiment with artificial intelligence algorithms."
+    />
+    <meta name="keywords" content="mini-game, AI, tanks, p5.js, TensorFlow" />
+  </head>
+  <body>
+    <script src="./dist/events.js" defer></script>
 
     <script type="module" src="./dist/sketch-control-test.js"></script>
     <main>
-        <h1>Tanks Lite</h1>
-        <nav>
-            <div>
-                <input type="radio" name="window-select" id="select-control-test" value="select-control-test" checked>
-                <label for="select-control-test">Control test</label>
-            </div>
-            <div>
-                <input type="radio" name="window-select" id="select-display-1" value="select-display-1">
-                <label for="select-display-1">Display 1</label>
-            </div>
-            <div>
-                <input type="radio" name="window-select" id="select-display-2" value="select-display-2">
-                <label for="select-display-2">Display 2</label>
-            </div>
-        </nav>
-        <div class="display" id="display-control-test"></div>
-        <div class="display" id="display-1"></div>
-        <div class="display" id="display-2"></div>
+      <h1>Tanks Lite</h1>
+      <nav>
+        <div>
+          <input
+            type="radio"
+            name="window-select"
+            id="select-control-test"
+            value="select-control-test"
+            checked
+          />
+          <label for="select-control-test">Control test</label>
+        </div>
+        <div>
+          <input
+            type="radio"
+            name="window-select"
+            id="select-display-1"
+            value="select-display-1"
+          />
+          <label for="select-display-1">Display 1</label>
+        </div>
+        <div>
+          <input
+            type="radio"
+            name="window-select"
+            id="select-display-2"
+            value="select-display-2"
+          />
+          <label for="select-display-2">Display 2</label>
+        </div>
+      </nav>
+      <div class="display" id="display-control-test"></div>
+      <div class="display" id="display-1"></div>
+      <div class="display" id="display-2"></div>
     </main>
-</body>
+  </body>
 </html>

@@ -2,7 +2,7 @@
   "dependencies": {
     "@types/p5": "^1.7.6",
     "p5": "^1.9.0",
-    "p5play": "^3.19.6",
+    "p5play": "^3.22.11",
     "planck": "^1.0.2"
   },
   "name": "tanks_lite",

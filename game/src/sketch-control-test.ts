@@ -10,7 +10,7 @@ const ctSketch: any = (p: p5Tanks) => {
     tankSprites = new p.Group();
     p.world.gravity.y = 0;
     cromwell = new p.Tank(p, tankSprites, 100, 100, "KV-2");
-    kv2 = new p.Tank(p,tankSprites, 50 ,50 , "Cromwell");
+    kv2 = new p.Tank(p, tankSprites, 50, 50, "Cromwell");
     console.log(cromwell.dimensions);
   };
 

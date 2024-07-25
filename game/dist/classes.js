@@ -1,4 +1,5 @@
-
+import p5 from "p5";
+import TANK_CONFIGS from "tank-configs";
 class p5Tanks extends p5 {
     constructor(arg0, arg1) {
         super(arg0, arg1);
@@ -57,14 +58,12 @@ class p5Tanks extends p5 {
                     }
                 }
                 this.p.angleMode(this.p.DEGREES);
-                //Specifications
                 this._damage = parameterInitializers.shellMass;
-                this._mass = parameterInitializers.mass * p5Tanks.SPEED_SCALAR; // 27[tons]
+                this._mass = parameterInitializers.mass * p5Tanks.SPEED_SCALAR;
                 this._name = parameterInitializers.name;
                 this._dispersion =
                     this.p.atan(parameterInitializers.shellMass / parameterInitializers.barrelLength) / p5Tanks.DISTANCE_SCALAR;
-                this._maxSpeed = parameterInitializers.maxSpeed * p5Tanks.SPEED_SCALAR; // 17.78 [m/s]
-                //p5play members
+                this._maxSpeed = parameterInitializers.maxSpeed * p5Tanks.SPEED_SCALAR;
                 this._turretAssembly = new this._modules.Group();
                 this._hull = new this._modules.Sprite(X, Y, parameterInitializers.width * p5Tanks.DISTANCE_SCALAR, parameterInitializers.length * p5Tanks.DISTANCE_SCALAR, "d");
                 this._tracks = {
@@ -97,7 +96,6 @@ class p5Tanks extends p5 {
                 this._tracks.t1.mass = this._mass * p5Tanks.DISTANCE_SCALAR * 0.2;
                 this.p.TANKS.push(this);
             }
-            //Controls
             drive(power) {
                 this._hull.bearing = this._hull.rotation + 90 * Math.sign(power);
                 const SPEED = this._maxSpeed * Math.abs(power);
@@ -134,11 +132,9 @@ class p5Tanks extends p5 {
                     SPEED_AMPLITUDE + this._hull.rotationSpeed;
                 return power;
             }
-            //Setters
             set name(N) {
                 this._name = N;
             }
-            //Getters
             get name() {
                 return this._name;
             }
@@ -209,12 +205,6 @@ class p5Tanks extends p5 {
             toString() {
                 return `Name: ${this._name}`;
             }
-            //Helpers
-            /**
-             * Normalizes and angle (degrees) to be between -180 and 180.
-             * @param A The angle.
-             * @returns An corresponding angle (degrees) between -180 and 180.
-             */
             normalizeTo180(A) {
                 let angle = A;
                 while (angle < -180) {
@@ -228,7 +218,6 @@ class p5Tanks extends p5 {
             getAngle2Turret(arg0, arg1) {
                 if (arg1 == undefined) {
                     let a = arg0;
-                    //If only an angle is provided
                     let rotation = this._turret.rotation - a;
                     rotation = this.normalizeTo180(rotation);
                     return this.normalizeTo180(rotation);
@@ -236,7 +225,6 @@ class p5Tanks extends p5 {
                 const DX = arg0 - this._turret.x;
                 const DY = arg1 - this._turret.y;
                 let rotation = -p5Tanks.prototype.atan2(DX, DY) - this._turret.rotation;
-                // Normalize the angle to be between -180 and 180 degrees
                 while (rotation < -180) {
                     rotation += 360;
                 }
@@ -259,7 +247,6 @@ class p5Tanks extends p5 {
                 if (this._turret.angleToFace(x, y, -90) <= -threshold / 2) {
                     return Tank.Direction.Left;
                 }
-                //Handles cases where the point is behind the turret
                 if (this.p.cos(this.getAngle2Turret(x, y)) < 0) {
                     return this.decideTurretTurningDirection(x, y, 0);
                 }
@@ -298,7 +285,6 @@ export var Tank;
         Direction[Direction["None"] = 0] = "None";
     })(Direction = Tank.Direction || (Tank.Direction = {}));
 })(Tank || (Tank = {}));
-//@ts-expect-error
 p5Tanks.prototype.registerMethod("pre", function applySideDragForce() {
     for (const P of p5Tanks.INSTANCES) {
         for (const TANK of P.TANKS) {
@@ -310,3 +296,4 @@ p5Tanks.prototype.registerMethod("pre", function applySideDragForce() {
         }
     }
 });
+//# sourceMappingURL=classes.js.map

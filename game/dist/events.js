@@ -1,5 +1,4 @@
 "use strict";
-//Colours from style
 let backgroundColour;
 let textColour;
 let allyWeakColour;
@@ -36,3 +35,4 @@ NAV.addEventListener("click", () => {
         }
     }
 });
+//# sourceMappingURL=events.js.map

@@ -20,3 +20,5 @@ const TANK_CONFIGS = [
         "wheelWidth": 0.7
     }
 ];
+export default TANK_CONFIGS;
+//# sourceMappingURL=tank-configs.js.map

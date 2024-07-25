@@ -1,5 +1,5 @@
 import p5 from "p5";
-import TANK_CONFIGS from "./tank-configs";
+import TANK_CONFIGS from "tank-configs";
 
 class p5Tanks extends p5 {
   declare mouse: { x: number; y: number };
@@ -134,8 +134,10 @@ class p5Tanks extends p5 {
         );
       }
 
-      if(args.length === 1) {
-        const TANK_CONFIG = TANK_CONFIGS.filter((type) => type.name === args[0])[0]!;
+      if (args.length === 1) {
+        const TANK_CONFIG = TANK_CONFIGS.filter(
+          (type) => type.name === args[0]
+        )[0]!;
         parameterInitializers.name = TANK_CONFIG.name;
         parameterInitializers.width = TANK_CONFIG.width;
         parameterInitializers.length = TANK_CONFIG.length;
@@ -144,7 +146,7 @@ class p5Tanks extends p5 {
         parameterInitializers.barrelLength = TANK_CONFIG.barrelLength;
         parameterInitializers.shellMass = TANK_CONFIG.shellMass;
         parameterInitializers.wheelWidth = TANK_CONFIG.wheelWidth;
-      }else {
+      } else {
         for (let i = 0; i < args.length; i++) {
           const KEY: string = parameterKeys[i] as string;
           parameterInitializers[KEY] = args[i];
