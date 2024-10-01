@@ -1,4 +1,4 @@
-body {
+#app {
   height: 100vh;
   margin: 0;
   overflow-y: hidden;
@@ -8,7 +8,8 @@ body {
 
 #root {
   font-size: 15px;
-  font-family: inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-family: inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   position: absolute;
   top: 0%;
   left: 0%;
@@ -18,21 +19,21 @@ body {
   color: var(--text-dark);
 
   /* Colour palette */
-  --background-light: #F8F0E5;
-  --background-medium: #E6D7C3;
-  --background-dark: #D4BB9F;
-  --contrast-dark: #102C57;
-  --contrast-light: #37649E;
-  --danger: #D42646;
-  --success: #50E693;
-  --warning: #F7EF57;
-  --info: #50C8E6;
+  --background-light: #f8f0e5;
+  --background-medium: #e6d7c3;
+  --background-dark: #d4bb9f;
+  --contrast-dark: #102c57;
+  --contrast-light: #37649e;
+  --danger: #d42646;
+  --success: #50e693;
+  --warning: #f7ef57;
+  --info: #50c8e6;
   --text-light: hsl(30, 15%, 75%);
   --text-dark: #040b16;
 }
 
 .bounding-box {
-  stroke: #D42646;
+  stroke: #d42646;
 }
 
 .titlebar {
@@ -47,8 +48,8 @@ body {
   .titlebar-tab {
     display: flex;
     align-items: center;
-    padding: .125rem .75rem;
-    transition: .2s;
+    padding: 0.125rem 0.75rem;
+    transition: 0.2s;
     user-select: none;
     z-index: 1;
   }
@@ -81,7 +82,7 @@ body {
   #zoom-select:hover {
     opacity: 100%;
   }
-  #manipulation-tools{
+  #manipulation-tools {
     display: inline-block;
     position: absolute;
     z-index: 1;
@@ -105,11 +106,11 @@ body {
 
     .instance-list-element {
       border-bottom: solid var(--contrast-light) 1px;
-      margin-bottom: .25rem;
-      margin: .25rem .125rem;
-      padding: .25rem;
+      margin-bottom: 0.25rem;
+      margin: 0.25rem 0.125rem;
+      padding: 0.25rem;
       summary {
-        margin-bottom: .25rem;
+        margin-bottom: 0.25rem;
         overflow-wrap: normal;
         white-space: nowrap;
         overflow: hidden;
@@ -129,18 +130,17 @@ body {
   }
   .asset-card {
     display: inline-block;
-    margin: .5rem .5rem;
-    padding: .25rem;
-    border: .25rem var(--contrast-light) solid;
+    margin: 0.5rem 0.5rem;
+    padding: 0.25rem;
+    border: 0.25rem var(--contrast-light) solid;
     border-radius: 1rem;
-    user-select: none; 
+    user-select: none;
   }
   .asset-card:hover {
     border-color: var(--contrast-dark);
   }
   .asset-card.adding {
-    border: .125rem var(--contrast-dark) solid;
-    margin: .625rem;
+    border: 0.125rem var(--contrast-dark) solid;
+    margin: 0.625rem;
   }
 }
-

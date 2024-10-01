@@ -18,6 +18,7 @@
     "@vitejs/plugin-vue": "^5.0.5",
     "pug": "^3.0.3",
     "pug-plain-loader": "^1.1.0",
+    "sass-embedded": "^1.79.4",
     "typescript": "^5.2.2",
     "vite": "^5.3.1",
     "vue-tsc": "^2.0.22"

@@ -1,10 +1,15 @@
 <script setup lang="ts">
-import Greet from "./components/Greet.vue"
-import Titlebar from "./components/Titlebar.vue"
+import Greet from "./components/Greet.vue";
+import Titlebar, { SuperTab } from "./components/Titlebar.vue";
+
+const MENU: SuperTab[] = [
+  { title: "Save", callbackFunction: () => console.log("Save") },
+];
 </script>
 
 <template>
-    <titlebar></titlebar>
+  <titlebar :tabs="MENU"></titlebar>
+  <p>Hej</p>
 </template>
 
-<style scoped></style>
+<style scoped lang="scss"></style>
