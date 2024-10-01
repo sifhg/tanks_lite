@@ -11,16 +11,13 @@
   },
   "dependencies": {
     "@tauri-apps/api": "^1",
-    "vue": "^3.3.4",
-    "wave-ui": "^3.16.2"
+    "vue": "^3.3.4"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^1.6.2",
     "@vitejs/plugin-vue": "^5.0.5",
     "pug": "^3.0.3",
     "pug-plain-loader": "^1.1.0",
-    "sass": "^1.79.4",
-    "sass-loader": "^10.5.2",
     "typescript": "^5.2.2",
     "vite": "^5.3.1",
     "vue-tsc": "^2.0.22"
